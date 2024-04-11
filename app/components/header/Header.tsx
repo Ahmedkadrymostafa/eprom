@@ -29,7 +29,7 @@ const Header = (props: any) => {
                     
                 </div>
             </div>
-            <nav className="flex gap-11 items-center">
+            <nav className="flex gap-7 items-center">
                 {/* <div className="flex gap-6 items-center">
                     <Link href="/dashboard" className="second-color text-2xl capitalize">dashboard</Link>
                     {props.role === "super admin" && 
@@ -39,9 +39,9 @@ const Header = (props: any) => {
 
                 <Search />
 
-                <div className="flex items-center gap-7">
+                <div className="flex items-center gap-5">
                     <UserDropDown email={props.email} name={props.name} />
-                    <button className="second-color text-4xl capitalize flex items-center gap-2" onClick={() => LogOut(props.email, router)}><IoMdExit /> <p className="second-color text-2xl">Logout</p></button>
+                    <button className="second-color text-3xl capitalize flex items-center gap-1" onClick={() => LogOut(props.email, router)}><IoMdExit /> <p className="second-color text-xl">Logout</p></button>
                 </div>
 
             </nav>

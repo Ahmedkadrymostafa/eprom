@@ -22,7 +22,7 @@ export default function Home() {
     if (!email.current.value || !password.current.value) return toast.warning("Please enter full inputs")
     setIsLoading(true);
 
-    axios.post(`http://localhost:3000/api/auth/login/${e}`, {password: password.current.value}).then(async (res: any) => {
+    axios.post(`/api/auth/login/${e}`, {password: password.current.value}).then(async (res: any) => {
         
         await axios.put(`/api/auth/login/${e}`, {password: password.current.value}).then((res: any) => {
           // console.log(res);

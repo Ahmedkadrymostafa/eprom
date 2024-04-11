@@ -9,6 +9,9 @@ import { DataContext } from "../../layout"
 import { toast } from "react-toastify"
 import { parse } from "path"
 import { useRouter } from "next/navigation";
+import { AiFillCloseSquare } from "react-icons/ai"
+import { FiShare } from "react-icons/fi"
+import { RiShareBoxLine } from "react-icons/ri"
 
 const Page = ({params}: {params: any}) => {
     const router = useRouter();
@@ -22,8 +25,11 @@ const Page = ({params}: {params: any}) => {
     const courseForm: any = useRef();
     // const newCourse: any = useRef();
     // const newCourseName: any = useRef();
-    const courseFormContent: any = useRef();
+    const courseFormContent: any = useRef('');
+    const courseDropDownRef: any = useRef('');
+
     const [ courses, setCourses ] = useState(dataContext.courses)
+    const [ courseInfo, setCourseInfo ] = useState<any>({})
     const [ ORGS, setORGS ] = useState(dataContext.ORGS)
     const [ APPS, setAPPS ] = useState(dataContext.APPS.filter((app: any) => app.person_id === id))
     const [ totalHours, setTotalHours ] = useState(0)
@@ -57,6 +63,12 @@ const Page = ({params}: {params: any}) => {
         setTimeout(() => {
             courseFormContent.current.classList.toggle('active-course-form-content')
         }, 1000)
+    }
+
+    const toggleCourseDropDown = () => {
+        if (courseDropDownRef.current) {
+            courseDropDownRef.current.classList.toggle("course-dropdown-active")
+        }
     }
 
    const emptyInputs = () => {
@@ -111,15 +123,15 @@ const Page = ({params}: {params: any}) => {
             return toast.warn("field course name is required")
         }
 
-        await axios.post('/api/apps', data).then(response => {
+        await axios.post('/api/apps', data).then(response => {           
             toast.success('New course added successfully')
             APPS.push({id: response.data.id, ...data})
             dataContext.setAPPS([{id: response.data.id, ...data}, ...dataContext.APPS])
             setTotalHours(totalHours +  parseInt(data.total_hours))
             emptyInputs()
             toggleForm()
-            setLoading(false)
-        }).catch(error => console.log(error))
+            
+        }).catch(error => console.log(error)).finally(() => setLoading(false))
     }
 
     const getTrainee = async () => {
@@ -244,6 +256,46 @@ const Page = ({params}: {params: any}) => {
                             </div>
                         </div>
 
+
+                            <div ref={courseDropDownRef} className="p-3 flex flex-col gap-5 course-dropdown fixed z-[3] bg-white h-full">
+                                <p className="absolute main-color text-3xl cursor-pointer right-2" onClick={toggleCourseDropDown}><AiFillCloseSquare /></p>
+                                <div>
+                                    <p className="text-gold text-2xl font-bold mb-2">Additional Information:-</p>
+                                    
+                                        <div className="ml-4 flex flex-col gap-2">
+                                            <p className="main-color text-xl font-bold flex gap-2">Days: <p className="text-xl text-gray-700">{courseInfo.days}</p></p>
+                                            <p className="main-color text-xl font-bold flex gap-2">Hours: <p className="text-xl text-gray-700">{courseInfo.hours}</p></p>
+                                            <p className="main-color text-xl font-bold flex gap-2">Training Center: <p className="text-xl text-gray-700">{courseInfo.training_center}</p></p>
+                                            <p className="main-color text-xl font-bold flex gap-2">City: <p className="text-xl text-gray-700">{courseInfo.city}</p></p>
+                                            <p className="main-color text-xl font-bold flex gap-2">Instructor: <p className="text-xl text-gray-700">{courseInfo.instructor}</p></p>
+                                        </div>
+                                       
+                                    
+                                </div>
+                                <div>
+                                    <p className="text-gold text-2xl font-bold mb-2">Financial:-</p>
+                                    <div className="flex gap-4">
+                                        <div className="ml-4 flex flex-col gap-2">
+                                            <p className="main-color text-xl font-bold">Budget Code:</p>
+                                            <p className="main-color text-xl font-bold">Course Fees:</p>
+                                            <p className="main-color text-xl font-bold">Instructor Fees:</p>
+                                            <p className="main-color text-xl font-bold">Profit:</p>
+                                            <p className="main-color text-xl font-bold">Allowance:</p>
+                                            <p className="main-color text-xl font-bold">Hotel Cost:</p>
+                                        </div>
+                                        <div className="ml-4 flex flex-col gap-2">
+                                            <p className="text-gray-900 text-xl font-bold">{courseInfo.budget_code}</p>
+                                            <p className="text-gray-900 text-xl font-bold">{courseInfo.course_fees}</p>
+                                            <p className="text-gray-900 text-xl font-bold">{courseInfo.instructor_fees}</p>
+                                            <p className="text-gray-900 text-xl font-bold">{courseInfo.profit}</p>
+                                            <p className="text-gray-900 text-xl font-bold">{courseInfo.allowance}</p>
+                                            <p className="text-gray-900 text-xl font-bold">{courseInfo.hotel_cost}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
             {!loading && trainee &&
                 <div className="margin">
 
@@ -338,7 +390,21 @@ const Page = ({params}: {params: any}) => {
                                             
                                             {
                                                 APPS.map((app: any) => (
-                                                    <tr key={app.id} className="admin-tr">
+                                                    <tr key={app.id} className="admin-tr relative cursor-pointer" onClick={() => {
+                                                        setCourseInfo({
+                                                            days: app.days,
+                                                            hours: app.total_hours,
+                                                            training_center: app.training_center,
+                                                            city: app.city,
+                                                            instructor: app.instructor,
+                                                            budget_code: app.budget_code,
+                                                            course_fees: app.course_fees,
+                                                            instructor_fees: app.instructor_fees,
+                                                            profit: app.profit,
+                                                            allowance: app.allowance,
+                                                            hotel_cost: app.hotel_cost,
+                                                        })
+                                                    }}>
                                                         <td className="admin-td">{app.course}</td>                                       
                                                         <td className="admin-td uppercase">{app.org}</td>                                       
                                                         <td className="admin-td">{app.date_from}</td>
@@ -346,41 +412,44 @@ const Page = ({params}: {params: any}) => {
                                                         <td className="admin-td">{app.total_cost}</td>
                                                         <td className="admin-td">{app.status}</td>
                                                         <td className="text-2xl font-black ">
-                                                        <div className="flex justify-center gap-3 row-buttons">
-                                                            <FaEdit className="cursor-pointer text-yellow-400" onClick={() => {
-                                                            setEdit(true)
-                                                                toggleForm();
-                                                                setCoursesToUpdateID(app.id)
-                                                                course.current.value = app.course
-                                                                from.current.value = app.date_from
-                                                                to.current.value = app.date_to
-                                                                org.current.value = app.org
-                
-                                                                app.status === "implemented" ?
-                                                                statusRef.current.checked = true
-                                                                : 
-                                                                statusRef.current.checked = false  
-                                                                
-                                                                days.current.value = app.days
-                                                                total_hours.current.value = app.total_hours
-                                                                training_center.current.value = app.training_center
-                                                                city.current.value = app.city
-                                                                instructor.current.value = app.instructor
-                                                                budget_code.current.value = app.budget_code
-                                                                course_fees.current.value = app.course_fees
-                                                                instructor_fees.current.value = app.instructor_fees
-                                                                total_cost.current.value = app.total_cost
-                                                                profit.current.value = app.profit
-                                                                allowance.current.value = app.allowance
-                                                                hotel_cost.current.value = app.hotel_cost
-                                                            }} />
-                                                            <MdDelete className="cursor-pointer text-red-700" onClick={() => {
-                                                                setCoursesToDeleteID(app.id)
-                                                                deletePopUp.current.classList.toggle('active-form-popup')
-                                                            }} />
-                                                        </div>
-                                                    </td>
+                                                            <div className="flex justify-center gap-5 row-buttons">
+                                                                <RiShareBoxLine className="text-white cursor-pointer" onClick={toggleCourseDropDown} />
+                                                                <FaEdit className="cursor-pointer text-yellow-400" onClick={() => {
+                                                                setEdit(true)
+                                                                    toggleForm();
+                                                                    setCoursesToUpdateID(app.id)
+                                                                    course.current.value = app.course
+                                                                    from.current.value = app.date_from
+                                                                    to.current.value = app.date_to
+                                                                    org.current.value = app.org
+                    
+                                                                    app.status === "implemented" ?
+                                                                    statusRef.current.checked = true
+                                                                    : 
+                                                                    statusRef.current.checked = false  
+                                                                    
+                                                                    days.current.value = app.days
+                                                                    total_hours.current.value = app.total_hours
+                                                                    training_center.current.value = app.training_center
+                                                                    city.current.value = app.city
+                                                                    instructor.current.value = app.instructor
+                                                                    budget_code.current.value = app.budget_code
+                                                                    course_fees.current.value = app.course_fees
+                                                                    instructor_fees.current.value = app.instructor_fees
+                                                                    total_cost.current.value = app.total_cost
+                                                                    profit.current.value = app.profit
+                                                                    allowance.current.value = app.allowance
+                                                                    hotel_cost.current.value = app.hotel_cost
+                                                                }} />
+                                                                <MdDelete className="cursor-pointer text-red-700" onClick={() => {
+                                                                    setCoursesToDeleteID(app.id)
+                                                                    deletePopUp.current.classList.toggle('active-form-popup')
+                                                                }} />
+                                                            </div>
+                                                        </td>
+                                                        
                                                     </tr>
+                                                    
                                                 ))
                                             }
                                                 
@@ -544,32 +613,7 @@ const Page = ({params}: {params: any}) => {
                 
                                             
                                         </form>
-                                        
-                                        {/* <div ref={newCourse} className="soft-bg w-fit p-7 hidden opacity-0 duration-300 flex-col gap-5 absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2">
-                                            <div className="flex justify-between items-center">
-                                                <p className="main-color text-3xl font-black">New Course</p>
-                                                <div onClick={(e: any) => {
-                                                    e.preventDefault();
-                                                    newCourse.current.classList.toggle('active-new-course');
-                                                }}><p className="main-color text-3xl font-black cursor-pointer">
-                                                    <GrClose />
-                                                </p></div>
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <form>
-                                                    <div className="coolinput mx-auto">
-                                                        <label className="text">Course Name:</label>
-                                                        <input ref={newCourseName} type="text" placeholder="Type..." name="input" className="input" />
-                                                    </div>
-                                                    
-                                                    <input className="submit mx-auto mt-7" type="submit" value="Submit course" onClick={(e: any) => {
-                                                        e.preventDefault();
-                                                        addNewCourse();
-                                                    }} />
-                                                </form>
-                                            </div>
-                                        </div> */}
-                
+                                       
                                 </div>
                             </div>
                 
@@ -578,14 +622,6 @@ const Page = ({params}: {params: any}) => {
         </div>
     )
     
-    // <div className="text-3xl">404 | Not Found</div>          
-
-//    if (!trainee) {
-//    }else {
-//    }
-        
-
-
 }
 
 export default Page

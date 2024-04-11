@@ -8,6 +8,8 @@ import axios from "axios";
 import { GrClose } from "react-icons/gr";
 import { DataContext } from "../layout";
 import Link from "next/link";
+import { FaShareFromSquare } from "react-icons/fa6";
+import { IoIosShareAlt } from "react-icons/io";
 
 const Page = () => {
     const [ isLoading, setIsLoading ] = useState(true);
@@ -204,9 +206,10 @@ const Page = () => {
                                 trainees.map((e: any) => (
                                 <tr key={e.person_id} className="admin-tr">
                                     <td className="admin-td">{e.person_id}</td>
-                                    <td className="admin-td">
+                                    <td className="admin-td relative">
                                         <Link href={`/dashboard/trainees/${e.person_id}`} >
                                             {e.name}
+                                            <p className="text-gold text-2xl font-black absolute top-6 left-6"><IoIosShareAlt /></p>
                                         </Link>
                                     </td>
                                     <td className="admin-td">{e.title}</td>
@@ -215,7 +218,8 @@ const Page = () => {
                                     <td className="admin-td">{e.department}</td>
                                     
                                     <td className="text-2xl font-black ">
-                                        <div className="flex justify-center gap-3 row-buttons">
+                                        <div className="flex justify-center gap-5 row-buttons">
+                                            <Link href={`/dashboard/trainees/${e.person_id}`} className="text-white"><FaShareFromSquare /></Link>
                                             <FaEdit className="cursor-pointer text-yellow-400" onClick={() => {
                                                 setEditButton(true);
                                                 setTraineeToUpdate(e.id)
