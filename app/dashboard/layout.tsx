@@ -82,11 +82,11 @@ export default function Layout({children}: {children: any}){
     return <Loading />
   }else if (loggedIn === true) {
     return (     
-      <DataContext.Provider value={{trainees, setTrainees, courses, setCourses, ORGS, setORGS, APPS, setAPPS}}>
+      <DataContext.Provider value={{credentials, trainees, setTrainees, courses, setCourses, ORGS, setORGS, APPS, setAPPS}}>
           <div>
-              <Header role={credentials.role} email={credentials.email} name={credentials.name} /> 
+              <Header  email={credentials.email} name={credentials.name} /> 
               
-              <SideBar />        
+              <SideBar role={credentials.role} />        
               
 
 

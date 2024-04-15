@@ -2,9 +2,10 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react"
 import Cryptr from "cryptr";
-import { MdDelete } from "react-icons/md";
+import { MdClose, MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import Loading from "@/app/loading";
+import { FaWindowClose } from "react-icons/fa";
 
 const AdminForm = () => {
   const cryptr = new Cryptr('secretKey', { encoding: 'base64', pbkdf2Iterations: 10000, saltLength: 10 });
@@ -13,14 +14,25 @@ const AdminForm = () => {
   const password: any = useRef();
   const id: any = useRef();
   const role: any = useRef();
+  const adminInputs: any = useRef();
   const [ admins, setAdmins ] = useState<any>([]);
   const [ isLoading, setIsLoading ] = useState(true);
 
+  const toggler = () => {
+    if (adminInputs.current.classList.contains('-left-96')) {
+        adminInputs.current.classList.remove('-left-96')
+        adminInputs.current.classList.add('left-10')
+    }else {
+        adminInputs.current.classList.add('-left-96')
+        adminInputs.current.classList.remove('left-10')
+    }
+  }
     const emptyInputs = () => {
         name.current.value = "";
         email.current.value = "";
         password.current.value = "";
         id.current.value = "";
+        toggler();
     }
   async function postAdmins() {
     setIsLoading(true);
@@ -46,7 +58,7 @@ const AdminForm = () => {
       session: ""
     }
 
-    axios.post('http://localhost:3000/api/admins', data).then((res) => {
+    axios.post('/api/admins', data).then((res) => {
         setIsLoading(false)
         toast.success("New admin added successfully")
         setAdmins([...admins, 
@@ -60,6 +72,7 @@ const AdminForm = () => {
             }
         ])
         emptyInputs();
+        
     }).catch(err => {
         setIsLoading(false)
         toast.error("Failed to add admin because Email is exist")
@@ -89,41 +102,56 @@ const AdminForm = () => {
         setIsLoading(false)
     });
   }
+  
   useEffect(() => {
     getAdmins();
   }, [])
 
+  if (isLoading) return <Loading />
+
+
 return (
     <div>
-            {isLoading && <Loading />}
 
-        <div className="relative flex justify-between pt-9 px-11 max-md:flex-col">
+            <div className="flex justify-between px-10 py-6">
+                <p className="text-5xl font-bold main-color">Admins Board</p>
+                <button className="button" onClick={toggler}>
+                    <span className="button-content">New Admin</span>
+                </button>
+            </div>
+
+        <div className="relative flex justify-between pt-5 px-11 max-md:flex-col">
                 
             
-            <div className="glass p-5 w-96">
-                <p className="main-color text-2xl font-black mb-4 text-center">Add new admin</p>
-                <form className="flex flex-col gap-3">
-                    <input className="input" ref={name} type="text" placeholder="name" />
-                    <input className="input" ref={email} type="email" placeholder="email" />
-                    <input className="input" ref={password} type="password" placeholder="password" />
-                    <input className="input" ref={id} type="number" placeholder="id" />
-                    <select className="input" ref={role}>
-                    <option value="admin">admin</option>
-                    <option value="super admin">super admin</option>
-                    </select>
-                    <input className="button-81" type="submit" onClick={(e: any) => {
-                    e.preventDefault();
-                    // console.log()
-                    postAdmins();
-                    }} />
-                </form>
+            <div ref={adminInputs} className="glass p-5 w-96 fixed duration-300 top-[80px] -left-96 left">
+                <div className="bg-white p-4 rounded-3xl">
+                    <div className="flex justify-between items-center mb-8 ">
+                        <p className="main-color text-3xl font-black text-center">New Admin</p>
+                        <button className="main-color text-3xl font-black" onClick={toggler}><FaWindowClose /></button>
+                    </div>
+                    <form className="flex flex-col gap-3">
+                        <input className="input" ref={name} type="text" placeholder="name" />
+                        <input className="input" ref={email} type="email" placeholder="email" />
+                        <input className="input" ref={password} type="password" placeholder="password" />
+                        <input className="input" ref={id} type="number" placeholder="id" />
+                        <select className="input" ref={role}>
+                        <option value="admin">admin</option>
+                        <option value="super admin">super admin</option>
+                        </select>
+                        <input className="button-81" type="submit" onClick={(e: any) => {
+                        e.preventDefault();
+                        // console.log()
+                        postAdmins();
+                        }} />
+                    </form>
+                </div>
             </div>
 
 
 
 
-            <div className="h-[75vh] overflow-y-scroll max-md:h-auto">
-                <table className="admin-table">
+            <div className="h-[75vh] w-full overflow-y-scroll max-md:h-auto">
+                <table className="admin-table w-[97%]">
                     <thead>
                         <tr>
                             <th className="admin-th">Id</th>

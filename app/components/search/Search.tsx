@@ -23,14 +23,15 @@ const Search = () => {
         }
         
     }
-
-    useEffect(() => {
+    
         document.body.addEventListener('click', (e: any) => {
-            if (!e.target.classList.contains("search-result")) {
+            if (e.target && searchResultRef.current && e.target instanceof HTMLElement && !e.target.classList.contains("search-result")) {
                 searchResultRef.current.classList.add('hidden')
             }
         })
-    }, [])
+    
+
+
 
   return (
     <div>

@@ -11,7 +11,7 @@
     background: var(--main-color);
     overflow: hidden;
     transition: 0.4s;
-    z-index: 1;
+    z-index: 10;
   }
   
   .sideMenu:hover {

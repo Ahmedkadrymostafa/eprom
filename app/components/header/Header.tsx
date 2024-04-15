@@ -29,6 +29,9 @@ const Header = (props: any) => {
                     
                 </div>
             </div>
+
+            <Search />
+
             <nav className="flex gap-7 items-center">
                 {/* <div className="flex gap-6 items-center">
                     <Link href="/dashboard" className="second-color text-2xl capitalize">dashboard</Link>
@@ -37,7 +40,6 @@ const Header = (props: any) => {
                     }
                 </div> */}
 
-                <Search />
 
                 <div className="flex items-center gap-5">
                     <UserDropDown email={props.email} name={props.name} />

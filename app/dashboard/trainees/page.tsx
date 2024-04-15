@@ -15,7 +15,7 @@ const Page = () => {
     const [ isLoading, setIsLoading ] = useState(true);
     const [ editButton, setEditButton ] = useState(false);
     const [ trainees, setTrainees ] = useState<any>([]);
-    const [ cloneTrainees, setCloneTrainees ] = useState<any>([]);
+    // const [ cloneTrainees, setCloneTrainees ] = useState<any>([]);
     const [ traineeToDelete, setTraineeToDelete ] = useState({id: "", name: ""})
     const [ traineeToDeleteIndex, setTraineeToDeleteIndex ] = useState()
     const [ traineeToUpdate, setTraineeToUpdate ] = useState("")
@@ -57,7 +57,7 @@ const Page = () => {
         await axios.post('/api/trainees', data).then((res: any) => {
             console.log(res.data.id)
             setTrainees([{id: res.data.id, ...data}, ...trainees])
-            setCloneTrainees([data, ...trainees])
+            // setCloneTrainees([data, ...trainees])
 
             dataContext.setTrainees([{id: res.data.id, ...data}, ...trainees])
 
@@ -99,7 +99,7 @@ const Page = () => {
             }
             
             setTrainees(updatedTrainees)
-            setCloneTrainees(updatedTrainees)
+            // setCloneTrainees(updatedTrainees)
             dataContext.setTrainees(updatedTrainees)
             emptyInputs()
             toast.success("updated successfully")
@@ -115,7 +115,7 @@ const Page = () => {
             setIsLoading(false)
             const updatedItems = trainees.filter((index: any) => index !== e);
             setTrainees(updatedItems)
-            setCloneTrainees(updatedItems)
+            // setCloneTrainees(updatedItems)
             toast.success("Successfully deleted")
         }).catch((err) => {
             toast.error("Failed to delete trainee")
@@ -126,10 +126,10 @@ const Page = () => {
 
     const search = (e: any) => {           
         if (e !== "") {
-            const filtered = trainees.filter((index: any) => index.name.includes(e.toLowerCase()))
+            const filtered = dataContext.trainees.filter((index: any) => index.name.includes(e.toLowerCase()))
             setTrainees(filtered)
         }else {
-            setTrainees(cloneTrainees);
+            setTrainees(dataContext.trainees);
         }
         
     }
@@ -139,7 +139,7 @@ const Page = () => {
     //    GetTrainees()
             setIsLoading(false)
             setTrainees(dataContext.trainees)
-            setCloneTrainees(dataContext.trainees)
+            // setCloneTrainees(dataContext.trainees)
             console.log(dataContext.trainees)
     }, [dataContext])
 
@@ -250,7 +250,7 @@ const Page = () => {
             
         </div>
 
-            <div ref={formPopUp} className="form-popup absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 w-96">
+            <div ref={formPopUp} className="form-popup fixed top-[57%] left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 w-96">
                 <div className="flex justify-between items-center mb-4">
                     {editButton ? <p className="main-color text-2xl font-black">Edit</p> : <p className="main-color text-2xl font-black">New Trainee</p>}
                     <p className="text-black cursor-pointer text-2xl font-bold" onClick={() => {

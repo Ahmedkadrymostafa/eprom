@@ -274,15 +274,15 @@ const Page = ({params}: {params: any}) => {
                                 </div>
                                 <div>
                                     <p className="text-gold text-2xl font-bold mb-2">Financial:-</p>
-                                    <div className="flex gap-4">
                                         <div className="ml-4 flex flex-col gap-2">
-                                            <p className="main-color text-xl font-bold">Budget Code:</p>
-                                            <p className="main-color text-xl font-bold">Course Fees:</p>
-                                            <p className="main-color text-xl font-bold">Instructor Fees:</p>
-                                            <p className="main-color text-xl font-bold">Profit:</p>
-                                            <p className="main-color text-xl font-bold">Allowance:</p>
-                                            <p className="main-color text-xl font-bold">Hotel Cost:</p>
+                                            <p className="main-color text-xl font-bold">Budget Code: {courseInfo.budget_code}</p>
+                                            <p className="main-color text-xl font-bold">Course Fees: {courseInfo.course_fees}</p>
+                                            <p className="main-color text-xl font-bold">Instructor Fees: {courseInfo.instructor_fees}</p>
+                                            <p className="main-color text-xl font-bold">Profit: {courseInfo.profit}</p>
+                                            <p className="main-color text-xl font-bold">Allowance: {courseInfo.allowance}</p>
+                                            <p className="main-color text-xl font-bold">Hotel Cost: {courseInfo.hotel_cost}</p>
                                         </div>
+                                    {/* <div className="flex gap-4">
                                         <div className="ml-4 flex flex-col gap-2">
                                             <p className="text-gray-900 text-xl font-bold">{courseInfo.budget_code}</p>
                                             <p className="text-gray-900 text-xl font-bold">{courseInfo.course_fees}</p>
@@ -291,7 +291,7 @@ const Page = ({params}: {params: any}) => {
                                             <p className="text-gray-900 text-xl font-bold">{courseInfo.allowance}</p>
                                             <p className="text-gray-900 text-xl font-bold">{courseInfo.hotel_cost}</p>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
 
@@ -387,6 +387,7 @@ const Page = ({params}: {params: any}) => {
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            
                                             
                                             {
                                                 APPS.map((app: any) => (
