@@ -32,14 +32,14 @@ const UserDropDown = (props: any) => {
         {dropDown && 
             <div className="drop-down absolute z-10 right-0 top-12 p-6 flex flex-col gap-1 glass">
                 <div className="bg-white flex flex-col gap-4 rounded-3xl p-4">
-                    <p className="main-color font-bold text-xl flex items-center gap-1 p-2 rounded-lg hover:bg-slate-200"><MdOutlineMail className="text-2xl" />{props.email}</p>
+                    <p className="main-color font-bold text-xl flex items-center gap-1 p-2 rounded-lg"><MdOutlineMail className="text-2xl text-gold font-black" />{props.email}</p>
                     <button onClick={() => {
                         router.push('/dashboard/settings')
                         setDropDown(false)
-                    }} className="user-drop-down main-color font-bold text-xl flex items-center gap-1 p-2 rounded-lg hover:bg-slate-200"><IoMdSettings className="text-2xl" /> Settings</button>
+                    }} className="user-drop-down main-color font-bold text-xl flex items-center gap-1 p-2 rounded-lg hover:bg-slate-200"><IoMdSettings className="text-2x text-gray-600" /> Settings</button>
                     {/* <Link href="/dashboard/settings" className="main-color font-bold text-xl flex items-center gap-1 p-2 rounded-lg hover:bg-slate-200"><IoMdSettings className="text-2xl" /> Settings</Link> */}
                     {/* <Link href="#" className="main-color font-bold text-xl capitalize">Logout</Link> */}
-                    <button className="user-drop-down main-color w-full font-bold text-xl flex items-center gap-1  p-2 rounded-lg hover:bg-slate-200" onClick={() => LogOut(props.email, router)}><BiLogOut className="text-2xl" /> Logout</button>
+                    <button className="user-drop-down main-color w-full font-bold text-xl flex items-center gap-1  p-2 rounded-lg hover:bg-slate-200" onClick={() => LogOut(props.email, router)}><BiLogOut className="text-2x text-gray-600" /> Logout</button>
                 </div>
             </div>
         }

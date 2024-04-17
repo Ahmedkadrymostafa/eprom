@@ -7,12 +7,12 @@ import { Doughnut } from "react-chartjs-2";
 const NonImplemented = (props: any) => {
     ChartJS.register(ArcElement, Tooltip, Legend);
     const today = new Date().setHours(0, 0, 0, 0);
-    console.log(today)
+    // console.log(today)
     const completedApps = props.apps.filter((app: any) => (new Date(app.date_to).setHours(0, 0, 0, 0) < today && app.status === 'not implemented'))
     const nonImplementedApps = props.apps.filter((app: any) => app.status === 'not implemented');
     const implementedApps = props.apps.filter((app: any) => app.status === 'implemented');
-    console.log(nonImplementedApps)
-    console.log(implementedApps)
+    // console.log(nonImplementedApps)
+    // console.log(implementedApps)
 
     const data = {
         labels: ['Not implemented', 'Implemented',],

@@ -104,7 +104,7 @@ const Page = () => {
             emptyInputs()
             toast.success("updated successfully")
         }).catch(err => {
-            toast.error(`Failed to update trainee`)
+            toast.error(`Failed to update trainee because ID is exist`)
             console.log(err)
         })
     }

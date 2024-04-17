@@ -39,6 +39,7 @@ const Page = ({params}: {params: any}) => {
     const [ courseToDeleteID, setCoursesToDeleteID ] = useState();
     const deletePopUp: any = useRef();
 
+    const today = new Date();
     const course: any = useRef();
     const from: any = useRef();
     const to: any = useRef();
@@ -97,6 +98,7 @@ const Page = ({params}: {params: any}) => {
         let data = {
             person_id: id.trim().toLowerCase().replace(/\s+/g, ' '),
             course: course.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+            date: today.toISOString().split('T')[0],
             date_from: from.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
             date_to: to.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
             org: org.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
@@ -314,7 +316,14 @@ const Page = ({params}: {params: any}) => {
                 
                             <div className="flex justify-between my-5 mx-10 gap-6 shadow-2xl p-6 rounded-3xl">
                                 <div className="flex flex-col gap-3">
-                                    
+                                    <div className="glass p-5 w-80 text-center">
+                                        <div className="flex gap-2 w-fit mx-auto items-center">
+                                            <p className=" text-gray-700 text-5xl font-black mb-5"><FaGraduationCap /></p>
+                                            <p className=" text-gray-700 text-3xl font-black mb-5">Courses</p>
+                                        </div>
+                                        <p className="text-gold text-5xl font-black">{APPS.length}</p>
+                                    </div>
+
                                     <div className="glass p-5 w-80 text-center">
                                         <div className="flex gap-2 w-fit mx-auto items-center">
                                             <p className=" text-gray-700 text-5xl font-black mb-5"><FaUserClock /></p>
@@ -323,14 +332,7 @@ const Page = ({params}: {params: any}) => {
                                         <p className="text-gold text-5xl font-black">{
                                             totalHours
                                         }</p>
-                                    </div>
-                                    <div className="glass p-5 w-80 text-center">
-                                        <div className="flex gap-2 w-fit mx-auto items-center">
-                                            <p className=" text-gray-700 text-5xl font-black mb-5"><FaGraduationCap /></p>
-                                            <p className=" text-gray-700 text-3xl font-black mb-5">Courses</p>
-                                        </div>
-                                        <p className="text-gold text-5xl font-black">{APPS.length}</p>
-                                    </div>
+                                    </div>                    
                                 </div>
                                 <div className="glass w-full py-10">
                                     <p className="text-gold text-5xl font-black mb-5 px-12">Person Information</p>
