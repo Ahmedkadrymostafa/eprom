@@ -56,8 +56,20 @@ export async function POST(request: any, res: any) {
           try {
             const connection = await pool.getConnection();
             const result: any = await connection.query(
-              'INSERT INTO courses (name) values (?)',
-              [data.name]
+              'INSERT INTO courses (name, num_of_trainees, date_from, date_to, days, total_hours, location, total_revenue, instructor_fees, break_cost, tools, net_revenue) values (?,?,?,?,?,?,?,?,?,?,?,?)',
+              [data.name,
+                data.num_of_trainees,
+                data.date_from,
+                data.date_to,
+                data.days,
+                data.total_hours,
+                data.location,
+                data.total_revenue,
+                data.instructor_fees,
+                data.break_cost,
+                data.tools,
+                data.net_revenue
+              ]
             );
             connection.release();
             return NextResponse.json({message: "success", id: result[0].insertId}, {status: 200})
