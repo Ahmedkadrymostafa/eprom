@@ -8,6 +8,7 @@ import { BiBookOpen } from "react-icons/bi"
 import NonImplemented from "../components/analysis/NonImplemented"
 import LastSevenDaysApps from "../components/analysis/LastSevenDaysApps"
 import LastSevenDaysRevenue from "../components/analysis/LastSevenDaysRevenue"
+import ReportComponent from "../components/analysis/ReportComponent"
 
 
 const Page = () => {
@@ -111,6 +112,7 @@ const Page = () => {
                 <LastSevenDaysRevenue />
                 <LastSevenDaysApps />
                 <NonImplemented apps={data.APPS} />
+                <ReportComponent />
             </div>
        </>
     )

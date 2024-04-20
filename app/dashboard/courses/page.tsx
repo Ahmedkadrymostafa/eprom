@@ -1,39 +1,45 @@
 'use client'
 import axios from "axios";
 import { useContext, useRef, useState } from "react";
-import { FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { FaEdit, FaPencilAlt } from "react-icons/fa";
+import { MdDelete, MdOutlineNoteAlt } from "react-icons/md";
 import { toast } from "react-toastify";
 import { DataContext } from "../layout";
 import { GrClose } from "react-icons/gr";
 import DatePicker from 'react-date-picker';
 import NewCourseInfo from "@/app/components/NewCourseInfo";
+import { IoAlertCircle } from "react-icons/io5";
+import { RiShareBoxFill } from "react-icons/ri";
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 type newCourseData = {
     name?: any,
-    numb_of_trainees?: any,
+    num_of_trainees?: any,
     date_from?: any,
     date_to?: any,
     days?: any,
     total_hours?: any,
     location?: any,
+    status?: any,
     total_revenue?: any,
     instructor_fees?: any,
     break_cost?: any,
     training_tools?: any,
     net_revenue?: any,
+    notes?: any,
 }
 const Page = () => {
-    const [value, onChange] = useState<Value>(new Date());
+    // const [value, onChange] = useState<Value>(new Date());
 
     const name: any = useRef()
     const numOfTrainees: any = useRef()
     const date_from: any = useRef()
     const date_to: any = useRef()
     const days: any = useRef()
+    const location: any = useRef()
+    const statusRef: any = useRef()
     const total_hours: any = useRef()
     const total_revenue: any = useRef()
     const instructor_fees: any = useRef()
@@ -44,6 +50,7 @@ const Page = () => {
     const coursePrice: any = useRef()
     const [ totalHours, setTotalHours ] = useState(0);
     const [ totalRevenue, setTotalRevenue ] = useState(0);
+    const [ statusCourse, setStatusCourse ] = useState('not implemented');
     const [ newCourseData, setNewCourseData ] = useState<newCourseData>({});
 
   const [fromDate, setFromDate] = useState('');
@@ -78,6 +85,9 @@ const Page = () => {
     setDaysDifference(Math.round(daysDifference));
   };
 
+    const notesRef: any = useRef()
+    const [notes, setNotes] = useState('');
+    const [selectedNoteId, setSelectedNoteId] = useState<any>('');
     const editName: any = useRef()
     const editCourse: any = useRef()
     const newCourseForm: any = useRef()
@@ -92,18 +102,55 @@ const Page = () => {
     const toggleCourseInfo = () => {
         newCourseInfo.current.classList.toggle('hidden')
     }
-    const addNewCourse = async () => {
+    const toggleNotes = () => {
+        notesRef.current.classList.toggle('hidden')
+    }
+    const emptyInputs = () => {
+        name.current.value = ''
+        numOfTrainees.current.value = null
+        coursePrice.current.value = null
+        date_to.current.value = ''
+        date_from.current.value = ''
+        location.current.value = ''
+        setStatusCourse('not implemented')
+        statusRef.current.checked = false
+        setTotalRevenue(0)
+        setTotalHours(0)
+        setDaysDifference(0)
+        instructor_fees.current.value = ''
+        break_cost.current.value = ''
+        training_tools.current.value = ''
+        toggleCourseInfo()
+    }
+    const saveNotes = async (id: any) => {
         let data = {
-            name: name.current.value.trim().toLowerCase().replace(/\s+/g, ' ')
+            notes: notes
         }
-        if (!data.name) return toast.warn("field course name is required")
+        axios.put(`/api/courses/${id}`, data).then(() => {
+            toast.success(`Notes saved successfully`);
+            const updatedArray = courses.map((item: any) => {
+                if (item.id === id) {
+                  return { ...item, notes: data.notes };
+                }
+                return item;
+            });
+            setCourses(updatedArray)
+            dataContext.setCourses(updatedArray)
+        })
+    }
+    const addNewCourse = async () => {
+        let data = newCourseData;
+        if (!data.name || !data.num_of_trainees || !data.break_cost
+            || !data.instructor_fees || !data.training_tools || !data.date_from || !data.date_to
+            || !data.days || !data.total_revenue || !data.net_revenue
+        ) return toast.warn("some fields is required")
 
         await axios.post('/api/courses', data).then(response => {
-            setCourses([{id: response.data.id, name: data.name}, ...courses])
-            dataContext.setCourses([{id: response.data.id, name: data.name}, ...courses])
+            setCourses([{id: response.data.id, ...newCourseData}, ...courses])
+            dataContext.setCourses([{id: response.data.id, }, ...courses])
             // console.log(courses)
             toast.success("New course added successfully")
-            name.current.value = ""
+            emptyInputs();
         }).catch(error => toast.error("course title is exist"))
     }
     const update = async () => {
@@ -164,7 +211,7 @@ const Page = () => {
                         </div>
                         <div className="flex items-center gap-3">
                             <p className='main-color text-xl font-bold'>Number of trainees</p>
-                            <p className='text-black text-3xl'>{newCourseData.numb_of_trainees}</p>
+                            <p className='text-black text-3xl'>{newCourseData.num_of_trainees}</p>
                         </div>
                         <div className='flex items-center gap-3'>
                             <p className='main-color text-xl font-bold'>From</p>
@@ -175,12 +222,20 @@ const Page = () => {
                             <p className='text-black text-xl'>{newCourseData.date_to}</p>
                         </div>
                         <div className='flex items-center gap-3'>
+                            <p className='main-color text-xl font-bold'>Location</p>
+                            <p className='text-black text-2xl'>{newCourseData.location}</p>
+                        </div>
+                        <div className='flex items-center gap-3'>
                             <p className='main-color text-xl font-bold'>Days</p>
                             <p className='text-black text-2xl'>{newCourseData.days}</p>
                         </div>
-                        <div className='flex items-center gap-3'>
-                            <p className='main-color text-xl font-bold'>Total hours</p>
-                            <p className='text-black text-2xl'>{newCourseData.total_hours}</p>
+                        <div className="flex items-center gap-12">
+                            <div className='flex items-center gap-3'>
+                                <p className='main-color text-xl font-bold'>Total hours</p>
+                                <p className='text-black text-2xl'>{newCourseData.total_hours}</p>
+                            </div>
+                            <p className='text-black font-black text-xl capitalize'>{newCourseData.status}</p>
+                            
                         </div>
                         
                     </div>
@@ -193,7 +248,7 @@ const Page = () => {
                             <pre className="text-gray-500 text-xl font-bold">-Training Tools:    {newCourseData.training_tools}</pre>
                             <pre className='text-black text-xl font-bold'>Net revenue:    {newCourseData.net_revenue}</pre>
                         </div>
-                        <button className='button-81'>Submit</button>
+                        <button className='button-81' onClick={addNewCourse}>Submit</button>
                     </div>
                 </div>
             </div>
@@ -228,12 +283,29 @@ const Page = () => {
                                     }} type="number" name="input" className="input" />
                             </div>
                         </div>
-                        <div className="coolinput">
+                        <div className="flex gap-5 items-center">
+                            <div className="coolinput">
                                 <label className="text">Location</label>
-                                <select className="select-form input">
+                                <select ref={location} className="select-form input">
                                     <option value="Alexandria">Alexandria</option>
                                     <option value="Cairo">Cairo</option>
                                 </select>
+                            </div>
+                            <div className="flex gap-3 items-center">
+                                <input ref={statusRef} type="checkbox" value={statusCourse} className="w-6 h-6" onChange={(e: any) => {
+                                    console.log("changed")
+                                    if (e.target.checked === true) {
+                                        setStatusCourse("implemented")
+                                        // statusRef.current.value = 'implemented'
+                                        // console.log(e.target.value)
+                                    }else {
+                                        setStatusCourse("not implemented")
+                                        // statusRef.current.value = 'not implemented'
+                                        // console.log(e.target.value)
+                                    }
+                                }} />
+                                <label className="main-color text-2xl">Implemented</label>
+                            </div>
                         </div>
                         
                         <div className="flex justify-around my-7">
@@ -291,16 +363,19 @@ const Page = () => {
                     let TT = parseInt(training_tools.current.value) * parseInt(numOfTrainees.current.value);
                     setNewCourseData({
                         name: name.current.value,
-                        numb_of_trainees: parseInt(numOfTrainees.current.value),
+                        num_of_trainees: parseInt(numOfTrainees.current.value),
                         date_from: fromDate,
                         date_to: toDate,
                         days: daysDifference,
                         total_hours: totalHours,
+                        location: location.current.value,
+                        status: statusCourse,
                         total_revenue: totalRevenue,
                         instructor_fees: IF,
                         break_cost: BC,
                         training_tools: TT,
-                        net_revenue: totalRevenue - (IF + BC + TT)
+                        net_revenue: totalRevenue - (IF + BC + TT),
+                        notes: '',
                     })
                     toggleForm();
                     toggleCourseInfo();
@@ -311,10 +386,64 @@ const Page = () => {
         </div>
         <div className="glass flex justify-between pt-9 mx-11 max-md:flex-col">
                 
-            
+            <table className="w-full p-2">
+                <thead>
+                    <tr className="text-gold text-2xl font-bold">
+                        <th>Title</th>
+                        <th>from</th>
+                        <th>to</th>
+                        <th>location</th>
+                        <th>status</th>
+                        <th>revenue</th>
+                        <th>Profit</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        courses.map((course: any) => (
+                            <tr key={course.id} className="table-row main-color text-base font-semibold text-center h-16">
+                                <td className="flex gap-1 justify-center mt-4 items-center"><p className="text-gray-600 cursor-pointer" onClick={() => {
+                                    toggleNotes();
+                                    setNotes(course.notes)
+                                    setSelectedNoteId(course.id)
+                                }}><MdOutlineNoteAlt /></p> {course.name}
+                                   {
+                                    course.notes !== "" &&
+                                    <IoAlertCircle onClick={() => {
+                                        toggleNotes()
+                                        setNotes(course.notes)
+                                        setSelectedNoteId(course.id)
+                                    }} className="text-yellow-400" />
+                                   }
+                                </td>
+                                <td>{course.date_from}</td>
+                                <td>{course.date_to}</td>
+                                <td>{course.location}</td>
+                                <td>{course.status}</td>
+                                <td>{course.total_revenue}</td>
+                                <td>{course.net_revenue}</td>
+                                <td>
+                                    <div className="table-row-buttons flex justify-center gap-3">
+                                        <RiShareBoxFill className="cursor-pointer text-2xl text-gray-700" />
+                                        <FaEdit className="cursor-pointer text-2xl text-green-700" onClick={() => {
+                                            editCourse.current.classList.toggle('active-new-course')
+                                            setSelected({id: course.id, name: course.name})
+                                            editName.current.value = course.name
+                                        }} />
+                                        <MdDelete className="cursor-pointer text-2xl text-red-700" onClick={() => {
+                                            deleteCourse(course.id)
+                                        }} />
+                                    </div>     
+                                </td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
     
     
-                <div className="flex flex-col gap-3 w-full m-16">
+                {/* <div className="flex flex-col gap-3 w-full m-16">
 
                     {
                         courses.map((course: any) => (
@@ -336,13 +465,34 @@ const Page = () => {
                     }
                     
 
-                </div>
+                </div> */}
     
                 
     
     
     
             </div>
+
+                <div ref={notesRef} className="soft-bg w-fit p-7 fixed hidden top-[56%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <div className="flex justify-between items-center mb-3 bottom-border">
+                        <p className="main-color text-3xl font-black flex gap-2">Notes <FaPencilAlt className="text-3xl text-green-600 font-black" /></p>
+                        <div onClick={toggleNotes}><p className="main-color text-3xl font-black cursor-pointer">
+                            <GrClose />
+                        </p></div>
+                    </div>
+                    <div>
+                        <form className="flex flex-col justify-center gap-5">
+                            <textarea value={notes} onChange={(e: any) => setNotes(e.target.value)} className="text-xl main-color bg-transparent" cols={35} rows={10}></textarea>
+                            <input type="submit" value="Save" onClick={(e: any) => {
+                                e.preventDefault();
+                                saveNotes(selectedNoteId)
+                                toggleNotes();
+                            }} className="button-81 m-3" />
+                        </form>
+                    </div>
+                </div>
+
+
             <div ref={editCourse} className="soft-bg w-fit p-7 hidden opacity-0 duration-300 flex-col gap-5 fixed top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2">
                             <div className="flex justify-between items-center">
                                 <p className="main-color text-3xl font-black">Edit Course</p>

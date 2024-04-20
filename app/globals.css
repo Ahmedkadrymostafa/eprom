@@ -800,7 +800,22 @@ stroke-linecap: round;
   visibility: visible;
   opacity: 1;
 }
+.table-row:nth-child(even) {
+  background-color: rgb(231 231 231);
+}
+.table-row-buttons {
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s;
+}
 /* end tables  */
+.table-row:hover .table-row-buttons {
+  visibility: visible;
+  opacity: 1;
+}
+.table-row:hover {
+  background-color: lightblue !important;
+}
 /* inputs  */
 .coolinput {
   display: flex;
