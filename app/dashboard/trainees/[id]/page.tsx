@@ -13,6 +13,23 @@ import { AiFillCloseSquare } from "react-icons/ai"
 import { FiShare } from "react-icons/fi"
 import { RiShareBoxLine } from "react-icons/ri"
 
+type courseData = {
+    person_id?: any,
+    course?: any,
+    date?: any,
+    date_from?: any,
+    date_to?: any,
+    status?: any,
+    days?: any,
+    total_hours?: any,
+    location?: any,
+    course_fees?: any,
+    instructor_fees?: any,
+    break_cost?: any,
+    tools?: any,
+}
+
+
 const Page = ({params}: {params: any}) => {
     const router = useRouter();
     const id = params.id
@@ -35,6 +52,8 @@ const Page = ({params}: {params: any}) => {
     const [ totalHours, setTotalHours ] = useState(0)
 
     const [ edit, setEdit ] = useState(false);
+    const [ showInfo, setShowInfo ] = useState(false);
+    const [ courseDataToSubmit, setCourseDataToSubmit ] = useState<courseData>({})
     const [ courseToUpdateID, setCoursesToUpdateID ] = useState();
     const [ courseToDeleteID, setCoursesToDeleteID ] = useState();
     const deletePopUp: any = useRef();
@@ -74,56 +93,79 @@ const Page = ({params}: {params: any}) => {
 
    const emptyInputs = () => {
         course.current.value = ""
-        from.current.value = ""
-        to.current.value = ""
-        org.current.value = ""
-        statusRef.current.checked = false
-        days.current.value = ""
-        total_hours.current.value = ""
-        training_center.current.value = ""
-        city.current.value = ""
-        instructor.current.value = ""
-        budget_code.current.value = ""
-        course_fees.current.value = ""
-        instructor_fees.current.value = ""
-        total_cost.current.value = ""
-        profit.current.value = ""
-        allowance.current.value = ""
-        hotel_cost.current.value = ""
-        setStatusJob("not implemented")
+        setCourseDataToSubmit({})
+        setShowInfo(false)
+        // from.current.value = ""
+        // to.current.value = ""
+        // org.current.value = ""
+        // statusRef.current.checked = false
+        // days.current.value = ""
+        // total_hours.current.value = ""
+        // training_center.current.value = ""
+        // city.current.value = ""
+        // instructor.current.value = ""
+        // budget_code.current.value = ""
+        // course_fees.current.value = ""
+        // instructor_fees.current.value = ""
+        // total_cost.current.value = ""
+        // profit.current.value = ""
+        // allowance.current.value = ""
+        // hotel_cost.current.value = ""
+        // setStatusJob("not implemented")
+   }
+
+
+   const handleCourseChange = (e: any) => {
+    console.log(e)
+    setShowInfo(true)
+    let currentCourse = courses.filter((course: any) => {
+        if (course.name === e) {
+            // from.current.value = course.date_from
+            // to.current.value = course.date_to
+            // if (course.status === "implemented") {
+            //     statusRef.current.checked = true
+            //     setStatusJob("implemented")
+            // }
+            // else {
+            //     statusRef.current.checked = false
+            //     setStatusJob("not implemented")
+            // }
+            // days.current.value = course.days
+            // total_hours.current.value = course.total_hours
+            // city.current.value = course.location
+            // course_fees.current.value = course.total_revenue / course.num_of_trainees
+            // instructor_fees.current.value = course.instructor_fees / course.num_of_trainees
+            setCourseDataToSubmit({
+                person_id: id,
+                course: course.name,
+                date: today.toISOString().split('T')[0],
+                date_from: course.date_from,
+                date_to: course.date_to,
+                status: course.status,
+                days: course.days,
+                total_hours: course.total_hours,
+                location: course.location,
+                course_fees: course.total_revenue / course.num_of_trainees,
+                instructor_fees: course.instructor_fees / course.num_of_trainees,
+                break_cost: course.break_cost / course.num_of_trainees,
+                tools: course.tools / course.num_of_trainees,
+            })
+        }
+    })
+    console.log(currentCourse)
    }
 
     const addNewCourse = async () => {
         setLoading(true)
-        let data = {
-            person_id: id.trim().toLowerCase().replace(/\s+/g, ' '),
-            course: course.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            date: today.toISOString().split('T')[0],
-            date_from: from.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            date_to: to.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            org: org.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            status: statusJob,
-            days: days.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            total_hours: total_hours.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            training_center: training_center.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            city: city.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            instructor: instructor.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            budget_code: budget_code.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            course_fees: course_fees.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            instructor_fees: instructor_fees.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            total_cost: total_cost.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            profit: profit.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            allowance: allowance.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            hotel_cost: hotel_cost.current.value.trim().toLowerCase().replace(/\s+/g, ' ')
-        }
-        if (!data.total_hours) {
-            setLoading(false)
-            return toast.warn("Hours is required! if you not know the hours for this course write zero instead")
-        }
-        if (!data.person_id && !data.course) {
-            setLoading(false)
-            return toast.warn("field course name is required")
-        }
+        let data = courseDataToSubmit
+        // if (!data.total_hours) {
+        //     setLoading(false)
+        //     return toast.warn("Hours is required! if you not know the hours for this course write zero instead")
+        // }
+        // if (!data.person_id && !data.course) {
+        //     setLoading(false)
+        //     return toast.warn("field course name is required")
+        // }
 
         await axios.post('/api/apps', data).then(response => {           
             toast.success('New course added successfully')
@@ -340,14 +382,14 @@ const Page = ({params}: {params: any}) => {
                                         <div className="flex flex-col gap-4">
                                             <p className="main-color text-2xl font-black">Person ID: </p>
                                             <p className="main-color text-2xl font-black">Location: </p>
+                                            <p className="main-color text-2xl font-black">Company: </p>
                                             <p className="main-color text-2xl font-black">Project: </p>
-                                            <p className="main-color text-2xl font-black">Department: </p>
                                         </div>
                                         <div className="flex flex-col gap-4">
                                             <p className="text-gray-600 text-2xl font-bold capitalize">{trainee.person_id}</p>
                                             <p className="text-gray-600 text-2xl font-bold capitalize">{trainee.location}</p>
-                                            <p className="text-gray-600 text-2xl font-bold capitalize">{trainee.project}</p>
                                             <p className="text-gray-600 text-2xl font-bold capitalize">{trainee.department}</p>
+                                            <p className="text-gray-600 text-2xl font-bold capitalize">{trainee.project}</p>
                                         </div>
                                         
                                     </div>
@@ -356,7 +398,7 @@ const Page = ({params}: {params: any}) => {
                 
                             <div className="glass">
                                 <div className="flex justify-between items-start px-10 py-7">
-                                    <p className="main-color text-3xl font-black">Completed Modules</p>
+                                    <p className="main-color text-3xl font-black">Applied Modules</p>
                                     <div className="flex gap-4">
                                         <button className="button" onClick={() => {
                                             toggleForm();
@@ -478,144 +520,77 @@ const Page = ({params}: {params: any}) => {
                                         </p></div>
                                     </div>
                 
-                                        <form className="mt-9 mb-11 flex justify-between gap-8">
-                
-                                            <div className="soft-bg w-1/2 p-7 flex flex-col gap-7">
-                                                <p className="text-gray-700 text-2xl font-bold">Course Information</p>
-                                                <div className="flex flex-col gap-3">
-                                                    {/* <div className="flex gap-3">
-                                                        
-                                                    </div> */}
-                                                        <select ref={course} className="select-form input">
-                                                            {
-                                                                courses.map((course: any) => (
-                                                                    <option key={course.id}>{course.name}</option>
-                                                                ))
-                                                            }
-                                                        </select>
-                                                    {/* <div className="coolinput">
-                                                        <label className="text">Course Name</label>
-                                                        <input type="text" name="input" className="input" />
-                                                    </div> */}
-                                                    <div className="flex justify-between gap-4 my-7">
-                                                        <div className="flex gap-2">
-                                                            <label className="main-color text-xl font-black">From</label>
-                                                            <input ref={from} className="select-form" type="date" />
+                                    <div className="flex flex-col gap-12">
+                                        <div className="w-fit mx-auto flex flex-col justify-center">
+                                            <p className="text-gray-700 text-3xl font-bold w-fit m-7">Choose course to add</p>
+
+                                            <select ref={course} className="select-form input" onChange={(e: any) => handleCourseChange(e.target.value)}>
+                                            {
+                                                courses.map((course: any) => (
+                                                    <option key={course.id}>{course.name}</option>
+                                                ))
+                                            }
+                                            </select>
+                                        </div>
+                                        {showInfo && <div>
+                                            <div  className='glass w-full z-10 px-5 py-2 top-0'>
+                                                <div className='bg-white px-7 py-3 rounded-3xl'>
+                                                    <div className='bottom-border px-5'>
+                                                        <p className='text-gold text-3xl font-bold'>New Course Info</p>
+                                                        {/* <p className='text-red-800 font-black text-2xl cursor-pointer'>Cancel</p> */}
+                                                    </div>
+                                                    <div className='flex justify-around m-7'>
+                                                        <div className='flex flex-col gap-4'>
+                                                            <div>
+                                                                <p className='main-color text-2xl font-bold'>Course Title</p>
+                                                                <p className='text-black text-xl font-semibold max-w-60'>{courseDataToSubmit.course}</p>
+                                                            </div>
+                                                            {/* <div className="flex items-center gap-3">
+                                                                <p className='main-color text-xl font-bold'>Number of trainees</p>
+                                                                <p className='text-black text-3xl'>{courseDataToSubmit.num_of_trainees}</p>
+                                                            </div> */}
+                                                            <div className='flex items-center gap-3'>
+                                                                <p className='main-color text-xl font-bold'>From</p>
+                                                                <p className='text-black text-xl'>{courseDataToSubmit.date_from}</p>
+                                                            </div>
+                                                            <div className='flex items-center gap-3'>
+                                                                <p className='main-color text-xl font-bold'>To</p>
+                                                                <p className='text-black text-xl'>{courseDataToSubmit.date_to}</p>
+                                                            </div>
+                                                            <div className='flex items-center gap-3'>
+                                                                <p className='main-color text-xl font-bold'>Location</p>
+                                                                <p className='text-black text-2xl'>{courseDataToSubmit.location}</p>
+                                                            </div>
+                                                            <div className='flex items-center gap-3'>
+                                                                <p className='main-color text-xl font-bold'>Days</p>
+                                                                <p className='text-black text-2xl'>{courseDataToSubmit.days}</p>
+                                                            </div>
+                                                            <div className="flex items-center gap-12">
+                                                                <div className='flex items-center gap-3'>
+                                                                    <p className='main-color text-xl font-bold'>Total hours</p>
+                                                                    <p className='text-black text-2xl'>{courseDataToSubmit.total_hours}</p>
+                                                                </div>
+                                                                <p className='text-black font-black text-xl capitalize'>{courseDataToSubmit.status}</p>
+                                                                
+                                                            </div>
+                                                            
                                                         </div>
-                                                        <div className="flex gap-2">
-                                                            <label className="main-color text-xl font-black">To</label>
-                                                            <input ref={to} className="select-form" type="date" />
-                                                        </div>
-                                                    </div>
-                
-                                                    <div className="flex justify-between mb-3">
-                                                        <select ref={org} className="select-form input uppercase font-black">
-                                                            {
-                                                                ORGS.map((org: any) => (
-                                                                    <option className="uppercase font-black" key={org.id}>{org.name}</option>
-                                                                ))
-                                                            }
-                                                        </select>
-                                                        <div className="flex gap-3 items-center">
-                                                            <input ref={statusRef} type="checkbox" value="Not implemented" className="w-6 h-6" onChange={(e: any) => {
-                                                                console.log("changed")
-                                                                if (e.target.checked === true) {
-                                                                    setStatusJob("implemented")
-                                                                    // statusRef.current.value = 'implemented'
-                                                                    // console.log(e.target.value)
-                                                                }else {
-                                                                    setStatusJob("not implemented")
-                                                                    // statusRef.current.value = 'not implemented'
-                                                                    // console.log(e.target.value)
-                                                                }
-                                                            }} />
-                                                            <label className="main-color text-2xl">Implemented</label>
-                                                        </div>
-                                                        {/* <select ref={statusInput} className="select-form input capitalize font-black">
-                                                            <option className="capitalize font-black">Not Implemented</option>
-                                                            <option className="capitalize font-black">Implemented</option>  
-                                                        </select> */}
-                                                        
-                                                    </div>
-                
-                                                    <div className="flex gap-3">
-                                                        <div className="coolinput">
-                                                            <label className="text">Days</label>
-                                                            <input ref={days} type="number" name="input" className="input" />
-                                                        </div>
-                                                        <div className="coolinput">
-                                                            <label className="text">Hours</label>
-                                                            <input ref={total_hours} type="number" name="input" className="input" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="coolinput">
-                                                        <label className="text">Training center</label>
-                                                        <input ref={training_center} type="text" name="input" className="input" />
-                                                    </div>
-                                                    <div className="coolinput">
-                                                        <label className="text">City</label>
-                                                        <input ref={city} type="text" name="input" className="input" />
-                                                    </div>
-                                                    <div className="coolinput">
-                                                        <label className="text">Instructor</label>
-                                                        <input ref={instructor} type="text" name="input" className="input" />
-                                                    </div>
-                                                    
-                                                    
-                                                </div>
-                                            </div>
-                
-                                            <div className="soft-bg w-full p-7 flex flex-col gap-5">
-                                                <p className="text-gray-700 text-2xl font-bold">Financial Information</p>
-                                                <div className="flex flex-col gap-5">
-                                                    <div className="coolinput">
-                                                        <label className="text">Budget Code:</label>
-                                                        <input ref={budget_code} type="text" name="input" className="input" />
-                                                    </div>
-                                                    <div className="flex justify-between gap-5">
-                                                        <div className="coolinput">
-                                                            <label className="text">Course Fees:</label>
-                                                            <input ref={course_fees} type="number" name="input" className="input" />
-                                                        </div>
-                                                        <div className="coolinput">
-                                                            <label className="text">Instructor Fees:</label>
-                                                            <input ref={instructor_fees} type="number" name="input" className="input" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="coolinput">
-                                                        <label className="text">Total Cost:</label>
-                                                        <input ref={total_cost} type="number" name="input" className="input" />
-                                                    </div>
-                                                    <div className="coolinput">
-                                                        <label className="text">Profit:</label>
-                                                        <input ref={profit} type="number" name="input" className="input" />
-                                                    </div>
-                                                    <div className="flex gap-5">
-                                                        <div className="coolinput">
-                                                            <label className="text">Allowance:</label>
-                                                            <input ref={allowance} type="text" name="input" className="input" />
-                                                        </div>
-                                                        <div className="coolinput">
-                                                            <label className="text">Hotel Cost:</label>
-                                                            <input ref={hotel_cost} type="number" name="input" className="input" />
+                                                        <div className='flex flex-col gap-6'>
+                                                            <p className='main-color text-3xl font-bold'>Total Revenue & Fees</p>
+                                                            <div className='flex flex-col gap-4'>
+                                                                <pre className='text-black text-xl font-bold'>Course fees:    {courseDataToSubmit.course_fees}</pre>
+                                                                <pre className="text-gray-500 text-xl font-bold">Instructor fees:    {courseDataToSubmit.instructor_fees}</pre>
+                                                                <pre className="text-gray-500 text-xl font-bold">Break cost:    {courseDataToSubmit.break_cost}</pre>
+                                                                <pre className="text-gray-500 text-xl font-bold">Training Tools:    {courseDataToSubmit.tools}</pre>
+                                                                <pre className='text-green-700 text-xl font-bold'>Profit:    {courseDataToSubmit.course_fees - (courseDataToSubmit.instructor_fees + courseDataToSubmit.break_cost + courseDataToSubmit.tools)}</pre>
+                                                            </div>
+                                                            <button className='button-81' onClick={addNewCourse}>Submit</button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {edit === false ? 
-                                                    <input className="text-white rounded-2xl p-5 main-bg mx-auto mt-7 text-xl cursor-pointer font-black duration-300 hover:scale-105" type="submit" value="Submit Course" onClick={(e: any) => {
-                                                        e.preventDefault();
-                                                        addNewCourse();
-                                                    }} />
-                                                    :
-                                                    <input className="text-white rounded-2xl p-5 main-bg mx-auto mt-7 text-xl cursor-pointer font-black duration-300 hover:scale-105" type="submit" value="Save" onClick={(e: any) => {
-                                                        e.preventDefault();
-                                                        updateCourse();
-                                                    }} />
-                                                }
                                             </div>
-                
-                                            
-                                        </form>
+                                        </div>}
+                                    </div>
                                        
                                 </div>
                             </div>
