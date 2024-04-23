@@ -1,16 +1,34 @@
 'use client'
 import { useRef, useState, useContext } from "react";
 import { DataContext } from "@/app/dashboard/layout";
+import { ReportContext } from "@/app/layout";
+import { useRouter } from "next/navigation";
 const ReportComponent = () => {
+  const router = useRouter()
     const dataContext: any = useContext(DataContext);
+    const reportContext: any = useContext(ReportContext);
 
-    const [fromDate, setFromDate ] = useState<any>();
-    const [toDate, setToDate ] = useState<any>();
+    const [fromDate, setFromDate ] = useState<any>('');
+    const [toDate, setToDate ] = useState<any>('');
     
-    const [traineesWithProject, setTraineesWithProject] = useState<any>([]);
+    const [ traineesWithProject, setTraineesWithProject ] = useState<any>([]);
+    const [ projectsToFilter, setProjectsToFilter ] = useState<any>([]);
     const [ showResult, setShowResult ] = useState<any>(false);
+    const [ filterByStatus, setFilterByStatus ] = useState<any>('all');
     // const date_from: any = useRef()
     // const date_to: any = useRef()
+    const handleFilterByStatusChange = (e: any) => {
+      setFilterByStatus(e.target.value);
+      console.log(e.target.value);
+    }
+    const handleFilterByProjectChange = (project: any) => {
+      if (project !== 'all') {
+        let filteredByProject = projectsToFilter.filter((e: any) => e.project === project)
+        setTraineesWithProject(filteredByProject)
+      }else {
+        setTraineesWithProject(projectsToFilter)
+      }
+    }
     const handleFromDateChange = (e: any) => {
         setFromDate(e.target.value)
     }
@@ -46,10 +64,20 @@ const ReportComponent = () => {
           );
       
           if (personApplications.length > 0) {
-            acc.push({
-              ...person,
-              applications: personApplications.map((app: any) => app),
-            });
+            if (filterByStatus === 'all') {
+              acc.push({
+                ...person,
+                applications: personApplications.map((app: any) => app),
+              });
+            }else {
+              const filteredByStatus = personApplications.filter((app: any) => app.status === filterByStatus)
+              if (filteredByStatus.length > 0) {
+                acc.push({
+                  ...person,
+                  applications: filteredByStatus.map((app: any) => app),
+                });
+              }
+            }
           }
       
           return acc;
@@ -71,6 +99,7 @@ const ReportComponent = () => {
           return acc;
         }, []);
         setTraineesWithProject(projectTrainees)
+        setProjectsToFilter(projectTrainees)
         console.log(projectTrainees)
     }
 
@@ -109,6 +138,10 @@ const ReportComponent = () => {
     
   };
    
+  const report = () => {
+    reportContext.setReportByTraineesData(traineesWithProject)
+    router.push('/report/bytrainees')
+  }
     
   return (
     <div>
@@ -129,10 +162,22 @@ const ReportComponent = () => {
                         <input value={toDate} onChange={handleToDateChange} className="select-form" type="date" />
                     </div>
                 </div>
+
+                <div>
+                  <div className="mb-7">
+                    <p className="main-color text-xl font-black">Filter By Status</p>
+                    <select className="input" value={filterByStatus} onChange={handleFilterByStatusChange}>
+                      <option value="all">All</option>
+                      <option value="implemented">Implemented</option>
+                      <option value="not implemented">Not implemented</option>
+                    </select>
+                  </div>
+
+                </div>
                 
                 <div className="flex gap-4">
                     <button className="cta" onClick={() => {
-                      getApplicationsWithTrainees();
+                      // getApplicationsWithTrainees();
                       PersonsWithApplications();
                     }}>
                         <span>Collect</span>
@@ -145,7 +190,7 @@ const ReportComponent = () => {
                       <button className="simple-btn" onClick={() => setShowResult(true)}>Show Result</button>                    
                     }
                     {traineesWithProject.length > 0 && 
-                      <button className="download-button">
+                      <button className="download-button" onClick={report}>
                         <div className="docs"><svg className="css-i6dzq1" strokeLinejoin="round" strokeLinecap="round" fill="none" strokeWidth="2" stroke="currentColor" height="20" width="20" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line y2="13" x2="8" y1="13" x1="16"></line><line y2="17" x2="8" y1="17" x1="16"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Report</div>
                         <div className="download">
                             <svg className="css-i6dzq1" strokeLinejoin="round" strokeLinecap="round" fill="none" strokeWidth="2" stroke="currentColor" height="24" width="24" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line y2="3" x2="12" y1="15" x1="12"></line></svg>
@@ -153,6 +198,21 @@ const ReportComponent = () => {
                       </button>
                     }
                 </div>
+
+                
+                {projectsToFilter.length > 0 && 
+                    <div className="mb-7">
+                      <p className="main-color text-xl font-black">Filter By Project</p>
+                      <select className="input" onChange={(value: any) => handleFilterByProjectChange(value.target.value)}>
+                        <option value="all">All</option>
+                        {
+                          projectsToFilter.map((trainee: any) => (
+                            <option className="capitalize" key={trainee.project} value={trainee.project}>{trainee.project}</option>
+                          ))
+                        }
+                      </select>
+                    </div>
+                  }
             </div>
         </div>
 
@@ -160,7 +220,7 @@ const ReportComponent = () => {
           <p className="main-color text-4xl font-black w-fit mx-auto my-11">Report Result</p>
           {traineesWithProject.map((trainee: any) => (
 
-          <div key={trainee} className="w-[80%] mx-auto p-4 border-black border-2">
+          <div key={trainee.project} className="w-[80%] mx-auto p-4 border-black border-2">
             <p className="text-black text-4xl font-black w-fit mx-auto my-5 uppercase">{trainee.project}</p>
             {trainee.trainees.map((trainee: any) => (
               <div key={trainee} className="my-6">
@@ -181,7 +241,7 @@ const ReportComponent = () => {
                       <tbody>
 
                         {trainee.applications.map((app: any) => (
-                          <tr key={app} className="text-center text-black text-xl p-3">
+                          <tr key={app.id} className="text-center text-black text-xl p-3">
                             <td className="w-1/2 text-left">{app.course}</td>
                             <td>{app.date_from}</td>
                             <td>{app.date_to}</td>
