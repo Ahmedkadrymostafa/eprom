@@ -6,6 +6,7 @@ import { GiMoneyStack } from "react-icons/gi"
 import { GrMoney } from "react-icons/gr"
 import { MdMenuBook } from "react-icons/md"
 import { PiPiggyBankBold } from "react-icons/pi"
+import PlannedCourses from "./PlannedCourses"
 
 const ApplicationsFinance = (props: any) => {
   return (
@@ -79,6 +80,8 @@ const ApplicationsFinance = (props: any) => {
             </div>
             
         </div>
+
+        <PlannedCourses />
     </div>
   )
 }

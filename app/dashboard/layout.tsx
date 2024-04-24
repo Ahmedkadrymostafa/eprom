@@ -15,6 +15,7 @@ export const DataContext = createContext<unknown>(null)
 export default function Layout({children}: {children: any}){
   
   const [loggedIn, setLoggedIn] = useState<any>(null);
+  const [loading, setLoading] = useState<any>(true);
   const router = useRouter();
   const [ credentials, setCredentials] = useState<any>({});
   const [ trainees, setTrainees] = useState([])
@@ -22,6 +23,24 @@ export default function Layout({children}: {children: any}){
   const [ ORGS, setORGS ] = useState([])
   const [ APPS, setAPPS ] = useState([])
 
+  const getSession = async () => {
+    await axios.get('/api/auth/login/session').then((res: any) => {
+      
+      if (res.data.cookie === res.data.credentials[0].session) {
+        setLoggedIn(true)
+        setCredentials(res.data.credentials[0])
+        
+        // console.log(loggedIn)
+      }else {
+        setLoggedIn(false)
+        // console.log(loggedIn)
+      }
+    }).catch((err) => {
+      // console.log(err)
+      router.push('/')
+    })
+    
+  }
   const getTrainees = async () => {
     await axios.get("/api/trainees").then((res) => {
         // console.log(res.data)
@@ -51,51 +70,36 @@ export default function Layout({children}: {children: any}){
         setAPPS(res.data)
     })
    }
+   const getData = async () => {
+     getSession();
+     getTrainees();
+     getCourses();
+     getORGS();
+     getAPPS();
+  }
   useEffect(() => {
-    const getSession = async () => {
-      await axios.get('/api/auth/login/session').then((res: any) => {
-        
-        if (res.data.cookie === res.data.credentials[0].session) {
-          setLoggedIn(true)
-          setCredentials(res.data.credentials[0])
-          
-          console.log(loggedIn)
-        }else {
-          setLoggedIn(false)
-          console.log(loggedIn)
-        }
-      }).catch((err) => {
-        console.log(err)
-        router.push('/')
-      })
-      
-    }
-    getSession();
-    getTrainees();
-    getCourses();
-    getORGS();
-    getAPPS();
+    getData().then(() => {
+      setLoading(false);
+    })
+    
   }, [])
 
 
-  if (loggedIn === null) {
+
+
+  if (loading) {
     return <Loading />
   }else if (loggedIn === true) {
-    return (     
+    return (
+        
       <DataContext.Provider value={{credentials, trainees, setTrainees, courses, setCourses, ORGS, setORGS, APPS, setAPPS}}>
           <div>
               <Header  email={credentials.email} name={credentials.name} /> 
               
               <SideBar role={credentials.role} />        
-              
-
-
                 <div className="page-width">
                   {children}
                 </div>
-
-
-
               
           </div>    
     </DataContext.Provider>
