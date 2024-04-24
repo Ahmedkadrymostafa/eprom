@@ -1,6 +1,6 @@
 'use client'
 import axios from "axios";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FaEdit, FaPencilAlt } from "react-icons/fa";
 import { MdDelete, MdOutlineNoteAlt } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -28,6 +28,7 @@ type newCourseData = {
     break_cost?: any,
     training_tools?: any,
     net_revenue?: any,
+    instructors?: any,
     notes?: any,
 }
 const Page = () => {
@@ -52,6 +53,9 @@ const Page = () => {
     const [ totalRevenue, setTotalRevenue ] = useState(0);
     const [ statusCourse, setStatusCourse ] = useState('not implemented');
     const [ newCourseData, setNewCourseData ] = useState<newCourseData>({});
+
+    const instructorRef: any = useRef();
+    const [ instructorsToShow, setInstructorsToShow ] = useState<any>([]);
 
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
@@ -122,6 +126,42 @@ const Page = () => {
         training_tools.current.value = ''
         toggleCourseInfo()
     }
+    const viewCourseInfo = () => {
+        if (
+            !name.current.value ||
+            !numOfTrainees.current.value ||
+            !fromDate ||
+            !toDate ||
+            !coursePrice.current.value ||
+            !instructor_fees.current.value ||
+            !break_cost.current.value ||
+            !training_tools.current.value
+        ) {
+            return toast.warn("please enter full fields")
+        }
+        let IF = parseInt(instructor_fees.current.value) * parseInt(numOfTrainees.current.value);
+        let BC = parseInt(break_cost.current.value) * parseInt(numOfTrainees.current.value);
+        let TT = parseInt(training_tools.current.value) * parseInt(numOfTrainees.current.value);
+        setNewCourseData({
+            name: name.current.value,
+            num_of_trainees: parseInt(numOfTrainees.current.value),
+            date_from: fromDate,
+            date_to: toDate,
+            days: daysDifference,
+            total_hours: totalHours,
+            location: location.current.value,
+            status: statusCourse,
+            total_revenue: totalRevenue,
+            instructor_fees: IF,
+            break_cost: BC,
+            training_tools: TT,
+            net_revenue: totalRevenue - (IF + BC + TT),
+            instructors: instructorsToShow.join('-'),
+            notes: '',
+        })
+        toggleForm();
+        toggleCourseInfo();
+    }
     const saveNotes = async (id: any) => {
         let data = {
             notes: notes
@@ -186,6 +226,7 @@ const Page = () => {
             console.log(err)
         })
     }
+    
   return (
     <div className="relative">
         <div className="flex justify-between items-center mx-6 my-5">
@@ -250,6 +291,16 @@ const Page = () => {
                         </div>
                         <button className='button-81' onClick={addNewCourse}>Submit</button>
                     </div>
+                    <div>
+                        <p className="text-2xl main-color font-black">Instructors</p>
+                        <div className="mt-4">
+                            {
+                                instructorsToShow.map((e: any) => (
+                                    <p key={e} className="text-base text-black capitalize">{e}</p>
+                                ))
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -259,6 +310,7 @@ const Page = () => {
                 <p className="main-color text-4xl font-black">Add New Course</p>
                 <GrClose className="main-color text-3xl font-black cursor-pointer" onClick={toggleForm} />
             </div>
+
             <form className="flex flex-col px-8">
                 <div className="flex justify-between gap-7">
                     <div className="flex flex-col gap-3">
@@ -354,31 +406,32 @@ const Page = () => {
                             </div>
                         </div>
                     </div>
+
+                    <div>
+                        <div className="flex">
+                            <div className="coolinput">
+                                <label className="text">Instructors</label>
+                                <input ref={instructorRef} type="text" name="input" className="input" />
+                            </div>
+                            <button onClick={(e: any) => {
+                                e.preventDefault();                                
+                                instructorsToShow.push(instructorRef.current.value);
+                                instructorRef.current.value = ''
+                            }}>Add</button>
+                        </div>
+                        {/* <div className="mt-4">
+                            {
+                                instructorsToShow.map((e: any) => (
+                                    <p key={e} className="text-base main-color">{e}</p>
+                                ))
+                            }
+                        </div> */}
+                    </div>
                 </div>
                     
                 <input className="button-81" type="submit" value="View" onClick={(e: any) => {
                     e.preventDefault();
-                    let IF = parseInt(instructor_fees.current.value) * parseInt(numOfTrainees.current.value);
-                    let BC = parseInt(break_cost.current.value) * parseInt(numOfTrainees.current.value);
-                    let TT = parseInt(training_tools.current.value) * parseInt(numOfTrainees.current.value);
-                    setNewCourseData({
-                        name: name.current.value,
-                        num_of_trainees: parseInt(numOfTrainees.current.value),
-                        date_from: fromDate,
-                        date_to: toDate,
-                        days: daysDifference,
-                        total_hours: totalHours,
-                        location: location.current.value,
-                        status: statusCourse,
-                        total_revenue: totalRevenue,
-                        instructor_fees: IF,
-                        break_cost: BC,
-                        training_tools: TT,
-                        net_revenue: totalRevenue - (IF + BC + TT),
-                        notes: '',
-                    })
-                    toggleForm();
-                    toggleCourseInfo();
+                    viewCourseInfo();
                 }} />
             </form>
             

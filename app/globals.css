@@ -38,6 +38,15 @@
 .second-bg {
   background-color: var(--second-bg);
 }
+.yellow-bg {
+  background-color: #e4ff006b;
+}
+.blue-bg {
+  background-color: #bbdfff;
+}
+.green-bg {
+  background-color: #00ff0066;
+}
 .gr-bg {
   background-image: url(./assets/gryellow.jpg);
   background-position: center;
@@ -61,14 +70,14 @@
   background-position: center;
   background-size: cover;
 }
-.card-yellow {
-  background-color: #FBA834;
+.card-one {
+  background-color: #ffdfb2;
 }
-.card-blue {
-  background-color: #59B4C3;
+.card-two {
+  background-color: #ff8d009e;
 }
-.card-green {
-  background-color: #74E291;
+.card-three {
+  background-color: #ff66b463;
 }
 .glass {
   background: rgba(255, 255, 255, 0.2);
