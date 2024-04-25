@@ -124,6 +124,7 @@ const Page = () => {
         instructor_fees.current.value = ''
         break_cost.current.value = ''
         training_tools.current.value = ''
+        setInstructorsToShow([])
         toggleCourseInfo()
     }
     const viewCourseInfo = () => {
@@ -187,7 +188,7 @@ const Page = () => {
 
         await axios.post('/api/courses', data).then(response => {
             setCourses([{id: response.data.id, ...newCourseData}, ...courses])
-            dataContext.setCourses([{id: response.data.id, }, ...courses])
+            dataContext.setCourses([{id: response.data.id, ...newCourseData}, ...courses])
             // console.log(courses)
             toast.success("New course added successfully")
             emptyInputs();
@@ -242,7 +243,7 @@ const Page = () => {
             <div className='bg-white px-7 py-3 rounded-3xl'>
                 <div className='flex justify-between items-center bottom-border px-5'>
                     <p className='main-color text-3xl font-bold'>New Course Info</p>
-                    <p className='text-red-800 font-black text-2xl cursor-pointer' onClick={toggleCourseInfo}>Cancel</p>
+                    <p className='text-red-800 font-black text-2xl cursor-pointer' onClick={emptyInputs}>Cancel</p>
                 </div>
                 <div className='flex justify-around m-7'>
                     <div className='flex flex-col gap-4'>

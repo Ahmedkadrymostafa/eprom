@@ -4,14 +4,18 @@ import { Doughnut } from "react-chartjs-2";
 import { CgSandClock } from "react-icons/cg"
 import { MdLibraryAddCheck } from "react-icons/md"
 
-const PlannedCourses = () => {
+const PlannedCourses = (props: any) => {
   ChartJS.register(ArcElement, Tooltip, Legend);
+
+  const nonImplementedCourses = props.notImplemented
+  const implementedCourses = props.implemented
+
   const data = {
     labels: ['Not implemented', 'Implemented',],
     datasets: [
       {
         label: 'Count',
-        data: [45, 15],
+        data: [nonImplementedCourses.length, implementedCourses.length],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(75, 192, 192, 0.2)',
@@ -34,14 +38,14 @@ const PlannedCourses = () => {
               <div className="lightblue-color flex justify-between items-center rounded-3xl p-7">
                 <div>
                   <p className="main-color text-2xl font-bold">Implemented Courses</p>
-                  <p className="text-black text-4xl font-semibold mx-6 mt-6">45</p>
+                  <p className="text-black text-4xl font-semibold mx-6 mt-6">{implementedCourses.length}</p>
                 </div>
                 <p className="text-green-600 text-6xl"><MdLibraryAddCheck /></p>
               </div>
               <div className="lightred-color flex justify-between items-center rounded-3xl p-7">
                 <div>
                   <p className="main-color text-2xl font-bold">Not Implemented Courses</p>
-                  <p className="text-black text-4xl font-semibold mx-6 mt-6">15</p>
+                  <p className="text-black text-4xl font-semibold mx-6 mt-6">{nonImplementedCourses.length}</p>
                 </div>
                 <p className="text-gray-500 text-6xl"><CgSandClock /></p>
               </div>

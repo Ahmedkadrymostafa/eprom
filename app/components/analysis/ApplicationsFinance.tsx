@@ -1,5 +1,4 @@
 'use client'
-
 import { BsFillBookmarkCheckFill } from "react-icons/bs"
 import { FaArrowTrendUp, FaUsers } from "react-icons/fa6"
 import { GiMoneyStack } from "react-icons/gi"
@@ -7,9 +6,62 @@ import { GrMoney } from "react-icons/gr"
 import { MdMenuBook } from "react-icons/md"
 import { PiPiggyBankBold } from "react-icons/pi"
 import PlannedCourses from "./PlannedCourses"
+import { DataContext } from "@/app/dashboard/layout"
+import { useContext, useEffect, useState } from "react"
+import formatNumberInEGP from "@/app/helpers/FormatNumInEGP"
 
 const ApplicationsFinance = (props: any) => {
-  return (
+    // const dataContext: any = useContext(DataContext);
+    
+    // const [ implementedCourses, setImplementedCourses ] = useState(dataContext.courses.filter((course: any) => course.status === 'implemented'))
+    // const [ nonImplementedCourses, setNonImplementedCourses ] = useState(dataContext.courses.filter((course: any) => course.status === 'not implemented'))
+    
+    // const [ implementedRevenue, setImplementedRevenue ] = useState(0)
+    // const [ implementedExpenses, setImplementedExpenses ] = useState(0)
+    // const [ notImplementedRevenue, setNotImplementedRevenue ] = useState(0)
+
+    // useEffect(() => {
+    //     // setImplementedCourses(dataContext.courses.filter((course: any) => course.status === 'implemented'))
+    //     // setNonImplementedCourses(dataContext.courses.filter((course: any) => course.status === 'not implemented'))
+        
+    //     setImplementedRevenue(implementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.total_revenue), 0))
+    //     setImplementedExpenses(implementedCourses.reduce((acc: any, course: any) => acc + (parseInt(course.total_revenue) - parseInt(course.net_revenue)), 0))
+    //     setNotImplementedRevenue(nonImplementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.total_revenue), 0))
+
+    //     console.log(implementedCourses)
+
+    // }, [dataContext.courses])
+
+
+    const dataContext: any = useContext(DataContext);
+
+    const [implementedCourses, setImplementedCourses] = useState<any[]>([]);
+    const [nonImplementedCourses, setNonImplementedCourses] = useState<any[]>([]);
+    
+    const [implementedRevenue, setImplementedRevenue] = useState<number>(0);
+    const [implementedExpenses, setImplementedExpenses] = useState<number>(0);
+    const [notImplementedRevenue, setNotImplementedRevenue] = useState<number>(0);
+
+    useEffect(() => {
+        const filteredImplementedCourses = dataContext.courses.filter((course: any) => course.status === 'implemented');
+        const filteredNonImplementedCourses = dataContext.courses.filter((course: any) => course.status === 'not implemented');
+
+        setImplementedCourses(filteredImplementedCourses);
+        setNonImplementedCourses(filteredNonImplementedCourses);
+
+        const implementedRev = filteredImplementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.total_revenue), 0);
+        const implementedExp = filteredImplementedCourses.reduce((acc: any, course: any) => acc + (parseInt(course.total_revenue) - parseInt(course.net_revenue)), 0);
+        const notImplementedRev = filteredNonImplementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.total_revenue), 0);
+
+        setImplementedRevenue(implementedRev);
+        setImplementedExpenses(implementedExp);
+        setNotImplementedRevenue(notImplementedRev);
+
+        console.log(filteredImplementedCourses);
+
+    }, [dataContext.courses]);
+
+    return (
     <div className="glass p-7">
         <div>
                 <div className="glass flex justify-between flex-wrap p-5 gap-5 mb-20">
@@ -46,7 +98,7 @@ const ApplicationsFinance = (props: any) => {
                     </div>
                     <p className="text-sm text-gray-500 max-w-44">Total Revenue for not implemented course</p>
                 </div>
-                <p className="text-black text-xl font-bold mt-4">150000 EGP</p>
+                <p className="text-black text-xl font-bold mt-4">{formatNumberInEGP(notImplementedRevenue)}</p>
             </div>
             <div className="blue-bg w-1/4 p-5 rounded-2xl">
                 <div>
@@ -56,7 +108,7 @@ const ApplicationsFinance = (props: any) => {
                     </div>
                     <p className="text-sm text-gray-500 max-w-44">Revenue for implemented Courses</p>
                 </div>
-                <p className="text-black text-xl font-bold mt-4">210000 EGP</p>
+                <p className="text-black text-xl font-bold mt-4">{formatNumberInEGP(implementedRevenue)}</p>
             </div>
             <div className="blue-bg w-1/4 p-5 rounded-2xl">
                 <div>
@@ -66,7 +118,7 @@ const ApplicationsFinance = (props: any) => {
                     </div>
                     <p className="text-sm text-gray-500 max-w-44">Expenses for implemented Courses</p>
                 </div>
-                <p className="text-black text-xl font-bold mt-4">10000 EGP</p>
+                <p className="text-black text-xl font-bold mt-4">{formatNumberInEGP(implementedExpenses)}</p>
             </div>
             <div className="green-bg w-1/4 p-5 rounded-2xl">
                 <div>
@@ -76,12 +128,12 @@ const ApplicationsFinance = (props: any) => {
                     </div>
                     <p className="text-sm text-gray-500  max-w-44">Current Profit for implemented courses only</p>
                 </div>
-                <p className="text-black text-xl font-bold mt-4">450000 EGP</p>
+                <p className="text-black text-xl font-bold mt-4">{formatNumberInEGP(implementedRevenue - implementedExpenses)}</p>
             </div>
             
         </div>
 
-        <PlannedCourses />
+        <PlannedCourses implemented={implementedCourses} notImplemented={nonImplementedCourses} />
     </div>
   )
 }
