@@ -47,38 +47,46 @@ export async function POST(request: any, res: any) {
 
 
     if (credentials[0].session === session.value) {
-        const courses = await query({
-            query: "SELECT * FROM courses WHERE name = ?",
-            values: [data.name],
-          })
-          if (courses.length !== 0) return NextResponse.json({message: "course is exist"}, {status: 400})
+        // const courses = await query({
+        //     query: "SELECT * FROM courses WHERE name = ?",
+        //     values: [data.name],
+        //   })
+        //   if (courses.length !== 0) return NextResponse.json({message: "course is exist"}, {status: 400})
         
           try {
             const connection = await pool.getConnection();
             const result: any = await connection.query(
-              'INSERT INTO courses (name, num_of_trainees, date_from, date_to, days, total_hours, location, status, total_revenue, instructor_fees, break_cost, tools, net_revenue, instructors) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-              [data.name,
+              'INSERT INTO courses (course_title, course_price, num_of_trainees, date_from, date_to, days, total_hours, location, course_status, total_revenue, instructor_fees, break_cost, tools, transportation, accommodation, allowance, other_expenses, total_expenses, net_revenue, notes) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+              [
+                data.course_title,
+                data.course_price,
                 data.num_of_trainees,
                 data.date_from,
                 data.date_to,
                 data.days,
                 data.total_hours,
                 data.location,
-                data.status,
+                data.course_status,
                 data.total_revenue,
                 data.instructor_fees,
                 data.break_cost,
-                data.training_tools,
+                data.tools,
+                data.transportation,
+                data.accommodation,
+                data.allowance,
+                data.other_expenses,
+                data.total_expenses,
                 data.net_revenue,
-                data.instructors
+                data.notes
               ]
             );
             connection.release();
             return NextResponse.json({message: "success", id: result[0].insertId}, {status: 200})
           } catch (error) {
-            console.error('Error registering user:', error);
+            console.error('Error adding course:', error);
             return NextResponse.json({message: "failed"}, {status: 200})
           }    
+          
     }
 }
 export async function PUT(request: any, res: any) {

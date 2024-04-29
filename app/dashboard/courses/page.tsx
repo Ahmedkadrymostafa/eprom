@@ -22,7 +22,7 @@ type newCourseData = {
     days?: any,
     total_hours?: any,
     location?: any,
-    status?: any,
+    courseStatus?: any,
     total_revenue?: any,
     instructor_fees?: any,
     break_cost?: any,
@@ -31,63 +31,86 @@ type newCourseData = {
     instructors?: any,
     notes?: any,
 }
+type addNewCourseData = {
+    course_title: any,
+    course_price: any,
+    num_of_trainees: any,
+    days: any,
+    total_hours: any,
+    location: any,
+    course_status: any,
+    date_from: any,
+    date_to: any,
+    total_revenue: any,
+    instructor_fees: any,
+    break_cost: any,
+    tools: any,
+    transportation: any,
+    accommodation: any,
+    allowance: any,
+    other_expenses: any,
+    total_expenses: any,
+    net_revenue: any,
+    instructors?: any,
+    notes?: any,
+}
 const Page = () => {
-    // const [value, onChange] = useState<Value>(new Date());
 
-    const name: any = useRef()
+    const [ formRole, setFormRole ] = useState('add');
+
+    const courseTitle: any = useRef()
+    const coursePrice: any = useRef()
     const numOfTrainees: any = useRef()
-    const date_from: any = useRef()
-    const date_to: any = useRef()
     const days: any = useRef()
+    const [ totalHours, setTotalHours ]: any = useState(0)
     const location: any = useRef()
+    const [ statusCourse, setStatusCourse ] = useState('not implemented');
     const statusRef: any = useRef()
-    const total_hours: any = useRef()
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
+    // const dateFromRef: any = useRef()
+    // const dateToRef: any = useRef()
+
     const total_revenue: any = useRef()
     const instructor_fees: any = useRef()
     const break_cost: any = useRef()
     const training_tools: any = useRef()
     const net_revenue: any = useRef()
     
-    const coursePrice: any = useRef()
-    const [ totalHours, setTotalHours ] = useState(0);
+    // const [ totalHours, setTotalHours ] = useState(0);
     const [ totalRevenue, setTotalRevenue ] = useState(0);
-    const [ statusCourse, setStatusCourse ] = useState('not implemented');
     const [ newCourseData, setNewCourseData ] = useState<newCourseData>({});
 
     const instructorRef: any = useRef();
     const [ instructorsToShow, setInstructorsToShow ] = useState<any>([]);
 
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
   const [daysDifference, setDaysDifference] = useState(0);
 
   const handleFromDateChange = (event: any) => {
     setFromDate(event.target.value);
-    calculateDays(event.target.value, toDate);
   };
 
   const handleToDateChange = (event: any) => {
     setToDate(event.target.value);
-    calculateDays(fromDate, event.target.value);
   };
 
-  const calculateDays = (from: any, to: any) => {
-    const fromDateObj: any = new Date(from);
-    const toDateObj: any = new Date(to);
+//   const calculateDays = (from: any, to: any) => {
+//     const fromDateObj: any = new Date(from);
+//     const toDateObj: any = new Date(to);
 
-    if (isNaN(fromDateObj.getTime()) || isNaN(toDateObj.getTime())) {
-      setDaysDifference(0);
-      return;
-    }
+//     if (isNaN(fromDateObj.getTime()) || isNaN(toDateObj.getTime())) {
+//       setDaysDifference(0);
+//       return;
+//     }
 
-    const timeDifference = toDateObj - fromDateObj;
-    const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+//     const timeDifference = toDateObj - fromDateObj;
+//     const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
 
-    let totalRev = parseInt(coursePrice.current.value) * Math.round(daysDifference)
-    setTotalHours(Math.round(daysDifference) * 6)
-    setTotalRevenue(totalRev)
-    setDaysDifference(Math.round(daysDifference));
-  };
+//     let totalRev = parseInt(coursePrice.current.value) * Math.round(daysDifference)
+//     setTotalHours(Math.round(daysDifference) * 6)
+//     setTotalRevenue(totalRev)
+//     setDaysDifference(Math.round(daysDifference));
+//   };
 
     const notesRef: any = useRef()
     const [notes, setNotes] = useState('');
@@ -110,22 +133,28 @@ const Page = () => {
         notesRef.current.classList.toggle('hidden')
     }
     const emptyInputs = () => {
-        name.current.value = ''
-        numOfTrainees.current.value = null
+        courseTitle.current.value = ''
         coursePrice.current.value = null
-        date_to.current.value = ''
-        date_from.current.value = ''
+        numOfTrainees.current.value = null
         location.current.value = ''
-        setStatusCourse('not implemented')
-        statusRef.current.checked = false
-        setTotalRevenue(0)
+        days.current.value = 0
         setTotalHours(0)
-        setDaysDifference(0)
-        instructor_fees.current.value = ''
-        break_cost.current.value = ''
-        training_tools.current.value = ''
-        setInstructorsToShow([])
-        toggleCourseInfo()
+        setStatusCourse('not implemented')
+        setFromDate('')
+        setToDate('')
+        toggleForm()
+        // date_to.current.value = ''
+        // date_from.current.value = ''
+        // setStatusCourse('not implemented')
+        // statusRef.current.checked = false
+        // setTotalRevenue(0)
+        // setTotalHours(0)
+        // setDaysDifference(0)
+        // instructor_fees.current.value = ''
+        // break_cost.current.value = ''
+        // training_tools.current.value = ''
+        // setInstructorsToShow([])
+        // toggleCourseInfo()
     }
     const viewCourseInfo = () => {
         if (
@@ -180,19 +209,38 @@ const Page = () => {
         })
     }
     const addNewCourse = async () => {
-        let data = newCourseData;
-        if (!data.name || !data.num_of_trainees || !data.break_cost
-            || !data.instructor_fees || !data.training_tools || !data.date_from || !data.date_to
-            || !data.days || !data.total_revenue || !data.net_revenue
-        ) return toast.warn("some fields is required")
+        let data: addNewCourseData = {
+            course_title: courseTitle.current.value,
+            course_price: coursePrice.current.value,
+            num_of_trainees: numOfTrainees.current.value,
+            days: days.current.value,
+            total_hours: totalHours,
+            location: location.current.value,
+            course_status: statusCourse,
+            date_from: fromDate,
+            date_to: toDate,
+            total_revenue: 0,
+            instructor_fees: 0,
+            break_cost: 0,
+            tools: 0,
+            transportation: 0,
+            accommodation: 0,
+            allowance: 0,
+            other_expenses: 0,
+            total_expenses: 0,
+            net_revenue: 0,
+            notes: '',
+        };
+        if (!data.course_title) return toast.warn("course title is required")
 
         await axios.post('/api/courses', data).then(response => {
-            setCourses([{id: response.data.id, ...newCourseData}, ...courses])
-            dataContext.setCourses([{id: response.data.id, ...newCourseData}, ...courses])
+            setCourses([{id: response.data.id, ...data}, ...courses])
+            dataContext.setCourses([{id: response.data.id, ...data}, ...courses])
             // console.log(courses)
             toast.success("New course added successfully")
             emptyInputs();
         }).catch(error => toast.error("course title is exist"))
+        console.log(data)
     }
     const update = async () => {
         let data = {
@@ -234,6 +282,7 @@ const Page = () => {
             <p className="main-color text-4xl font-bold">Courses</p>
             <button className="button" onClick={() => {
                 toggleForm();
+                setFormRole('add');
             }}>
                 <span className="button-content">Add New Course</span>
             </button>
@@ -306,21 +355,27 @@ const Page = () => {
             </div>
         </div>
 
-        <div ref={newCourseForm} className="fixed z-10 soft-bg p-5 w-[93%] duration-300 top-[100px] -left-full">
+        <div ref={newCourseForm} className="fixed z-10 soft-bg p-5 w-fit max-h-[500px] max-w-[850px] overflow-y-scroll none-scrollbar duration-300 top-[100px] -left-full">
             <div className="flex justify-between items-center mb-4">
+                {formRole === 'add' ? 
                 <p className="main-color text-4xl font-black">Add New Course</p>
-                <GrClose className="main-color text-3xl font-black cursor-pointer" onClick={toggleForm} />
+                :
+                <p className="main-color text-4xl font-black">Update Course</p>
+                }
+                <GrClose className="main-color text-3xl font-black cursor-pointer" onClick={() => {
+                    toggleForm();
+                    setFormRole('add')
+                }} />
             </div>
 
             <form className="flex flex-col px-8">
-                <div className="flex justify-between gap-7">
                     <div className="flex flex-col gap-3">
                         
                         <div className="coolinput">
                                 <label className="text">Course title</label>
-                                <input ref={name} type="text" name="input" className="input" />
+                                <input ref={courseTitle} type="text" name="input" className="input" />
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-3">
                             <div className="coolinput">
                                     <label className="text">Course price</label>
                                     <input ref={coursePrice} onChange={() => {
@@ -336,7 +391,18 @@ const Page = () => {
                                     }} type="number" name="input" className="input" />
                             </div>
                         </div>
-                        <div className="flex gap-5 items-center">
+                                <div className="flex justify-between">
+                                    
+                                    <div className="coolinput">
+                                        <label className="text">Days</label>
+                                        <input ref={days} type="number" name="input" onChange={(e: any) => setTotalHours(e.target.value * 6)} className="input" />
+                                    </div>
+                                    <div className="coolinput">
+                                        <label className="text">Hours</label>
+                                        <input type="number" name="input" className="input" disabled value={totalHours} />
+                                    </div>
+                                </div>
+                        <div className="flex justify-between items-center">
                             <div className="coolinput">
                                 <label className="text">Location</label>
                                 <select ref={location} className="select-form input">
@@ -346,52 +412,99 @@ const Page = () => {
                             </div>
                             <div className="flex gap-3 items-center">
                                 <input ref={statusRef} type="checkbox" value={statusCourse} className="w-6 h-6" onChange={(e: any) => {
-                                    console.log("changed")
                                     if (e.target.checked === true) {
                                         setStatusCourse("implemented")
-                                        // statusRef.current.value = 'implemented'
-                                        // console.log(e.target.value)
+                                       
                                     }else {
                                         setStatusCourse("not implemented")
-                                        // statusRef.current.value = 'not implemented'
-                                        // console.log(e.target.value)
+                                        
                                     }
                                 }} />
                                 <label className="main-color text-2xl">Implemented</label>
                             </div>
                         </div>
                         
-                        <div className="flex justify-around my-7">
+                        <div className="flex justify-between my-7">
                             <div className="flex gap-2">
                                 <label className="main-color text-xl font-black">From</label>
-                                <input ref={date_from} value={fromDate} onChange={handleFromDateChange} className="select-form" type="date" />
+                                <input value={fromDate} onChange={handleFromDateChange} className="select-form" type="date" />
                             </div>
                             <div className="flex gap-2">
                                 <label className="main-color text-xl font-black">To</label>
-                                <input ref={date_to} value={toDate} onChange={handleToDateChange} className="select-form" type="date" />
+                                <input value={toDate} onChange={handleToDateChange} className="select-form" type="date" />
                             </div>
                         </div>
-                    </div>
-                    <div className="w-1/2">
-                        <div className="flex gap-5">
-                           
-                                
-                                <div className="flex flex-col gap-3">
+                        
+
+                        {formRole === 'update' && 
+                        <div className="flex flex-col gap-4">
+                            <div>
+                                <hr className="main-bg h-1" />
+                                <p className="main-color text-2xl font-semibold my-4">Financial Information</p>
+                            </div>
+                            <div>
+                                <div className="coolinput">
+                                    <label className="text">Total revenue</label>
+                                    <input type="number" name="input" className="input" />
+                                </div>
+                                <div className="flex justify-between gap-3">
                                     <div className="coolinput">
-                                        <label className="text">Total revenue</label>
-                                        <input type="number" name="input" className="input" disabled value={totalRevenue} />
+                                        <label className="text">Instructor Fees</label>
+                                        <input type="number" name="input" className="input" />
                                     </div>
                                     <div className="coolinput">
-                                        <label className="text">Days</label>
-                                        <input ref={days} value={daysDifference} disabled type="number" name="input" className="input" />
+                                        <label className="text">Break Cost</label>
+                                        <input type="number" name="input" className="input" />
                                     </div>
                                     <div className="coolinput">
-                                        <label className="text">Hours</label>
-                                        <input type="number" name="input" className="input" disabled value={totalHours} />
+                                        <label className="text">Tools</label>
+                                        <input type="number" name="input" className="input" />
                                     </div>
                                 </div>
+                                <div className="flex justify-between gap-3">
+                                    <div className="coolinput">
+                                        <label className="text">Transportation</label>
+                                        <input type="number" name="input" className="input" />
+                                    </div>
+                                    <div className="coolinput">
+                                        <label className="text">Accommodation</label>
+                                        <input type="number" name="input" className="input" />
+                                    </div>
+                                    <div className="coolinput">
+                                        <label className="text">Allowance</label>
+                                        <input type="number" name="input" className="input" />
+                                    </div>
+                                    <div className="coolinput">
+                                        <label className="text">Other Expenses</label>
+                                        <input type="number" name="input" className="input" />
+                                    </div>
+                                </div>
+                                <div className="coolinput">
+                                    <label className="text">Total Expenses</label>
+                                    <input type="number" name="input" className="input" />
+                                </div>
+                                <div className="coolinput">
+                                    <label className="text">Net Revenue</label>
+                                    <input type="number" name="input" className="input" />
+                                </div>
+                            </div>
+                        </div>
+                        }
+
+
+
+
+
+
+
+                    </div>
+                    {/* <div className="w-1/2">
+                        <div className="flex gap-5">
+                            */}
+                                
+                                
                             
-                            <div className="flex flex-col gap-5">
+                            {/* <div className="flex flex-col gap-5">
                                 <div className="coolinput">
                                     <label className="text">Instructor fees</label>
                                     <input ref={instructor_fees} type="number" name="input" className="input" />
@@ -404,11 +517,11 @@ const Page = () => {
                                     <label className="text">Training tools</label>
                                     <input ref={training_tools} type="number" name="input" className="input" />
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </div> */}
+                        {/* </div>
+                    </div> */}
 
-                    <div>
+                    {/* <div>
                         <div className="flex">
                             <div className="coolinput">
                                 <label className="text">Instructors</label>
@@ -420,20 +533,24 @@ const Page = () => {
                                 instructorRef.current.value = ''
                             }}>Add</button>
                         </div>
-                        {/* <div className="mt-4">
-                            {
-                                instructorsToShow.map((e: any) => (
-                                    <p key={e} className="text-base main-color">{e}</p>
-                                ))
-                            }
-                        </div> */}
-                    </div>
-                </div>
+                        
+                    </div> */}
+                {/* </div> */}
                     
-                <input className="button-81" type="submit" value="View" onClick={(e: any) => {
-                    e.preventDefault();
-                    viewCourseInfo();
-                }} />
+                {formRole === 'add' &&
+                    <input className="button-81" type="submit" value="Add New" onClick={(e: any) => {
+                        e.preventDefault();
+                        // viewCourseInfo();
+                        addNewCourse();
+                    }} />
+                }
+                {formRole === 'update' && 
+                    <input className="button-81" type="submit" value="Save" onClick={(e: any) => {
+                        e.preventDefault();
+                        // viewCourseInfo();
+                    }} />
+                }
+
             </form>
             
 
@@ -449,7 +566,8 @@ const Page = () => {
                         <th>location</th>
                         <th>status</th>
                         <th>revenue</th>
-                        <th>Profit</th>
+                        <th>expenses</th>
+                        <th>net revenue</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -461,7 +579,7 @@ const Page = () => {
                                     toggleNotes();
                                     setNotes(course.notes)
                                     setSelectedNoteId(course.id)
-                                }}><MdOutlineNoteAlt /></p> {course.name}
+                                }}><MdOutlineNoteAlt /></p> {course.course_title}
                                    {
                                     course.notes !== "" &&
                                     <IoAlertCircle onClick={() => {
@@ -474,16 +592,34 @@ const Page = () => {
                                 <td>{course.date_from}</td>
                                 <td>{course.date_to}</td>
                                 <td>{course.location}</td>
-                                <td>{course.status}</td>
+                                <td>{course.course_status}</td>
                                 <td>{course.total_revenue}</td>
+                                <td>{course.total_expenses}</td>
                                 <td>{course.net_revenue}</td>
                                 <td>
                                     <div className="table-row-buttons flex justify-center gap-3">
                                         <RiShareBoxFill className="cursor-pointer text-2xl text-gray-700" />
                                         <FaEdit className="cursor-pointer text-2xl text-green-700" onClick={() => {
-                                            editCourse.current.classList.toggle('active-new-course')
-                                            setSelected({id: course.id, name: course.name})
-                                            editName.current.value = course.name
+                                            // editCourse.current.classList.toggle('active-new-course')
+                                            // setSelected({id: course.id, name: course.name})
+                                            // editName.current.value = course.name
+                                            setFormRole('update')
+                                            courseTitle.current.value = course.course_title
+                                            coursePrice.current.value = course.course_price
+                                            numOfTrainees.current.value = course.num_of_trainees
+                                            days.current.value = course.days
+                                            setTotalHours(course.total_hours)
+                                            location.current.value = course.location
+                                            if (course.course_status === 'implemented') {
+                                                statusRef.current.checked = true
+                                                setStatusCourse('implemented')
+                                            }else {
+                                                statusRef.current.checked = false
+                                                setStatusCourse('not implemented')
+                                            }
+                                            setFromDate(course.date_from)
+                                            setToDate(course.date_to)
+                                            toggleForm()
                                         }} />
                                         <MdDelete className="cursor-pointer text-2xl text-red-700" onClick={() => {
                                             deleteCourse(course.id)
