@@ -863,13 +863,14 @@ stroke-linecap: round;
   border-radius: 5px;
   background: #e8e8e8;
   max-width: 360px;
-    width: 100%;
-    color: black;
-    font-weight: bolder;
+  width: 100%;
+  color: black;
+  font-weight: bolder;
 }
 
-.coolinput input[type=text].input:focus {
+.coolinput input.input:focus {
   outline: none !important;
+  border: 2px var(--gold-color) solid !important;
 }
 
 .select-form {

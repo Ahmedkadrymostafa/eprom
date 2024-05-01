@@ -10,28 +10,29 @@ import DatePicker from 'react-date-picker';
 import NewCourseInfo from "@/app/components/NewCourseInfo";
 import { IoAlertCircle } from "react-icons/io5";
 import { RiShareBoxFill } from "react-icons/ri";
-type ValuePiece = Date | null;
+// type ValuePiece = Date | null;
 
-type Value = ValuePiece | [ValuePiece, ValuePiece];
+// type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-type newCourseData = {
-    name?: any,
-    num_of_trainees?: any,
-    date_from?: any,
-    date_to?: any,
-    days?: any,
-    total_hours?: any,
-    location?: any,
-    courseStatus?: any,
-    total_revenue?: any,
-    instructor_fees?: any,
-    break_cost?: any,
-    training_tools?: any,
-    net_revenue?: any,
-    instructors?: any,
-    notes?: any,
-}
+// type newCourseData = {
+//     name?: any,
+//     num_of_trainees?: any,
+//     date_from?: any,
+//     date_to?: any,
+//     days?: any,
+//     total_hours?: any,
+//     location?: any,
+//     courseStatus?: any,
+//     total_revenue?: any,
+//     instructor_fees?: any,
+//     break_cost?: any,
+//     training_tools?: any,
+//     net_revenue?: any,
+//     instructors?: any,
+//     notes?: any,
+// }
 type addNewCourseData = {
+    id?: any
     course_title: any,
     course_price: any,
     num_of_trainees: any,
@@ -70,21 +71,37 @@ const Page = () => {
     const [toDate, setToDate] = useState('');
     // const dateFromRef: any = useRef()
     // const dateToRef: any = useRef()
-
-    const total_revenue: any = useRef()
-    const instructor_fees: any = useRef()
-    const break_cost: any = useRef()
-    const training_tools: any = useRef()
-    const net_revenue: any = useRef()
-    
-    // const [ totalHours, setTotalHours ] = useState(0);
-    const [ totalRevenue, setTotalRevenue ] = useState(0);
-    const [ newCourseData, setNewCourseData ] = useState<newCourseData>({});
-
+    const [ totalRevenue, setTotalRevenue ] = useState();
+    const [ instructorFees, setInstructorFees ] = useState();
+    const [ breakCost, setBreakCost ] = useState();
+    const [ tools, setTools ] = useState();
+    const [ transportation, setTransportation ] = useState();
+    const [ accommodation, setAccommodation ] = useState();
+    const [ allowance, setAllowance ] = useState();
+    const [ otherExpenses, setOtherExpenses ] = useState();
+    const [ totalExpenses, setTotalExpenses ] = useState();
+    const [ netRevenue, setNetRevenue] = useState();
     const instructorRef: any = useRef();
     const [ instructorsToShow, setInstructorsToShow ] = useState<any>([]);
+    
+    const [ selectedCourseToUpdateId, setSelectedCourseToUpdateId ] = useState<any>()
+    // const total_revenueRef: any = useRef()
+    // const instructor_feesRef: any = useRef()
+    // const break_costRef: any = useRef()
+    // const toolsRef: any = useRef()
+    // const transportationRef: any = useRef()
+    // const accommodationRef: any = useRef()
+    // const allowanceRef: any = useRef()
+    // const other_expensesRef: any = useRef()
+    // const total_expensesRef: any = useRef()
+    // const [ totalExpenses, setTotalExpenses ] = useState(0); 
+    // const net_revenueRef: any = useRef()
+    
+    // const [ totalHours, setTotalHours ] = useState(0);
+    // const [ newCourseData, setNewCourseData ] = useState<newCourseData>({});
 
-  const [daysDifference, setDaysDifference] = useState(0);
+
+//   const [daysDifference, setDaysDifference] = useState(0);
 
   const handleFromDateChange = (event: any) => {
     setFromDate(event.target.value);
@@ -93,7 +110,42 @@ const Page = () => {
   const handleToDateChange = (event: any) => {
     setToDate(event.target.value);
   };
+   const changeInputsToUpdate = (course: any) => {
+    setSelectedCourseToUpdateId(course.id)
+    courseTitle.current.value = course.course_title
+    coursePrice.current.value = course.course_price
+    numOfTrainees.current.value = course.num_of_trainees
+    days.current.value = course.days
+    setTotalHours(course.total_hours)
+    location.current.value = course.location
+    if (course.course_status === 'implemented') {
+        statusRef.current.checked = true
+        setStatusCourse('implemented')
+    }else {
+        statusRef.current.checked = false
+        setStatusCourse('not implemented')
+    }
+    setFromDate(course.date_from)
+    setToDate(course.date_to)
+    setTotalRevenue(course.total_revenue)
+    setInstructorFees(course.instructor_fees)
+    setBreakCost(course.break_cost)
+    setTools(course.tools)
+    setTransportation(course.transportation)
+    setAccommodation(course.accommodation)
+    setAllowance(course.allowance)
+    setOtherExpenses(course.other_expenses)
+    setTotalExpenses(course.total_expenses)
+    setNetRevenue(course.net_revenue)
 
+    let instructorsSplitter = course.instructors.split('-')
+
+    if (!instructorsSplitter.includes('')) {
+        setInstructorsToShow(instructorsSplitter)
+    }else {
+        setInstructorsToShow([])
+    }
+   }
 //   const calculateDays = (from: any, to: any) => {
 //     const fromDateObj: any = new Date(from);
 //     const toDateObj: any = new Date(to);
@@ -115,13 +167,14 @@ const Page = () => {
     const notesRef: any = useRef()
     const [notes, setNotes] = useState('');
     const [selectedNoteId, setSelectedNoteId] = useState<any>('');
-    const editName: any = useRef()
-    const editCourse: any = useRef()
+    // const editName: any = useRef()
+    // const editCourse: any = useRef()
     const newCourseForm: any = useRef()
     const newCourseInfo: any = useRef()
+
     const dataContext: any = useContext(DataContext)
     const [ courses, setCourses ] = useState(dataContext.courses)
-    const [ selected, setSelected ] = useState<any>({})
+
     const toggleForm = () => {
         newCourseForm.current.classList.toggle('left-[15px]')
         newCourseForm.current.classList.toggle('-left-full')
@@ -140,6 +193,7 @@ const Page = () => {
         days.current.value = 0
         setTotalHours(0)
         setStatusCourse('not implemented')
+        statusRef.current.checked = false
         setFromDate('')
         setToDate('')
         toggleForm()
@@ -210,7 +264,7 @@ const Page = () => {
     }
     const addNewCourse = async () => {
         let data: addNewCourseData = {
-            course_title: courseTitle.current.value,
+            course_title: courseTitle.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
             course_price: coursePrice.current.value,
             num_of_trainees: numOfTrainees.current.value,
             days: days.current.value,
@@ -242,26 +296,47 @@ const Page = () => {
         }).catch(error => toast.error("course title is exist"))
         console.log(data)
     }
-    const update = async () => {
-        let data = {
-            id: selected.id,
-            name: editName.current.value.trim().toLowerCase().replace(/\s+/g, ' ')
-        }
-        if (!data.name) return toast.warn("field course name is required")
+    const updateCourse = async () => {
+        let data: addNewCourseData = {
+            id: selectedCourseToUpdateId,
+            course_title: courseTitle.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+            course_price: coursePrice.current.value,
+            num_of_trainees: numOfTrainees.current.value,
+            days: days.current.value,
+            total_hours: totalHours,
+            location: location.current.value,
+            course_status: statusCourse,
+            date_from: fromDate,
+            date_to: toDate,
+            total_revenue: totalRevenue,
+            instructor_fees: instructorFees,
+            break_cost: breakCost,
+            tools: tools,
+            transportation: transportation,
+            accommodation: accommodation,
+            allowance: allowance,
+            other_expenses: otherExpenses,
+            total_expenses: totalExpenses,
+            net_revenue: netRevenue,
+            instructors: instructorsToShow.join('-'),
+        };
+        console.log(data);
+        if (!data.course_title) return toast.warn("field course title is required")
         let updatedCourses = [...courses]
         await axios.put('/api/courses', data).then(() => {
-            let toUpdate = courses.findIndex((i: any) => i.id === selected.id)
+            let toUpdate = courses.findIndex((i: any) => i.id === data.id)
             if (toUpdate !== -1) {
                 updatedCourses[toUpdate] = {...updatedCourses[toUpdate],
-                    name: data.name                   
+                    ...data                   
                 }
             }
             setCourses(updatedCourses);
             dataContext.setCourses(updatedCourses)
             toast.success("updated successfully")
-            editCourse.current.classList.toggle('active-new-course')
-        }).catch((err) => {
-            toast.error("course title is exist")
+            emptyInputs();
+            // editCourse.current.classList.toggle('active-new-course')
+        }).catch((error) => {
+            console.log(error)
         })
     }
     const deleteCourse = async (id: any) => {
@@ -379,15 +454,15 @@ const Page = () => {
                             <div className="coolinput">
                                     <label className="text">Course price</label>
                                     <input ref={coursePrice} onChange={() => {
-                                        let totalRev = parseInt(coursePrice.current.value) * parseInt(numOfTrainees.current.value);
-                                        setTotalRevenue(totalRev)
+                                        // let totalRev = parseInt(coursePrice.current.value) * parseInt(numOfTrainees.current.value);
+                                        // setTotalRevenue(totalRev)
                                     }} type="number" name="input" className="input" />
                             </div>
                             <div className="coolinput">
                                     <label className="text">Number of trainees</label>
                                     <input ref={numOfTrainees} onChange={() => {
-                                        let totalRev = parseInt(coursePrice.current.value) * parseInt(numOfTrainees.current.value);
-                                        setTotalRevenue(totalRev)
+                                        // let totalRev = parseInt(coursePrice.current.value) * parseInt(numOfTrainees.current.value);
+                                        // setTotalRevenue(totalRev)
                                     }} type="number" name="input" className="input" />
                             </div>
                         </div>
@@ -442,51 +517,88 @@ const Page = () => {
                                 <hr className="main-bg h-1" />
                                 <p className="main-color text-2xl font-semibold my-4">Financial Information</p>
                             </div>
-                            <div>
+                            <div className="flex flex-col gap-5">
                                 <div className="coolinput">
                                     <label className="text">Total revenue</label>
-                                    <input type="number" name="input" className="input" />
+                                    <input value={totalRevenue} onChange={(e: any) => setTotalRevenue(e.target.value)} type="number" name="input" className="input" />
                                 </div>
                                 <div className="flex justify-between gap-3">
                                     <div className="coolinput">
                                         <label className="text">Instructor Fees</label>
-                                        <input type="number" name="input" className="input" />
+                                        <input value={instructorFees} onChange={(e: any) => setInstructorFees(e.target.value)} type="number" name="input" className="input" />
                                     </div>
                                     <div className="coolinput">
                                         <label className="text">Break Cost</label>
-                                        <input type="number" name="input" className="input" />
+                                        <input value={breakCost} onChange={(e: any) => setBreakCost(e.target.value)} type="number" name="input" className="input" />
                                     </div>
                                     <div className="coolinput">
                                         <label className="text">Tools</label>
-                                        <input type="number" name="input" className="input" />
+                                        <input value={tools} onChange={(e: any) => setTools(e.target.value)} type="number" name="input" className="input" />
                                     </div>
                                 </div>
                                 <div className="flex justify-between gap-3">
                                     <div className="coolinput">
                                         <label className="text">Transportation</label>
-                                        <input type="number" name="input" className="input" />
+                                        <input value={transportation} onChange={(e: any) => setTransportation(e.target.value)} type="number" name="input" className="input" />
                                     </div>
                                     <div className="coolinput">
                                         <label className="text">Accommodation</label>
-                                        <input type="number" name="input" className="input" />
+                                        <input value={accommodation} onChange={(e: any) => setAccommodation(e.target.value)} type="number" name="input" className="input" />
                                     </div>
                                     <div className="coolinput">
                                         <label className="text">Allowance</label>
-                                        <input type="number" name="input" className="input" />
+                                        <input value={allowance} onChange={(e: any) => setAllowance(e.target.value)} type="number" name="input" className="input" />
                                     </div>
                                     <div className="coolinput">
                                         <label className="text">Other Expenses</label>
-                                        <input type="number" name="input" className="input" />
+                                        <input value={otherExpenses} onChange={(e: any) => setOtherExpenses(e.target.value)} type="number" name="input" className="input" />
                                     </div>
                                 </div>
-                                <div className="coolinput">
-                                    <label className="text">Total Expenses</label>
-                                    <input type="number" name="input" className="input" />
-                                </div>
-                                <div className="coolinput">
-                                    <label className="text">Net Revenue</label>
-                                    <input type="number" name="input" className="input" />
-                                </div>
+                               <div className="flex gap-8 justify-between">
+                                    <div>
+                                        <div className="coolinput">
+                                            <label className="text">Total Expenses</label>
+                                            <input value={totalExpenses} onChange={(e: any) => setTotalExpenses(e.target.value)} type="number" name="input" className="input" />
+                                        </div>
+                                        <div className="coolinput">
+                                            <label className="text">Net Revenue</label>
+                                            <input value={netRevenue} onChange={(e: any) => setNetRevenue(e.target.value)} type="number" name="input" className="input" />
+                                        </div>
+                                    </div>
+                                   <div>
+                                    <div className="flex items-center gap-4">
+                                            <div className="coolinput">
+                                                <label className="text">Instructors</label>
+                                                <input ref={instructorRef} type="text" name="input" className="input" />
+                                            </div>
+                                            
+                                                <button className="border-2 border-green-600 h-11 text-xl px-2" onClick={(e: any) => {
+                                                    e.preventDefault();
+                                                    if (instructorRef.current.value !== '') {
+                                                        setInstructorsToShow([...instructorsToShow, instructorRef.current.value])                              
+                                                    } 
+                                                    instructorRef.current.value = ''
+                                                }}>Add</button>
+                                                <button className="border-2 border-black h-11 text-xl px-2" onClick={(e: any) => {
+                                                    e.preventDefault(); 
+                                                    setInstructorsToShow([])
+                                                }}>Reset</button>
+                                            
+                                        </div>
+                                        {instructorsToShow.length !== 0 &&
+                                        <div>
+                                            <p className="text-xl mt-3 main-color font-black">Instructors</p>
+                                            <div className="mt-2">
+                                                {
+                                                    instructorsToShow.map((e: any) => (
+                                                        <p key={e} className="text-xl text-black capitalize">{e}</p>
+                                                    ))
+                                                }
+                                            </div>
+                                        </div>
+                                        }
+                                   </div>
+                               </div>
                             </div>
                         </div>
                         }
@@ -537,19 +649,21 @@ const Page = () => {
                     </div> */}
                 {/* </div> */}
                     
-                {formRole === 'add' &&
-                    <input className="button-81" type="submit" value="Add New" onClick={(e: any) => {
-                        e.preventDefault();
-                        // viewCourseInfo();
-                        addNewCourse();
-                    }} />
-                }
-                {formRole === 'update' && 
-                    <input className="button-81" type="submit" value="Save" onClick={(e: any) => {
-                        e.preventDefault();
-                        // viewCourseInfo();
-                    }} />
-                }
+                <div className="mt-7 mx-auto">
+                    {formRole === 'add' &&
+                        <input className="button-81" type="submit" value="Add New" onClick={(e: any) => {
+                            e.preventDefault();
+                            // viewCourseInfo();
+                            addNewCourse();
+                        }} />
+                    }
+                    {formRole === 'update' && 
+                        <input className="button-81" type="submit" value="Save" onClick={(e: any) => {
+                            e.preventDefault();
+                            updateCourse();
+                        }} />
+                    }
+                </div>
 
             </form>
             
@@ -604,22 +718,8 @@ const Page = () => {
                                             // setSelected({id: course.id, name: course.name})
                                             // editName.current.value = course.name
                                             setFormRole('update')
-                                            courseTitle.current.value = course.course_title
-                                            coursePrice.current.value = course.course_price
-                                            numOfTrainees.current.value = course.num_of_trainees
-                                            days.current.value = course.days
-                                            setTotalHours(course.total_hours)
-                                            location.current.value = course.location
-                                            if (course.course_status === 'implemented') {
-                                                statusRef.current.checked = true
-                                                setStatusCourse('implemented')
-                                            }else {
-                                                statusRef.current.checked = false
-                                                setStatusCourse('not implemented')
-                                            }
-                                            setFromDate(course.date_from)
-                                            setToDate(course.date_to)
                                             toggleForm()
+                                            changeInputsToUpdate(course)
                                         }} />
                                         <MdDelete className="cursor-pointer text-2xl text-red-700" onClick={() => {
                                             deleteCourse(course.id)
@@ -683,7 +783,7 @@ const Page = () => {
                 </div>
 
 
-            <div ref={editCourse} className="soft-bg w-fit p-7 hidden opacity-0 duration-300 flex-col gap-5 fixed top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+            {/* <div ref={editCourse} className="soft-bg w-fit p-7 hidden opacity-0 duration-300 flex-col gap-5 fixed top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2">
                             <div className="flex justify-between items-center">
                                 <p className="main-color text-3xl font-black">Edit Course</p>
                                 <div onClick={(e: any) => {
@@ -702,11 +802,11 @@ const Page = () => {
                                     
                                     <input className="submit mx-auto mt-7" type="submit" value="Save" onClick={(e: any) => {
                                         e.preventDefault();
-                                        update();
+                                        // update();
                                     }} />
                                 </form>
                             </div>
-                </div>
+                </div> */}
     </div>
   )
 }
