@@ -15,7 +15,10 @@ import { RiShareBoxLine } from "react-icons/ri"
 
 type courseData = {
     person_id?: any,
+    person_name?: any,
+    project?: any,
     course?: any,
+    course_price?: any,
     date?: any,
     date_from?: any,
     date_to?: any,
@@ -32,7 +35,7 @@ type courseData = {
 
 const Page = ({params}: {params: any}) => {
     const router = useRouter();
-    const id = params.id
+    const personId = params.id
     const dataContext: any = useContext(DataContext)
     // let data = dataContext.trainees
     // let traineeIndex = data.findIndex((item: any) => item.person_id === id)
@@ -48,7 +51,7 @@ const Page = ({params}: {params: any}) => {
     const [ courses, setCourses ] = useState(dataContext.courses)
     const [ courseInfo, setCourseInfo ] = useState<any>({})
     const [ ORGS, setORGS ] = useState(dataContext.ORGS)
-    const [ APPS, setAPPS ] = useState(dataContext.APPS.filter((app: any) => app.person_id === id))
+    const [ APPS, setAPPS ] = useState(dataContext.APPS.filter((app: any) => app.person_id === personId))
     const [ totalHours, setTotalHours ] = useState(0)
 
     const [ edit, setEdit ] = useState(false);
@@ -116,42 +119,27 @@ const Page = ({params}: {params: any}) => {
 
 
    const handleCourseChange = (e: any) => {
-    console.log(e)
+    let id = e.target.selectedOptions[0].id
+    console.log(id)
+    console.log(courses)
     setShowInfo(true)
-    let currentCourse = courses.filter((course: any) => {
-        if (course.name === e) {
-            // from.current.value = course.date_from
-            // to.current.value = course.date_to
-            // if (course.status === "implemented") {
-            //     statusRef.current.checked = true
-            //     setStatusJob("implemented")
-            // }
-            // else {
-            //     statusRef.current.checked = false
-            //     setStatusJob("not implemented")
-            // }
-            // days.current.value = course.days
-            // total_hours.current.value = course.total_hours
-            // city.current.value = course.location
-            // course_fees.current.value = course.total_revenue / course.num_of_trainees
-            // instructor_fees.current.value = course.instructor_fees / course.num_of_trainees
-            setCourseDataToSubmit({
-                person_id: id,
-                course: course.name,
-                date: today.toISOString().split('T')[0],
-                date_from: course.date_from,
-                date_to: course.date_to,
-                status: course.status,
-                days: course.days,
-                total_hours: course.total_hours,
-                location: course.location,
-                course_fees: course.total_revenue / course.num_of_trainees,
-                instructor_fees: course.instructor_fees / course.num_of_trainees,
-                break_cost: course.break_cost / course.num_of_trainees,
-                tools: course.tools / course.num_of_trainees,
-            })
-        }
-    })
+    let currentCourse = courses.filter((course: any) => course.id === parseInt(id))
+    if (currentCourse.length > 0) {
+        setCourseDataToSubmit({
+            person_id: personId,
+            person_name: trainee.name,
+            project: trainee.project,
+            course: currentCourse[0].course_title,
+            course_price: currentCourse[0].course_price,
+            date: today.toISOString().split('T')[0],
+            date_from: currentCourse[0].date_from,
+            date_to: currentCourse[0].date_to,
+            status: currentCourse[0].course_status,
+            days: currentCourse[0].days,
+            total_hours: currentCourse[0].total_hours,
+            location: currentCourse[0].location,
+        })
+    }
     console.log(currentCourse)
    }
 
@@ -172,7 +160,8 @@ const Page = ({params}: {params: any}) => {
             APPS.push({id: response.data.id, ...data})
             dataContext.setAPPS([{id: response.data.id, ...data}, ...dataContext.APPS])
             setTotalHours(totalHours +  parseInt(data.total_hours))
-            emptyInputs()
+            // emptyInputs()
+            setShowInfo(false)
             toggleForm()
             
         }).catch(error => console.log(error)).finally(() => setLoading(false))
@@ -184,7 +173,7 @@ const Page = ({params}: {params: any}) => {
         //     setTrainee(response.data)
         // })
         let data = await dataContext.trainees
-        let traineeIndex = await data.findIndex((item: any) => item.person_id === id)
+        let traineeIndex = await data.findIndex((item: any) => item.person_id === personId)
         setTrainee(data[traineeIndex])
         if (traineeIndex === -1) {
             router.push('/dashboard/trainees')
@@ -200,7 +189,7 @@ const Page = ({params}: {params: any}) => {
         console.log(courseToUpdateID)
 
         let data = {
-            person_id: id.trim().toLowerCase().replace(/\s+/g, ' '),
+            person_id: personId.trim().toLowerCase().replace(/\s+/g, ' '),
             course: course.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
             date_from: from.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
             date_to: to.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
@@ -245,7 +234,7 @@ const Page = ({params}: {params: any}) => {
                 }
                 // console.log(statusRef.current.checked)
                 // console.log(data.status)
-                let filteredApps = updatedAllApps.filter((app: any) => app.person_id === id)
+                let filteredApps = updatedAllApps.filter((app: any) => app.person_id === personId)
                 let updatedHours = filteredApps.reduce((acc: any, current: any) => parseInt(acc) + parseInt(current.total_hours), 0)
                 setAPPS(filteredApps);
                 setTotalHours(updatedHours)
@@ -264,7 +253,7 @@ const Page = ({params}: {params: any}) => {
         axios.delete(`/api/apps/${courseToDeleteID}`).then(() => {
             toast.success(`Course deleted successfully`);
             setLoading(false)
-            const updatedApps = filteredAppsAfterDelete.filter((app: any) => app.person_id === id)
+            const updatedApps = filteredAppsAfterDelete.filter((app: any) => app.person_id === personId)
             setAPPS(updatedApps)
             setTotalHours(updatedApps.reduce((acc: any, current: any) => parseInt(acc) + parseInt(current.total_hours), 0))
             dataContext.setAPPS(filteredAppsAfterDelete)
@@ -274,7 +263,7 @@ const Page = ({params}: {params: any}) => {
         getTrainee()
         setCourses(dataContext.courses)
         setORGS(dataContext.ORGS)
-        setAPPS(dataContext.APPS.filter((app: any) => app.person_id === id))
+        setAPPS(dataContext.APPS.filter((app: any) => app.person_id === personId))
         setTotalHours(APPS.reduce((acc: any, current: any) => parseInt(acc) + parseInt(current.total_hours), 0))
         
     }, [])
@@ -422,10 +411,12 @@ const Page = ({params}: {params: any}) => {
                                         <thead>
                                             <tr>
                                                 <th className="admin-th">Course Name</th>
-                                                <th className="admin-th">ORG</th>
-                                                <th className="admin-th">Date From</th>
-                                                <th className="admin-th">Date To</th>
-                                                <th className="admin-th">Cost</th>
+                                                <th className="admin-th">Price</th>
+                                                {/* <th className="admin-th">ORG</th> */}
+                                                <th className="admin-th">From</th>
+                                                <th className="admin-th">To</th>
+                                                <th className="admin-th">Days</th>
+                                                <th className="admin-th">Location</th>
                                                 <th className="admin-th">status</th>
                                                 <th className="admin-th"></th>
                                             </tr>
@@ -451,10 +442,12 @@ const Page = ({params}: {params: any}) => {
                                                         })
                                                     }}>
                                                         <td className="admin-td">{app.course}</td>                                       
-                                                        <td className="admin-td uppercase">{app.org}</td>                                       
+                                                        <td className="admin-td">{app.course_price}</td>                                       
+                                                        {/* <td className="admin-td uppercase">{app.org}</td>                                        */}
                                                         <td className="admin-td">{app.date_from}</td>
                                                         <td className="admin-td">{app.date_to}</td>
-                                                        <td className="admin-td">{app.total_cost}</td>
+                                                        <td className="admin-td">{app.days}</td>
+                                                        <td className="admin-td">{app.location}</td>
                                                         <td className="admin-td">{app.status}</td>
                                                         <td className="text-2xl font-black ">
                                                             <div className="flex justify-center gap-5 row-buttons">
@@ -508,13 +501,15 @@ const Page = ({params}: {params: any}) => {
                             <div ref={courseForm} className="course-form-popup overflow-scroll">
                                 <div ref={courseFormContent} className="course-form-content">
                                     <div className="flex justify-between items-center">
-                                        {edit === false ? <p className="main-color text-3xl font-black">Add New Course</p> :
+                                        {/* {edit === false ? <p className="main-color text-3xl font-black">Add New Course</p> :
                                             <p className="text-gray-700 text-3xl font-black">Edit Course</p>
-                                        }
+                                        } */}
+                                        <p className="main-color text-3xl font-black">Add New Course</p>
                                         <div onClick={() => {
                                         toggleForm();
-                                        emptyInputs();
-                                        setEdit(false)
+                                        // emptyInputs();
+                                        // setEdit(false)
+                                        setShowInfo(false);
                                         }}><p className="main-color text-3xl font-black cursor-pointer">
                                             <GrClose />
                                         </p></div>
@@ -524,10 +519,11 @@ const Page = ({params}: {params: any}) => {
                                         <div className="w-fit mx-auto flex flex-col justify-center">
                                             <p className="text-gray-700 text-3xl font-bold w-fit m-7">Choose course to add</p>
 
-                                            <select ref={course} className="select-form input" onChange={(e: any) => handleCourseChange(e.target.value)}>
+                                            <select ref={course} className="select-form input" onChange={(e: any) => handleCourseChange(e)}>
+                                                <option value="please select course">please select course</option>
                                             {
                                                 courses.map((course: any) => (
-                                                    <option key={course.id}>{course.name}</option>
+                                                    <option id={course.id} key={course.id}>{course.course_title}</option>
                                                 ))
                                             }
                                             </select>
@@ -539,16 +535,16 @@ const Page = ({params}: {params: any}) => {
                                                         <p className='text-gold text-3xl font-bold'>New Course Info</p>
                                                         {/* <p className='text-red-800 font-black text-2xl cursor-pointer'>Cancel</p> */}
                                                     </div>
-                                                    <div className='flex justify-around m-7'>
+                                                    <div className='flex justify-center flex-col m-7'>
                                                         <div className='flex flex-col gap-4'>
                                                             <div>
                                                                 <p className='main-color text-2xl font-bold'>Course Title</p>
                                                                 <p className='text-black text-xl font-semibold max-w-60'>{courseDataToSubmit.course}</p>
                                                             </div>
-                                                            {/* <div className="flex items-center gap-3">
-                                                                <p className='main-color text-xl font-bold'>Number of trainees</p>
-                                                                <p className='text-black text-3xl'>{courseDataToSubmit.num_of_trainees}</p>
-                                                            </div> */}
+                                                            <div className="flex items-center gap-3">
+                                                                <p className='main-color text-xl font-bold'>Price</p>
+                                                                <p className='text-black text-3xl'>{courseDataToSubmit.course_price}</p>
+                                                            </div>
                                                             <div className='flex items-center gap-3'>
                                                                 <p className='main-color text-xl font-bold'>From</p>
                                                                 <p className='text-black text-xl'>{courseDataToSubmit.date_from}</p>
@@ -575,7 +571,7 @@ const Page = ({params}: {params: any}) => {
                                                             </div>
                                                             
                                                         </div>
-                                                        <div className='flex flex-col gap-6'>
+                                                        {/* <div className='flex flex-col gap-6'>
                                                             <p className='main-color text-3xl font-bold'>Total Revenue & Fees</p>
                                                             <div className='flex flex-col gap-4'>
                                                                 <pre className='text-black text-xl font-bold'>Course fees:    {courseDataToSubmit.course_fees}</pre>
@@ -584,8 +580,8 @@ const Page = ({params}: {params: any}) => {
                                                                 <pre className="text-gray-500 text-xl font-bold">Training Tools:    {courseDataToSubmit.tools}</pre>
                                                                 <pre className='text-green-700 text-xl font-bold'>Profit:    {courseDataToSubmit.course_fees - (courseDataToSubmit.instructor_fees + courseDataToSubmit.break_cost + courseDataToSubmit.tools)}</pre>
                                                             </div>
-                                                            <button className='button-81' onClick={addNewCourse}>Submit</button>
-                                                        </div>
+                                                        </div> */}
+                                                        <button className='button-81' onClick={addNewCourse}>Submit</button>
                                                     </div>
                                                 </div>
                                             </div>

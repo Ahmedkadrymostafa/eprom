@@ -69,8 +69,7 @@ const Page = () => {
     const statusRef: any = useRef()
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
-    // const dateFromRef: any = useRef()
-    // const dateToRef: any = useRef()
+
     const [ totalRevenue, setTotalRevenue ] = useState();
     const [ instructorFees, setInstructorFees ] = useState();
     const [ breakCost, setBreakCost ] = useState();
@@ -85,23 +84,8 @@ const Page = () => {
     const [ instructorsToShow, setInstructorsToShow ] = useState<any>([]);
     
     const [ selectedCourseToUpdateId, setSelectedCourseToUpdateId ] = useState<any>()
-    // const total_revenueRef: any = useRef()
-    // const instructor_feesRef: any = useRef()
-    // const break_costRef: any = useRef()
-    // const toolsRef: any = useRef()
-    // const transportationRef: any = useRef()
-    // const accommodationRef: any = useRef()
-    // const allowanceRef: any = useRef()
-    // const other_expensesRef: any = useRef()
-    // const total_expensesRef: any = useRef()
-    // const [ totalExpenses, setTotalExpenses ] = useState(0); 
-    // const net_revenueRef: any = useRef()
-    
-    // const [ totalHours, setTotalHours ] = useState(0);
-    // const [ newCourseData, setNewCourseData ] = useState<newCourseData>({});
-
-
-//   const [daysDifference, setDaysDifference] = useState(0);
+    const [ selectedCourseToShowInfo, setSelectedCourseToShowInfo ] = useState<addNewCourseData>()
+   
 
   const handleFromDateChange = (event: any) => {
     setFromDate(event.target.value);
@@ -146,29 +130,11 @@ const Page = () => {
         setInstructorsToShow([])
     }
    }
-//   const calculateDays = (from: any, to: any) => {
-//     const fromDateObj: any = new Date(from);
-//     const toDateObj: any = new Date(to);
-
-//     if (isNaN(fromDateObj.getTime()) || isNaN(toDateObj.getTime())) {
-//       setDaysDifference(0);
-//       return;
-//     }
-
-//     const timeDifference = toDateObj - fromDateObj;
-//     const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
-
-//     let totalRev = parseInt(coursePrice.current.value) * Math.round(daysDifference)
-//     setTotalHours(Math.round(daysDifference) * 6)
-//     setTotalRevenue(totalRev)
-//     setDaysDifference(Math.round(daysDifference));
-//   };
 
     const notesRef: any = useRef()
     const [notes, setNotes] = useState('');
     const [selectedNoteId, setSelectedNoteId] = useState<any>('');
-    // const editName: any = useRef()
-    // const editCourse: any = useRef()
+ 
     const newCourseForm: any = useRef()
     const newCourseInfo: any = useRef()
 
@@ -197,55 +163,8 @@ const Page = () => {
         setFromDate('')
         setToDate('')
         toggleForm()
-        // date_to.current.value = ''
-        // date_from.current.value = ''
-        // setStatusCourse('not implemented')
-        // statusRef.current.checked = false
-        // setTotalRevenue(0)
-        // setTotalHours(0)
-        // setDaysDifference(0)
-        // instructor_fees.current.value = ''
-        // break_cost.current.value = ''
-        // training_tools.current.value = ''
-        // setInstructorsToShow([])
-        // toggleCourseInfo()
     }
-    const viewCourseInfo = () => {
-        if (
-            !name.current.value ||
-            !numOfTrainees.current.value ||
-            !fromDate ||
-            !toDate ||
-            !coursePrice.current.value ||
-            !instructor_fees.current.value ||
-            !break_cost.current.value ||
-            !training_tools.current.value
-        ) {
-            return toast.warn("please enter full fields")
-        }
-        let IF = parseInt(instructor_fees.current.value) * parseInt(numOfTrainees.current.value);
-        let BC = parseInt(break_cost.current.value) * parseInt(numOfTrainees.current.value);
-        let TT = parseInt(training_tools.current.value) * parseInt(numOfTrainees.current.value);
-        setNewCourseData({
-            name: name.current.value,
-            num_of_trainees: parseInt(numOfTrainees.current.value),
-            date_from: fromDate,
-            date_to: toDate,
-            days: daysDifference,
-            total_hours: totalHours,
-            location: location.current.value,
-            status: statusCourse,
-            total_revenue: totalRevenue,
-            instructor_fees: IF,
-            break_cost: BC,
-            training_tools: TT,
-            net_revenue: totalRevenue - (IF + BC + TT),
-            instructors: instructorsToShow.join('-'),
-            notes: '',
-        })
-        toggleForm();
-        toggleCourseInfo();
-    }
+
     const saveNotes = async (id: any) => {
         let data = {
             notes: notes
@@ -334,7 +253,6 @@ const Page = () => {
             dataContext.setCourses(updatedCourses)
             toast.success("updated successfully")
             emptyInputs();
-            // editCourse.current.classList.toggle('active-new-course')
         }).catch((error) => {
             console.log(error)
         })
@@ -363,44 +281,48 @@ const Page = () => {
             </button>
         </div>
 
-        <div ref={newCourseInfo} className='glass w-[100%] hidden absolute z-10 px-5 py-2 top-0 -translate-x-1/2 left-1/2'>
+        <div ref={newCourseInfo} className='glass max-h-[500px] overflow-y-scroll none-scrollbar w-[100%] hidden absolute z-10 px-5 py-2 top-0 -translate-x-1/2 left-1/2'>
             <div className='bg-white px-7 py-3 rounded-3xl'>
                 <div className='flex justify-between items-center bottom-border px-5'>
                     <p className='main-color text-3xl font-bold'>New Course Info</p>
-                    <p className='text-red-800 font-black text-2xl cursor-pointer' onClick={emptyInputs}>Cancel</p>
+                    <p className='text-red-800 font-black text-2xl cursor-pointer' onClick={toggleCourseInfo}>Cancel</p>
                 </div>
                 <div className='flex justify-around m-7'>
                     <div className='flex flex-col gap-4'>
                         <div>
-                            <p className='main-color text-2xl font-bold'>Course Title</p>
-                            <p className='text-black text-xl font-semibold max-w-60'>{newCourseData.name}</p>
+                            <p className='main-color text-3xl font-bold'>Course Title</p>
+                            <p className='text-gold text-2xl my-2 font-semibold max-w-60'>{selectedCourseToShowInfo?.course_title}</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <p className='main-color text-xl font-bold'>Course Price</p>
+                            <p className='text-black text-3xl font-black'>{selectedCourseToShowInfo?.course_price}</p>
                         </div>
                         <div className="flex items-center gap-3">
                             <p className='main-color text-xl font-bold'>Number of trainees</p>
-                            <p className='text-black text-3xl'>{newCourseData.num_of_trainees}</p>
+                            <p className='text-black text-3xl'>{selectedCourseToShowInfo?.num_of_trainees}</p>
                         </div>
                         <div className='flex items-center gap-3'>
                             <p className='main-color text-xl font-bold'>From</p>
-                            <p className='text-black text-xl'>{newCourseData.date_from}</p>
+                            <p className='text-black text-xl'>{selectedCourseToShowInfo?.date_from}</p>
                         </div>
                         <div className='flex items-center gap-3'>
                             <p className='main-color text-xl font-bold'>To</p>
-                            <p className='text-black text-xl'>{newCourseData.date_to}</p>
+                            <p className='text-black text-xl'>{selectedCourseToShowInfo?.date_to}</p>
                         </div>
                         <div className='flex items-center gap-3'>
                             <p className='main-color text-xl font-bold'>Location</p>
-                            <p className='text-black text-2xl'>{newCourseData.location}</p>
+                            <p className='text-black text-2xl'>{selectedCourseToShowInfo?.location}</p>
                         </div>
                         <div className='flex items-center gap-3'>
                             <p className='main-color text-xl font-bold'>Days</p>
-                            <p className='text-black text-2xl'>{newCourseData.days}</p>
+                            <p className='text-black text-2xl'>{selectedCourseToShowInfo?.days}</p>
                         </div>
                         <div className="flex items-center gap-12">
                             <div className='flex items-center gap-3'>
                                 <p className='main-color text-xl font-bold'>Total hours</p>
-                                <p className='text-black text-2xl'>{newCourseData.total_hours}</p>
+                                <p className='text-black text-2xl'>{selectedCourseToShowInfo?.total_hours}</p>
                             </div>
-                            <p className='text-black font-black text-xl capitalize'>{newCourseData.status}</p>
+                            <p className='text-black font-black text-xl capitalize'>{selectedCourseToShowInfo?.course_status}</p>
                             
                         </div>
                         
@@ -408,20 +330,26 @@ const Page = () => {
                     <div className='flex flex-col gap-6'>
                         <p className='main-color text-3xl font-bold'>Total Revenue & Fees</p>
                         <div className='flex flex-col gap-4'>
-                            <pre className='text-black text-xl font-bold'>Total revenue:    {newCourseData.total_revenue}</pre>
-                            <pre className="text-gray-500 text-xl font-bold">-Instructor fees:    {newCourseData.instructor_fees}</pre>
-                            <pre className="text-gray-500 text-xl font-bold">-Break cost:    {newCourseData.break_cost}</pre>
-                            <pre className="text-gray-500 text-xl font-bold">-Training Tools:    {newCourseData.training_tools}</pre>
-                            <pre className='text-black text-xl font-bold'>Net revenue:    {newCourseData.net_revenue}</pre>
+                            <pre className='text-black text-2xl font-bold'>Total revenue:    {selectedCourseToShowInfo?.total_revenue}</pre>
+                            <div className="flex flex-col gap-2 text-base">
+                                <pre className="text-gray-500 font-bold">-Instructor fees:    {selectedCourseToShowInfo?.instructor_fees}</pre>
+                                <pre className="text-gray-500 font-bold">-Break cost:    {selectedCourseToShowInfo?.break_cost}</pre>
+                                <pre className="text-gray-500 font-bold">-Training Tools:    {selectedCourseToShowInfo?.tools}</pre>
+                                <pre className="text-gray-500 font-bold">-Transportation:    {selectedCourseToShowInfo?.transportation}</pre>
+                                <pre className="text-gray-500 font-bold">-Accommodation:    {selectedCourseToShowInfo?.accommodation}</pre>
+                                <pre className="text-gray-500 font-bold">-Allowance:    {selectedCourseToShowInfo?.allowance}</pre>
+                                <pre className="text-gray-500 font-bold">-Other Expenses:    {selectedCourseToShowInfo?.other_expenses}</pre>
+                                <pre className="text-red-500 text-2xl font-bold">total Expenses:    {selectedCourseToShowInfo?.total_expenses}</pre>
+                            </div>
+                            <pre className='text-green-700 text-2xl font-bold'>Net revenue:    {selectedCourseToShowInfo?.net_revenue}</pre>
                         </div>
-                        <button className='button-81' onClick={addNewCourse}>Submit</button>
                     </div>
                     <div>
                         <p className="text-2xl main-color font-black">Instructors</p>
                         <div className="mt-4">
                             {
                                 instructorsToShow.map((e: any) => (
-                                    <p key={e} className="text-base text-black capitalize">{e}</p>
+                                    <p key={e} className="text-xl my-2 text-black capitalize">{e}</p>
                                 ))
                             }
                         </div>
@@ -454,15 +382,13 @@ const Page = () => {
                             <div className="coolinput">
                                     <label className="text">Course price</label>
                                     <input ref={coursePrice} onChange={() => {
-                                        // let totalRev = parseInt(coursePrice.current.value) * parseInt(numOfTrainees.current.value);
-                                        // setTotalRevenue(totalRev)
+                                       
                                     }} type="number" name="input" className="input" />
                             </div>
                             <div className="coolinput">
                                     <label className="text">Number of trainees</label>
                                     <input ref={numOfTrainees} onChange={() => {
-                                        // let totalRev = parseInt(coursePrice.current.value) * parseInt(numOfTrainees.current.value);
-                                        // setTotalRevenue(totalRev)
+                                       
                                     }} type="number" name="input" className="input" />
                             </div>
                         </div>
@@ -603,57 +529,12 @@ const Page = () => {
                         </div>
                         }
 
-
-
-
-
-
-
                     </div>
-                    {/* <div className="w-1/2">
-                        <div className="flex gap-5">
-                            */}
-                                
-                                
-                            
-                            {/* <div className="flex flex-col gap-5">
-                                <div className="coolinput">
-                                    <label className="text">Instructor fees</label>
-                                    <input ref={instructor_fees} type="number" name="input" className="input" />
-                                </div>
-                                <div className="coolinput">
-                                    <label className="text">Break cost</label>
-                                    <input ref={break_cost} type="number" name="input" className="input" />
-                                </div>
-                                <div className="coolinput">
-                                    <label className="text">Training tools</label>
-                                    <input ref={training_tools} type="number" name="input" className="input" />
-                                </div>
-                            </div> */}
-                        {/* </div>
-                    </div> */}
-
-                    {/* <div>
-                        <div className="flex">
-                            <div className="coolinput">
-                                <label className="text">Instructors</label>
-                                <input ref={instructorRef} type="text" name="input" className="input" />
-                            </div>
-                            <button onClick={(e: any) => {
-                                e.preventDefault();                                
-                                instructorsToShow.push(instructorRef.current.value);
-                                instructorRef.current.value = ''
-                            }}>Add</button>
-                        </div>
-                        
-                    </div> */}
-                {/* </div> */}
                     
                 <div className="mt-7 mx-auto">
                     {formRole === 'add' &&
                         <input className="button-81" type="submit" value="Add New" onClick={(e: any) => {
                             e.preventDefault();
-                            // viewCourseInfo();
                             addNewCourse();
                         }} />
                     }
@@ -673,7 +554,7 @@ const Page = () => {
                 
             <table className="w-full p-2">
                 <thead>
-                    <tr className="text-gold text-2xl font-bold">
+                    <tr className="text-gold text-xl font-bold">
                         <th>Title</th>
                         <th>from</th>
                         <th>to</th>
@@ -693,7 +574,7 @@ const Page = () => {
                                     toggleNotes();
                                     setNotes(course.notes)
                                     setSelectedNoteId(course.id)
-                                }}><MdOutlineNoteAlt /></p> {course.course_title}
+                                }}><MdOutlineNoteAlt /></p> <p className="max-w-60">{course.course_title}</p>
                                    {
                                     course.notes !== "" &&
                                     <IoAlertCircle onClick={() => {
@@ -712,11 +593,14 @@ const Page = () => {
                                 <td>{course.net_revenue}</td>
                                 <td>
                                     <div className="table-row-buttons flex justify-center gap-3">
-                                        <RiShareBoxFill className="cursor-pointer text-2xl text-gray-700" />
+                                        <RiShareBoxFill className="cursor-pointer text-2xl text-gray-700" onClick={() => {
+                                            setSelectedCourseToShowInfo(course)
+                                            toggleCourseInfo()
+                                            let instSplitter = course.instructors.split('-')
+                                            setInstructorsToShow(instSplitter)
+                                        }} />
                                         <FaEdit className="cursor-pointer text-2xl text-green-700" onClick={() => {
-                                            // editCourse.current.classList.toggle('active-new-course')
-                                            // setSelected({id: course.id, name: course.name})
-                                            // editName.current.value = course.name
+                                            
                                             setFormRole('update')
                                             toggleForm()
                                             changeInputsToUpdate(course)
@@ -732,81 +616,27 @@ const Page = () => {
                 </tbody>
             </table>
     
-    
-                {/* <div className="flex flex-col gap-3 w-full m-16">
+        </div>
 
-                    {
-                        courses.map((course: any) => (
-                            <div key={course.id} className="flex justify-between items-center p-4 hover:bg-slate-300">
-                                <p className="main-color text-2xl font-black">{course.name}</p>
-                                
-                                <div className="flex justify-center gap-5">
-                                    <FaEdit className="cursor-pointer text-3xl text-yellow-400" onClick={() => {
-                                        editCourse.current.classList.toggle('active-new-course')
-                                        setSelected({id: course.id, name: course.name})
-                                        editName.current.value = course.name
-                                    }} />
-                                    <MdDelete className="cursor-pointer text-3xl text-red-700" onClick={() => {
-                                        deleteCourse(course.id)
-                                    }} />
-                                </div>                       
-                            </div>
-                        ))
-                    }
-                    
-
-                </div> */}
-    
-                
-    
-    
-    
+        <div ref={notesRef} className="soft-bg w-fit p-7 fixed hidden top-[56%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className="flex justify-between items-center mb-3 bottom-border">
+                <p className="main-color text-3xl font-black flex gap-2">Notes <FaPencilAlt className="text-3xl text-green-600 font-black" /></p>
+                <div onClick={toggleNotes}><p className="main-color text-3xl font-black cursor-pointer">
+                    <GrClose />
+                </p></div>
             </div>
+            <div>
+                <form className="flex flex-col justify-center gap-5">
+                    <textarea value={notes} onChange={(e: any) => setNotes(e.target.value)} className="text-xl main-color bg-transparent" cols={35} rows={10}></textarea>
+                    <input type="submit" value="Save" onClick={(e: any) => {
+                        e.preventDefault();
+                        saveNotes(selectedNoteId)
+                        toggleNotes();
+                    }} className="button-81 m-3" />
+                </form>
+            </div>
+        </div>
 
-                <div ref={notesRef} className="soft-bg w-fit p-7 fixed hidden top-[56%] left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <div className="flex justify-between items-center mb-3 bottom-border">
-                        <p className="main-color text-3xl font-black flex gap-2">Notes <FaPencilAlt className="text-3xl text-green-600 font-black" /></p>
-                        <div onClick={toggleNotes}><p className="main-color text-3xl font-black cursor-pointer">
-                            <GrClose />
-                        </p></div>
-                    </div>
-                    <div>
-                        <form className="flex flex-col justify-center gap-5">
-                            <textarea value={notes} onChange={(e: any) => setNotes(e.target.value)} className="text-xl main-color bg-transparent" cols={35} rows={10}></textarea>
-                            <input type="submit" value="Save" onClick={(e: any) => {
-                                e.preventDefault();
-                                saveNotes(selectedNoteId)
-                                toggleNotes();
-                            }} className="button-81 m-3" />
-                        </form>
-                    </div>
-                </div>
-
-
-            {/* <div ref={editCourse} className="soft-bg w-fit p-7 hidden opacity-0 duration-300 flex-col gap-5 fixed top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2">
-                            <div className="flex justify-between items-center">
-                                <p className="main-color text-3xl font-black">Edit Course</p>
-                                <div onClick={(e: any) => {
-                                    e.preventDefault();
-                                    editCourse.current.classList.toggle('active-new-course');
-                                }}><p className="main-color text-3xl font-black cursor-pointer">
-                                    <GrClose />
-                                </p></div>
-                            </div>
-                            <div className="flex flex-col">
-                                <form>
-                                    <div className="coolinput mx-auto">
-                                        <label className="text">Course Name:</label>
-                                        <input ref={editName} type="text" name="input" className="input" />
-                                    </div>
-                                    
-                                    <input className="submit mx-auto mt-7" type="submit" value="Save" onClick={(e: any) => {
-                                        e.preventDefault();
-                                        // update();
-                                    }} />
-                                </form>
-                            </div>
-                </div> */}
     </div>
   )
 }
