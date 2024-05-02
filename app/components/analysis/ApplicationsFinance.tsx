@@ -11,78 +11,76 @@ import { useContext, useEffect, useState } from "react"
 import formatNumberInEGP from "@/app/helpers/FormatNumInEGP"
 
 const ApplicationsFinance = (props: any) => {
-    // const dataContext: any = useContext(DataContext);
-    
-    // const [ implementedCourses, setImplementedCourses ] = useState(dataContext.courses.filter((course: any) => course.status === 'implemented'))
-    // const [ nonImplementedCourses, setNonImplementedCourses ] = useState(dataContext.courses.filter((course: any) => course.status === 'not implemented'))
-    
-    // const [ implementedRevenue, setImplementedRevenue ] = useState(0)
-    // const [ implementedExpenses, setImplementedExpenses ] = useState(0)
-    // const [ notImplementedRevenue, setNotImplementedRevenue ] = useState(0)
-
-    // useEffect(() => {
-    //     // setImplementedCourses(dataContext.courses.filter((course: any) => course.status === 'implemented'))
-    //     // setNonImplementedCourses(dataContext.courses.filter((course: any) => course.status === 'not implemented'))
-        
-    //     setImplementedRevenue(implementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.total_revenue), 0))
-    //     setImplementedExpenses(implementedCourses.reduce((acc: any, course: any) => acc + (parseInt(course.total_revenue) - parseInt(course.net_revenue)), 0))
-    //     setNotImplementedRevenue(nonImplementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.total_revenue), 0))
-
-    //     console.log(implementedCourses)
-
-    // }, [dataContext.courses])
-
 
     const dataContext: any = useContext(DataContext);
-
+    
     const [implementedCourses, setImplementedCourses] = useState<any[]>([]);
     const [nonImplementedCourses, setNonImplementedCourses] = useState<any[]>([]);
     
     const [implementedRevenue, setImplementedRevenue] = useState<number>(0);
     const [implementedExpenses, setImplementedExpenses] = useState<number>(0);
-    const [notImplementedRevenue, setNotImplementedRevenue] = useState<number>(0);
+    
+    const [peopleTrained, setPeopleTrained] = useState<number>(0);
+    const [ currentYearApps, setCurrentYearApps ] = useState([])
 
     useEffect(() => {
-        const filteredImplementedCourses = dataContext.courses.filter((course: any) => course.status === 'implemented');
-        const filteredNonImplementedCourses = dataContext.courses.filter((course: any) => course.status === 'not implemented');
+        const currentYear = new Date().getFullYear();
+
+        const filteredImplementedCourses = dataContext.courses.filter((course: any) => {
+            const year = parseInt(course.date_from.split('/')[0])
+            return (course.course_status === 'implemented' && year === currentYear)
+        });
+        const filteredNonImplementedCourses = dataContext.courses.filter((course: any) => {
+            const year = parseInt(course.date_from.split('/')[0])
+            return (course.course_status === 'not implemented' && year === currentYear)
+        });
 
         setImplementedCourses(filteredImplementedCourses);
         setNonImplementedCourses(filteredNonImplementedCourses);
 
-        const implementedRev = filteredImplementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.total_revenue), 0);
-        const implementedExp = filteredImplementedCourses.reduce((acc: any, course: any) => acc + (parseInt(course.total_revenue) - parseInt(course.net_revenue)), 0);
-        const notImplementedRev = filteredNonImplementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.total_revenue), 0);
+        const filteredCurrentYearApps = dataContext.APPS.filter((app: any) => {
+            const year = parseInt(app.date_from.split('/')[0])
+            return year === currentYear
+        })
+        setCurrentYearApps(filteredCurrentYearApps)
 
+        const implementedRev = filteredImplementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.total_revenue), 0);
+        const implementedExp = filteredImplementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.total_expenses), 0);
         setImplementedRevenue(implementedRev);
         setImplementedExpenses(implementedExp);
-        setNotImplementedRevenue(notImplementedRev);
+        
+        const implementedTrainees = filteredImplementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.num_of_trainees), 0);
+        setPeopleTrained(implementedTrainees)
+        
+        // setNotImplementedRevenue(notImplementedRev);
 
         console.log(filteredImplementedCourses);
 
-    }, [dataContext.courses]);
+    }, [dataContext.courses, dataContext.APPS]);
 
     return (
     <div className="glass p-7">
         <div>
+            <p className="text-gray-600 text-3xl font-bold mb-6 text-center"><p className=" text-blue-950 text-7xl font-black">EPR<span className="text-green-600">O</span>M</p> progress over the current year</p>
                 <div className="glass flex justify-between flex-wrap p-5 gap-5 mb-20">
                     <div className="card-one flex justify-between w-[32%] items-center py-11 px-6 bg-slate-700 rounded-2xl">
                         <div className="gap-4">
-                            <p className="text-2xl main-color font-black">Current Trainees</p>
-                            <p className="text-4xl main-color font-black">{props.trainees}</p>
+                            <p className="text-2xl main-color font-black">People Trained</p>
+                            <p className="text-4xl main-color font-black">{peopleTrained}</p>
                         </div>
                         <p className="text-6xl main-color"><FaUsers /></p>
                     </div>
                     <div className="card-two flex justify-between w-[32%] items-center py-11 px-6 bg-slate-700 rounded-2xl">
                     <div className="gap-3">
                             <p className="text-2xl main-color font-black">Planned Courses</p>
-                            <p className="text-4xl main-color font-black">{props.courses}</p>
+                            <p className="text-4xl main-color font-black">{implementedCourses.length + nonImplementedCourses.length}</p>
                         </div>
                         <p className="text-6xl main-color"><MdMenuBook /></p>
                     </div>
                     <div className="card-three flex justify-between w-[32%] items-center py-11 px-6 bg-slate-700 rounded-2xl">
                     <div className="gap-3">
                             <p className="text-2xl main-color font-black">Total Applications</p>
-                            <p className="text-4xl main-color font-black">{props.APPS}</p>
+                            <p className="text-4xl main-color font-black">{currentYearApps.length}</p>
                         </div>
                         <p className="text-6xl main-color"><BsFillBookmarkCheckFill /></p>
                     </div>
@@ -90,7 +88,7 @@ const ApplicationsFinance = (props: any) => {
         </div>
         <p className="main-color text-3xl font-semibold">Financial information for applications</p>
         <div className="flex justify-between gap-5 mt-5">
-            <div className="yellow-bg w-1/4 p-5 rounded-2xl">
+            {/* <div className="yellow-bg w-1/4 p-5 rounded-2xl">
                 <div>
                     <div className="flex justify-between">
                         <p className="main-color text-2xl font-black">Remaining</p>
@@ -99,8 +97,8 @@ const ApplicationsFinance = (props: any) => {
                     <p className="text-sm text-gray-500 max-w-44">Total Revenue for not implemented course</p>
                 </div>
                 <p className="text-black text-xl font-bold mt-4">{formatNumberInEGP(notImplementedRevenue)}</p>
-            </div>
-            <div className="blue-bg w-1/4 p-5 rounded-2xl">
+            </div> */}
+            <div className="blue-bg w-1/3 p-5 rounded-2xl">
                 <div>
                     <div className="flex justify-between">
                         <p className="main-color text-2xl font-black">Revenue</p>
@@ -110,7 +108,7 @@ const ApplicationsFinance = (props: any) => {
                 </div>
                 <p className="text-black text-xl font-bold mt-4">{formatNumberInEGP(implementedRevenue)}</p>
             </div>
-            <div className="blue-bg w-1/4 p-5 rounded-2xl">
+            <div className="yellow-bg w-1/3 p-5 rounded-2xl">
                 <div>
                     <div className="flex justify-between">
                         <p className="main-color text-2xl font-black">Expenses</p>
@@ -120,7 +118,7 @@ const ApplicationsFinance = (props: any) => {
                 </div>
                 <p className="text-black text-xl font-bold mt-4">{formatNumberInEGP(implementedExpenses)}</p>
             </div>
-            <div className="green-bg w-1/4 p-5 rounded-2xl">
+            <div className="green-bg w-1/3 p-5 rounded-2xl">
                 <div>
                     <div className="flex justify-between">
                         <p className="main-color text-2xl font-black">Profit</p>

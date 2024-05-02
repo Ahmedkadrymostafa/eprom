@@ -20,7 +20,7 @@ const Page = () => {
        <>
             
             <div className="mt-16 margin flex flex-col gap-24">
-                <ApplicationsFinance trainees={data.trainees.length} APPS={data.APPS.length} courses={data.courses.length} />
+                <ApplicationsFinance />
                 <LastSevenDaysRevenue />
                 <LastSevenDaysApps />
                 <NonImplemented apps={data.APPS} />

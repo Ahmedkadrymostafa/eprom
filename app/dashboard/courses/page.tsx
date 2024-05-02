@@ -95,40 +95,42 @@ const Page = () => {
     setToDate(event.target.value);
   };
    const changeInputsToUpdate = (course: any) => {
-    setSelectedCourseToUpdateId(course.id)
-    courseTitle.current.value = course.course_title
-    coursePrice.current.value = course.course_price
-    numOfTrainees.current.value = course.num_of_trainees
-    days.current.value = course.days
-    setTotalHours(course.total_hours)
-    location.current.value = course.location
-    if (course.course_status === 'implemented') {
-        statusRef.current.checked = true
-        setStatusCourse('implemented')
-    }else {
-        statusRef.current.checked = false
-        setStatusCourse('not implemented')
-    }
-    setFromDate(course.date_from)
-    setToDate(course.date_to)
-    setTotalRevenue(course.total_revenue)
-    setInstructorFees(course.instructor_fees)
-    setBreakCost(course.break_cost)
-    setTools(course.tools)
-    setTransportation(course.transportation)
-    setAccommodation(course.accommodation)
-    setAllowance(course.allowance)
-    setOtherExpenses(course.other_expenses)
-    setTotalExpenses(course.total_expenses)
-    setNetRevenue(course.net_revenue)
+        setSelectedCourseToUpdateId(course.id)
+        courseTitle.current.value = course.course_title
+        coursePrice.current.value = course.course_price
+        numOfTrainees.current.value = course.num_of_trainees
+        days.current.value = course.days
+        setTotalHours(course.total_hours)
+        location.current.value = course.location
+        if (course.course_status === 'implemented') {
+            statusRef.current.checked = true
+            setStatusCourse('implemented')
+        }else {
+            statusRef.current.checked = false
+            setStatusCourse('not implemented')
+        }
+        setFromDate(course.date_from)
+        setToDate(course.date_to)
+        setTotalRevenue(course.total_revenue)
+        setInstructorFees(course.instructor_fees)
+        setBreakCost(course.break_cost)
+        setTools(course.tools)
+        setTransportation(course.transportation)
+        setAccommodation(course.accommodation)
+        setAllowance(course.allowance)
+        setOtherExpenses(course.other_expenses)
+        setTotalExpenses(course.total_expenses)
+        setNetRevenue(course.net_revenue)
 
-    let instructorsSplitter = course.instructors.split('-')
+        if (course.instructors !== '') {
+            let instructorsSplitter = course.instructors?.split('-')
+            if (!instructorsSplitter?.includes('')) {
+                setInstructorsToShow(instructorsSplitter)
+            }else {
+                setInstructorsToShow([])
+            }
+        }
 
-    if (!instructorsSplitter.includes('')) {
-        setInstructorsToShow(instructorsSplitter)
-    }else {
-        setInstructorsToShow([])
-    }
    }
 
     const notesRef: any = useRef()
@@ -144,6 +146,7 @@ const Page = () => {
     const toggleForm = () => {
         newCourseForm.current.classList.toggle('left-[15px]')
         newCourseForm.current.classList.toggle('-left-full')
+        setInstructorsToShow([])
     }
     const toggleCourseInfo = () => {
         newCourseInfo.current.classList.toggle('hidden')
@@ -346,13 +349,15 @@ const Page = () => {
                     </div>
                     <div>
                         <p className="text-2xl main-color font-black">Instructors</p>
-                        <div className="mt-4">
-                            {
-                                instructorsToShow.map((e: any) => (
-                                    <p key={e} className="text-xl my-2 text-black capitalize">{e}</p>
-                                ))
-                            }
-                        </div>
+                        {instructorsToShow.length > 0 && 
+                            <div className="mt-4">
+                                {
+                                    instructorsToShow.map((e: any) => (
+                                        <p key={e} className="text-xl my-2 text-black capitalize">{e}</p>
+                                    ))
+                                }
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -596,7 +601,7 @@ const Page = () => {
                                         <RiShareBoxFill className="cursor-pointer text-2xl text-gray-700" onClick={() => {
                                             setSelectedCourseToShowInfo(course)
                                             toggleCourseInfo()
-                                            let instSplitter = course.instructors.split('-')
+                                            let instSplitter = course.instructors?.split('-')
                                             setInstructorsToShow(instSplitter)
                                         }} />
                                         <FaEdit className="cursor-pointer text-2xl text-green-700" onClick={() => {
