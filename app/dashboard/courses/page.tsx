@@ -5,32 +5,14 @@ import { FaEdit, FaPencilAlt } from "react-icons/fa";
 import { MdDelete, MdOutlineNoteAlt } from "react-icons/md";
 import { toast } from "react-toastify";
 import { DataContext } from "../layout";
+import { ReportContext } from "@/app/layout";
 import { GrClose } from "react-icons/gr";
 import DatePicker from 'react-date-picker';
 import NewCourseInfo from "@/app/components/NewCourseInfo";
 import { IoAlertCircle } from "react-icons/io5";
 import { RiShareBoxFill } from "react-icons/ri";
-// type ValuePiece = Date | null;
+import { useRouter } from "next/navigation";
 
-// type Value = ValuePiece | [ValuePiece, ValuePiece];
-
-// type newCourseData = {
-//     name?: any,
-//     num_of_trainees?: any,
-//     date_from?: any,
-//     date_to?: any,
-//     days?: any,
-//     total_hours?: any,
-//     location?: any,
-//     courseStatus?: any,
-//     total_revenue?: any,
-//     instructor_fees?: any,
-//     break_cost?: any,
-//     training_tools?: any,
-//     net_revenue?: any,
-//     instructors?: any,
-//     notes?: any,
-// }
 type addNewCourseData = {
     id?: any
     course_title: any,
@@ -56,6 +38,8 @@ type addNewCourseData = {
     notes?: any,
 }
 const Page = () => {
+    const router = useRouter();
+    const reportContext = useContext(ReportContext);
 
     const [ formRole, setFormRole ] = useState('add');
 
@@ -85,8 +69,36 @@ const Page = () => {
     
     const [ selectedCourseToUpdateId, setSelectedCourseToUpdateId ] = useState<any>()
     const [ selectedCourseToShowInfo, setSelectedCourseToShowInfo ] = useState<addNewCourseData>()
-   
+    
+    const [fromDateReport, setFromDateReport ] = useState<any>('');
+    const [toDateReport, setToDateReport ] = useState<any>('');
+    
+    const [ coursesToReport, setCoursesToReport ] = useState<any>([]);
+    const FromDateChangeReport = (e: any) => {
+        setFromDateReport(e.target.value)
+    }
+    const ToDateChangeReport = (e: any) => {
+        setToDateReport(e.target.value)
+    }
+    const getCoursesReport = () => {
+        const filteredData = dataContext.courses.filter((course: any) => {
 
+            const appStartDate = new Date(course.date_from);
+            const appEndDate = new Date(course.date_to);
+            const selectedFromDate = new Date(fromDateReport);
+            const selectedToDate = new Date(toDateReport);
+            if (selectedFromDate === null || selectedToDate === null) return toast.error("select date to create report")
+            return (
+              appStartDate >= selectedFromDate && appEndDate <= selectedToDate
+            );
+          });
+          setCoursesToReport(filteredData)
+          reportContext.setReportByCoursesData(filteredData)
+          console.log(filteredData);
+    }
+    const report = () => {
+        router.push('/report/bycourses')
+    }
   const handleFromDateChange = (event: any) => {
     setFromDate(event.target.value);
   };
@@ -282,6 +294,37 @@ const Page = () => {
             }}>
                 <span className="button-content">Add New Course</span>
             </button>
+        </div>
+
+        <div className="flex items-center justify-between m-12">
+            <div className="flex items-center gap-14">
+                <div className="flex gap-2">
+                    <label className="main-color text-xl font-black">From</label>
+                    <input value={fromDateReport} onChange={FromDateChangeReport} className="select-form" type="date" />
+                </div>
+                <div className="flex gap-2">
+                    <label className="main-color text-xl font-black">To</label>
+                    <input value={toDateReport} onChange={ToDateChangeReport} className="select-form" type="date" />
+                </div>
+                <button className="cta" onClick={() => {
+                    // getApplicationsWithTrainees();
+                    getCoursesReport();
+                }}>
+                    <span>Collect</span>
+                    <svg width="15px" height="10px" viewBox="0 0 13 10">
+                        <path d="M1,5 L11,5"></path>
+                        <polyline points="8 1 12 5 8 9"></polyline>
+                    </svg>
+                </button>
+            </div>
+            {coursesToReport.length > 0 && 
+                <button className="download-button" onClick={report}>
+                    <div className="docs"><svg className="css-i6dzq1" strokeLinejoin="round" strokeLinecap="round" fill="none" strokeWidth="2" stroke="currentColor" height="20" width="20" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line y2="13" x2="8" y1="13" x1="16"></line><line y2="17" x2="8" y1="17" x1="16"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Report</div>
+                    {/* <div className="download">
+                        <svg className="css-i6dzq1" strokeLinejoin="round" strokeLinecap="round" fill="none" strokeWidth="2" stroke="currentColor" height="24" width="24" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line y2="3" x2="12" y1="15" x1="12"></line></svg>
+                    </div> */}
+                </button>
+            }
         </div>
 
         <div ref={newCourseInfo} className='glass max-h-[500px] overflow-y-scroll none-scrollbar w-[100%] hidden absolute z-10 px-5 py-2 top-0 -translate-x-1/2 left-1/2'>

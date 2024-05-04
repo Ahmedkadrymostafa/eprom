@@ -13,7 +13,7 @@ const Search = () => {
     const search = (e: any) => { 
         console.log(trainees)          
         if (e !== "") {
-            const filtered = dataContext.trainees.filter((index: any) => index.name.includes(e.toLowerCase()))
+            const filtered = dataContext.trainees.filter((index: any) => index.name.includes(e.toLowerCase()) || index.person_id.includes(e))
             // console.log(filtered)
             setTrainees(filtered)
             searchResultRef.current.classList.remove('hidden')

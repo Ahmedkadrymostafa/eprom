@@ -4,7 +4,7 @@ import { MdSpaceDashboard, MdMenuBook, MdAdminPanelSettings } from "react-icons/
 import styles from "./sidebar.module.css"
 import { FaUsers, FaUserPlus } from "react-icons/fa";
 import { LuBookPlus } from "react-icons/lu";
-import { FaChartColumn } from 'react-icons/fa6';
+import { FaBuildingUser, FaChartColumn } from 'react-icons/fa6';
 
 const SideBar = (props: any) => {
   return (
@@ -36,8 +36,14 @@ const SideBar = (props: any) => {
             </li>
             <li className={styles.sideMenuLi}>
                 <Link className={styles.sideMenuLink} href="/dashboard/organizations">
-                    <p className='text-3xl'><LuBookPlus /></p>
+                    <p className='text-3xl'><FaBuildingUser /></p>
                     <p>Organizations</p>
+                </Link>
+            </li>
+            <li className={styles.sideMenuLi}>
+                <Link className={styles.sideMenuLink} href="/dashboard/insert">
+                    <p className='text-3xl'><LuBookPlus /></p>
+                    <p>Insert Applications</p>
                 </Link>
             </li>
             

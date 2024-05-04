@@ -24,10 +24,13 @@ export default function RootLayout({
 }>) {
 
   const [ reportByTraineesData, setReportByTraineesData ] = useState<any>([])
+  const [ reportByCoursesData, setReportByCoursesData ] = useState<any>([])
 
   const reportContextValue: any = {
     reportByTraineesData,
     setReportByTraineesData,
+    reportByCoursesData,
+    setReportByCoursesData,
   };
 
 
