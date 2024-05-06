@@ -1,5 +1,5 @@
 'use client'
-import { useContext, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { DataContext } from "../layout"
 import Search from "@/app/components/search/Search";
 import { FaSearch } from "react-icons/fa";
@@ -25,6 +25,7 @@ const Page = () => {
     const dataContext = useContext<any>(DataContext);
 
     const [ courseToInsert, setCourseToInsert ] = useState<course>();
+    let [ newApps, setNewApps ] = useState<any>([])
 
     const handleCourseChange = (e: any) => {
         let id = e.target.selectedOptions[0].id;
@@ -42,7 +43,7 @@ const Page = () => {
     const search = (e: any) => { 
         console.log(trainees)          
         if (e !== "") {
-            const filtered = dataContext.trainees.filter((index: any) => index.name.includes(e.toLowerCase()) || index.person_id.includes(e))
+            const filtered = dataContext.trainees.filter((index: any) => index.name.includes(e.toLowerCase()) || index.project.includes(e.toLowerCase()) || index.person_id.includes(e))
             // console.log(filtered)
             setTrainees(filtered)
             searchResultRef.current.classList.remove('hidden')
@@ -61,10 +62,20 @@ const Page = () => {
     
     const [ selectedTrainees, setSelectedTrainees ] = useState<any>([])
     const traineeToSelect = (id: any, name: any, project: any) => {
+        if (!courseToInsert?.course_title || !courseToInsert) return toast.error('please select a course before selecting a trainee')
         let trainee = {
             person_id: id,
-            name: name,
-            project: project
+            person_name: name,
+            project: project,
+            course: courseToInsert.course_title,
+            course_price: courseToInsert.course_price,
+            date: today.toISOString().split('T')[0],
+            date_from: courseToInsert.date_from,
+            date_to: courseToInsert.date_to,
+            status: courseToInsert.course_status,
+            days: courseToInsert.days,
+            total_hours: courseToInsert.total_hours,
+            location: courseToInsert.location,
         }
         console.log(trainee)
         setSelectedTrainees([...selectedTrainees, trainee])
@@ -82,25 +93,27 @@ const Page = () => {
         if (selectedTrainees.length === 0) return toast.error('please select at least one person')
 
         selectedTrainees.map(async (trainee: any) => {
-            let data = {
-                person_id: trainee.person_id,
-                person_name: trainee.name,
-                project: trainee.project,
-                course: courseToInsert.course_title,
-                course_price: courseToInsert.course_price,
-                date: today.toISOString().split('T')[0],
-                date_from: courseToInsert.date_from,
-                date_to: courseToInsert.date_to,
-                status: courseToInsert.course_status,
-                days: courseToInsert.days,
-                total_hours: courseToInsert.total_hours,
-                location: courseToInsert.location,
-            }
-
+            // let data = {
+            //     person_id: trainee.person_id,
+            //     person_name: trainee.name,
+            //     project: trainee.project,
+            //     course: courseToInsert.course_title,
+            //     course_price: courseToInsert.course_price,
+            //     date: today.toISOString().split('T')[0],
+            //     date_from: courseToInsert.date_from,
+            //     date_to: courseToInsert.date_to,
+            //     status: courseToInsert.course_status,
+            //     days: courseToInsert.days,
+            //     total_hours: courseToInsert.total_hours,
+            //     location: courseToInsert.location,
+            // }
+            let data = trainee
+            
             await axios.post('/api/apps', data).then(response => {           
                 toast.success(`New course added successfully for ${data.person_name}`)
                 // APPS.push({id: response.data.id, ...data})
-                dataContext.setAPPS([{id: response.data.id, ...data}, ...dataContext.APPS])
+                setNewApps([{id: response.data.id, ...trainee}])
+                // setSelectedTrainees([])
                 // setTotalHours(totalHours +  parseInt(data.total_hours))
                 // emptyInputs()
                 // setShowInfo(false)
@@ -108,7 +121,14 @@ const Page = () => {
                 
             }).catch(error => console.log(error))
         })
+        
     }
+
+    useEffect(() => {
+        dataContext.setAPPS([...newApps, ...dataContext.APPS])
+        console.log(newApps)
+
+    }, [newApps])
   return (
     <div className="m-6">
         <p className='main-color text-3xl font-semibold'>Insert Courses To Trainees</p>
@@ -194,7 +214,7 @@ const Page = () => {
                                                     <p className="main-color text-xl capitalize font-bold">{trainee.name}</p>
                                                     <div className="flex gap-3">
                                                         <p className="text-gray-700 text-sm ml-2">{`ID: ${trainee.person_id}`}</p>
-                                                        <p className="text-gray-700 text-sm ml-2">{`ID: ${trainee.project}`}</p>
+                                                        <p className="text-gray-700 text-sm ml-2">{`Project: ${trainee.project}`}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -235,7 +255,7 @@ const Page = () => {
                                 selectedTrainees.map((e: any) => (
                                 <tr key={e.person_id} className="admin-tr">
                                     <td className="admin-td">{e.person_id}</td>
-                                    <td className="admin-td">{e.name}</td>
+                                    <td className="admin-td">{e.person_name}</td>
 {/*                                     
                                     <td className="admin-td">{e.title}</td>
                                     <td className="admin-td">{e.department}</td> */}

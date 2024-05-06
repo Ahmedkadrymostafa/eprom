@@ -41,13 +41,13 @@
   background-color: var(--second-bg);
 }
 .yellow-bg {
-  background-color: #e4ff006b;
+  background-color: rgba(228, 255, 0, 0.42);
 }
 .blue-bg {
-  background-color: #bbdfff;
+  background-color: rgb(187, 223, 255);
 }
 .green-bg {
-  background-color: #00ff0066;
+  background-color: rgba(0, 255, 0, 0.4);
 }
 .lightblue-color {
   background-color: rgba(75, 192, 192, 0.2);

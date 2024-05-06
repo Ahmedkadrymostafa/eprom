@@ -27,11 +27,11 @@ const ApplicationsFinance = (props: any) => {
         const currentYear = new Date().getFullYear();
 
         const filteredImplementedCourses = dataContext.courses.filter((course: any) => {
-            const year = parseInt(course.date_from.split('/')[0])
+            const year = parseInt(course.date_from.split('-')[0])
             return (course.course_status === 'implemented' && year === currentYear)
         });
         const filteredNonImplementedCourses = dataContext.courses.filter((course: any) => {
-            const year = parseInt(course.date_from.split('/')[0])
+            const year = parseInt(course.date_from.split('-')[0])
             return (course.course_status === 'not implemented' && year === currentYear)
         });
 
@@ -39,7 +39,7 @@ const ApplicationsFinance = (props: any) => {
         setNonImplementedCourses(filteredNonImplementedCourses);
 
         const filteredCurrentYearApps = dataContext.APPS.filter((app: any) => {
-            const year = parseInt(app.date_from.split('/')[0])
+            const year = parseInt(app.date_from.split('-')[0])
             return year === currentYear
         })
         setCurrentYearApps(filteredCurrentYearApps)

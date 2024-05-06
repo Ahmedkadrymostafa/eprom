@@ -252,7 +252,7 @@ const Page = () => {
             other_expenses: otherExpenses,
             total_expenses: totalExpenses,
             net_revenue: netRevenue,
-            instructors: instructorsToShow.join('-'),
+            instructors: instructorsToShow?.join('-'),
         };
         console.log(data);
         if (!data.course_title) return toast.warn("field course title is required")
@@ -392,7 +392,7 @@ const Page = () => {
                     </div>
                     <div>
                         <p className="text-2xl main-color font-black">Instructors</p>
-                        {instructorsToShow.length > 0 && 
+                        {instructorsToShow?.length > 0 && 
                             <div className="mt-4">
                                 {
                                     instructorsToShow.map((e: any) => (
@@ -559,7 +559,7 @@ const Page = () => {
                                                 }}>Reset</button>
                                             
                                         </div>
-                                        {instructorsToShow.length !== 0 &&
+                                        {instructorsToShow?.length > 0 &&
                                         <div>
                                             <p className="text-xl mt-3 main-color font-black">Instructors</p>
                                             <div className="mt-2">

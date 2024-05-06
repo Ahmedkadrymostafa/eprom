@@ -19,7 +19,7 @@ const Page = () => {
     return (
        <>
             
-            <div className="mt-16 margin flex flex-col gap-24">
+            <div className="mt-16 margin flex flex-col gap-16">
                 <ApplicationsFinance />
                 <LastSevenDaysRevenue />
                 <LastSevenDaysApps />
