@@ -7,11 +7,11 @@ import { GrClose } from "react-icons/gr"
 import { MdDelete, MdOutlineClose } from "react-icons/md"
 import { DataContext } from "../../layout"
 import { toast } from "react-toastify"
-import { parse } from "path"
+// import { parse } from "path"
 import { useRouter } from "next/navigation";
-import { AiFillCloseSquare } from "react-icons/ai"
-import { FiShare } from "react-icons/fi"
-import { RiShareBoxLine } from "react-icons/ri"
+// import { AiFillCloseSquare } from "react-icons/ai"
+// import { FiShare } from "react-icons/fi"
+// import { RiShareBoxLine } from "react-icons/ri"
 
 type courseData = {
     person_id?: any,
@@ -49,37 +49,37 @@ const Page = ({params}: {params: any}) => {
     const courseDropDownRef: any = useRef('');
 
     const [ courses, setCourses ] = useState(dataContext.courses)
-    const [ courseInfo, setCourseInfo ] = useState<any>({})
-    const [ ORGS, setORGS ] = useState(dataContext.ORGS)
+    // const [ courseInfo, setCourseInfo ] = useState<any>({})
+    // const [ ORGS, setORGS ] = useState(dataContext.ORGS)
     const [ APPS, setAPPS ] = useState(dataContext.APPS.filter((app: any) => app.person_id === personId))
     const [ totalHours, setTotalHours ] = useState(0)
 
-    const [ edit, setEdit ] = useState(false);
+    // const [ edit, setEdit ] = useState(false);
     const [ showInfo, setShowInfo ] = useState(false);
     const [ courseDataToSubmit, setCourseDataToSubmit ] = useState<courseData>({})
-    const [ courseToUpdateID, setCoursesToUpdateID ] = useState();
+    // const [ courseToUpdateID, setCoursesToUpdateID ] = useState();
     const [ courseToDeleteID, setCoursesToDeleteID ] = useState();
     const deletePopUp: any = useRef();
 
     const today = new Date();
     const course: any = useRef();
-    const from: any = useRef();
-    const to: any = useRef();
-    const org: any = useRef();
-    const statusRef: any = useRef(null);
-    const [ statusJob, setStatusJob ] = useState("not implemented");
-    const days: any = useRef();
-    const total_hours: any = useRef();
-    const training_center: any = useRef();
-    const city: any = useRef();
-    const instructor: any = useRef();
-    const budget_code: any = useRef();
-    const course_fees: any = useRef();
-    const instructor_fees: any = useRef();
-    const total_cost: any = useRef();
-    const profit: any = useRef();
-    const allowance: any = useRef();
-    const hotel_cost: any = useRef();
+    // const from: any = useRef();
+    // const to: any = useRef();
+    // const org: any = useRef();
+    // const statusRef: any = useRef(null);
+    // const [ statusJob, setStatusJob ] = useState("not implemented");
+    // const days: any = useRef();
+    // const total_hours: any = useRef();
+    // const training_center: any = useRef();
+    // const city: any = useRef();
+    // const instructor: any = useRef();
+    // const budget_code: any = useRef();
+    // const course_fees: any = useRef();
+    // const instructor_fees: any = useRef();
+    // const total_cost: any = useRef();
+    // const profit: any = useRef();
+    // const allowance: any = useRef();
+    // const hotel_cost: any = useRef();
 
     const toggleForm = () => {
         courseForm.current.classList.toggle('active-course-form')
@@ -120,8 +120,8 @@ const Page = ({params}: {params: any}) => {
 
    const handleCourseChange = (e: any) => {
     let id = e.target.selectedOptions[0].id
-    console.log(id)
-    console.log(courses)
+    // console.log(id)
+    // console.log(courses)
     setShowInfo(true)
     let currentCourse = courses.filter((course: any) => course.id === parseInt(id))
     if (currentCourse.length > 0) {
@@ -140,7 +140,7 @@ const Page = ({params}: {params: any}) => {
             location: currentCourse[0].location,
         })
     }
-    console.log(currentCourse)
+    // console.log(currentCourse)
    }
 
     const addNewCourse = async () => {
@@ -184,67 +184,67 @@ const Page = ({params}: {params: any}) => {
         // console.log(traineeIndex)
     }
 
-    const updateCourse = async () => {
-        setLoading(true)
-        console.log(courseToUpdateID)
+    // const updateCourse = async () => {
+    //     setLoading(true)
+    //     console.log(courseToUpdateID)
 
-        let data = {
-            person_id: personId.trim().toLowerCase().replace(/\s+/g, ' '),
-            course: course.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            date_from: from.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            date_to: to.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            org: org.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            status: statusJob,
-            days: days.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            total_hours: total_hours.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            training_center: training_center.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            city: city.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            instructor: instructor.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            budget_code: budget_code.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            course_fees: course_fees.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            instructor_fees: instructor_fees.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            total_cost: total_cost.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            profit: profit.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            allowance: allowance.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
-            hotel_cost: hotel_cost.current.value.trim().toLowerCase().replace(/\s+/g, ' ')
-        }
-        if (!data.total_hours) {
-            setLoading(false)
-            return toast.warn("Hours is required! if you not know the hours for this course write zero instead")
-        }
-        if (!data.person_id && !data.course) {
-            setLoading(false)
-            return toast.warn("field course name is required")
-        }
+    //     let data = {
+    //         person_id: personId.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         course: course.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         date_from: from.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         date_to: to.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         org: org.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         status: statusJob,
+    //         days: days.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         total_hours: total_hours.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         training_center: training_center.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         city: city.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         instructor: instructor.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         budget_code: budget_code.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         course_fees: course_fees.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         instructor_fees: instructor_fees.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         total_cost: total_cost.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         profit: profit.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         allowance: allowance.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
+    //         hotel_cost: hotel_cost.current.value.trim().toLowerCase().replace(/\s+/g, ' ')
+    //     }
+    //     if (!data.total_hours) {
+    //         setLoading(false)
+    //         return toast.warn("Hours is required! if you not know the hours for this course write zero instead")
+    //     }
+    //     if (!data.person_id && !data.course) {
+    //         setLoading(false)
+    //         return toast.warn("field course name is required")
+    //     }
 
-            let updatedAllApps = [...dataContext.APPS]
+    //         let updatedAllApps = [...dataContext.APPS]
 
-            await axios.put(`/api/apps/${courseToUpdateID}`, data).then(response => {
-                toast.success('Course updated successfully')
-                setLoading(false)
+    //         await axios.put(`/api/apps/${courseToUpdateID}`, data).then(response => {
+    //             toast.success('Course updated successfully')
+    //             setLoading(false)
                 
 
-                let toUpdate = updatedAllApps.findIndex((i: any) => i.id === courseToUpdateID)
-                console.log(toUpdate)
-                if (toUpdate !== -1) {
+    //             let toUpdate = updatedAllApps.findIndex((i: any) => i.id === courseToUpdateID)
+    //             console.log(toUpdate)
+    //             if (toUpdate !== -1) {
                    
-                    updatedAllApps[toUpdate] = {...updatedAllApps[toUpdate],
-                        ...data
-                    }
-                }
-                // console.log(statusRef.current.checked)
-                // console.log(data.status)
-                let filteredApps = updatedAllApps.filter((app: any) => app.person_id === personId)
-                let updatedHours = filteredApps.reduce((acc: any, current: any) => parseInt(acc) + parseInt(current.total_hours), 0)
-                setAPPS(filteredApps);
-                setTotalHours(updatedHours)
-                dataContext.setAPPS(updatedAllApps)
-                console.log(updatedHours)
-                toggleForm()
-                emptyInputs()              
+    //                 updatedAllApps[toUpdate] = {...updatedAllApps[toUpdate],
+    //                     ...data
+    //                 }
+    //             }
+    //             // console.log(statusRef.current.checked)
+    //             // console.log(data.status)
+    //             let filteredApps = updatedAllApps.filter((app: any) => app.person_id === personId)
+    //             let updatedHours = filteredApps.reduce((acc: any, current: any) => parseInt(acc) + parseInt(current.total_hours), 0)
+    //             setAPPS(filteredApps);
+    //             setTotalHours(updatedHours)
+    //             dataContext.setAPPS(updatedAllApps)
+    //             console.log(updatedHours)
+    //             toggleForm()
+    //             emptyInputs()              
 
-            }).catch(error => console.log(error))
-    }
+    //         }).catch(error => console.log(error))
+    // }
     
     const deleteCourse = async () => {
         setLoading(true)
@@ -262,7 +262,7 @@ const Page = ({params}: {params: any}) => {
     useEffect(() => {
         getTrainee()
         setCourses(dataContext.courses)
-        setORGS(dataContext.ORGS)
+        // setORGS(dataContext.ORGS)
         setAPPS(dataContext.APPS.filter((app: any) => app.person_id === personId))
         setTotalHours(APPS.reduce((acc: any, current: any) => parseInt(acc) + parseInt(current.total_hours), 0))
         
@@ -290,7 +290,7 @@ const Page = ({params}: {params: any}) => {
                         </div>
 
 
-                            <div ref={courseDropDownRef} className="p-3 flex flex-col gap-5 course-dropdown fixed z-[3] bg-white h-full">
+                            {/* <div ref={courseDropDownRef} className="p-3 flex flex-col gap-5 course-dropdown fixed z-[3] bg-white h-full">
                                 <p className="absolute main-color text-3xl cursor-pointer right-2" onClick={toggleCourseDropDown}><AiFillCloseSquare /></p>
                                 <div>
                                     <p className="text-gold text-2xl font-bold mb-2">Additional Information:-</p>
@@ -315,7 +315,7 @@ const Page = ({params}: {params: any}) => {
                                             <p className="main-color text-xl font-bold">Allowance: {courseInfo.allowance}</p>
                                             <p className="main-color text-xl font-bold">Hotel Cost: {courseInfo.hotel_cost}</p>
                                         </div>
-                                    {/* <div className="flex gap-4">
+                                    <div className="flex gap-4">
                                         <div className="ml-4 flex flex-col gap-2">
                                             <p className="text-gray-900 text-xl font-bold">{courseInfo.budget_code}</p>
                                             <p className="text-gray-900 text-xl font-bold">{courseInfo.course_fees}</p>
@@ -324,9 +324,9 @@ const Page = ({params}: {params: any}) => {
                                             <p className="text-gray-900 text-xl font-bold">{courseInfo.allowance}</p>
                                             <p className="text-gray-900 text-xl font-bold">{courseInfo.hotel_cost}</p>
                                         </div>
-                                    </div> */}
+                                    </div>
                                 </div>
-                            </div>
+                            </div> */}
 
 
             {!loading && trainee &&
@@ -395,12 +395,12 @@ const Page = ({params}: {params: any}) => {
                                             <span className="button-content">Add New Course</span>
                                         </button>
                                         
-                                        <button className="download-button">
+                                        {/* <button className="download-button">
                                             <div className="docs"><svg className="css-i6dzq1" strokeLinejoin="round" strokeLinecap="round" fill="none" strokeWidth="2" stroke="currentColor" height="20" width="20" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line y2="13" x2="8" y1="13" x1="16"></line><line y2="17" x2="8" y1="17" x1="16"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Report</div>
                                             <div className="download">
                                                 <svg className="css-i6dzq1" strokeLinejoin="round" strokeLinecap="round" fill="none" strokeWidth="2" stroke="currentColor" height="24" width="24" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line y2="3" x2="12" y1="15" x1="12"></line></svg>
                                             </div>
-                                        </button>
+                                        </button> */}
                                     </div>
                                 </div>
                 
@@ -427,19 +427,19 @@ const Page = ({params}: {params: any}) => {
                                             {
                                                 APPS.map((app: any) => (
                                                     <tr key={app.id} className="admin-tr relative cursor-pointer" onClick={() => {
-                                                        setCourseInfo({
-                                                            days: app.days,
-                                                            hours: app.total_hours,
-                                                            training_center: app.training_center,
-                                                            city: app.city,
-                                                            instructor: app.instructor,
-                                                            budget_code: app.budget_code,
-                                                            course_fees: app.course_fees,
-                                                            instructor_fees: app.instructor_fees,
-                                                            profit: app.profit,
-                                                            allowance: app.allowance,
-                                                            hotel_cost: app.hotel_cost,
-                                                        })
+                                                        // setCourseInfo({
+                                                        //     days: app.days,
+                                                        //     hours: app.total_hours,
+                                                        //     training_center: app.training_center,
+                                                        //     city: app.city,
+                                                        //     instructor: app.instructor,
+                                                        //     budget_code: app.budget_code,
+                                                        //     course_fees: app.course_fees,
+                                                        //     instructor_fees: app.instructor_fees,
+                                                        //     profit: app.profit,
+                                                        //     allowance: app.allowance,
+                                                        //     hotel_cost: app.hotel_cost,
+                                                        // })
                                                     }}>
                                                         <td className="admin-td">{app.course}</td>                                       
                                                         <td className="admin-td">{app.course_price}</td>                                       
@@ -451,7 +451,7 @@ const Page = ({params}: {params: any}) => {
                                                         <td className="admin-td">{app.status}</td>
                                                         <td className="text-2xl font-black ">
                                                             <div className="flex justify-center gap-5 row-buttons">
-                                                                <RiShareBoxLine className="text-white cursor-pointer" onClick={toggleCourseDropDown} />
+                                                                {/* <RiShareBoxLine className="text-white cursor-pointer" onClick={toggleCourseDropDown} />
                                                                 <FaEdit className="cursor-pointer text-yellow-400" onClick={() => {
                                                                 setEdit(true)
                                                                     toggleForm();
@@ -478,7 +478,7 @@ const Page = ({params}: {params: any}) => {
                                                                     profit.current.value = app.profit
                                                                     allowance.current.value = app.allowance
                                                                     hotel_cost.current.value = app.hotel_cost
-                                                                }} />
+                                                                }} /> */}
                                                                 <MdDelete className="cursor-pointer text-red-700" onClick={() => {
                                                                     setCoursesToDeleteID(app.id)
                                                                     deletePopUp.current.classList.toggle('active-form-popup')

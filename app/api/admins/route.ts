@@ -33,6 +33,19 @@ export async function GET(request: any) {
 export async function POST(request: any, res: any) {
   const data = await request.json()
 
+
+    const cookieStore = cookies()
+    const session: any = cookieStore.get("session")
+    if (!session) return NextResponse.json({message: "forbidden"}, {status: 403})
+
+    const credentials = await query({
+      query: "SELECT * FROM admins WHERE session = ?",
+      values: [session.value],
+    })
+
+    if (credentials.length === 0) return NextResponse.json({message: "forbidden"}, {status: 403})
+
+
   const admins = await query({
     query: "SELECT * FROM admins WHERE email = ?",
     values: [data.email],

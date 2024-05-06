@@ -47,7 +47,7 @@ const SideBar = (props: any) => {
                 </Link>
             </li>
             
-            {props.role === 'super admin' && 
+            {(props.role === 'admin' || props.role === 'developer') && 
                 <li className={styles.sideMenuLi}>
                     <Link className={styles.sideMenuLink} href="/dashboard/admins">
                         <p className='text-3xl'><MdAdminPanelSettings /></p>

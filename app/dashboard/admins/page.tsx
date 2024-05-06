@@ -8,7 +8,7 @@ const Page = () => {
   const dataContext: any = useContext(DataContext)
   const router = useRouter();
 
-  if (dataContext.credentials.role === "super admin") {
+  if (dataContext.credentials.role === "admin" || dataContext.credentials.role === "developer") {
     return (
       <div>
         <AdminForm />

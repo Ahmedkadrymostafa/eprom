@@ -1,13 +1,16 @@
 'use client'
 import axios from "axios";
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import Cryptr from "cryptr";
 import { MdClose, MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import Loading from "@/app/loading";
 import { FaWindowClose } from "react-icons/fa";
+import { DataContext } from "@/app/dashboard/layout";
 
 const AdminForm = () => {
+const dataContext: any = useContext(DataContext)
+
   const cryptr = new Cryptr('secretKey', { encoding: 'base64', pbkdf2Iterations: 10000, saltLength: 10 });
   const name: any = useRef();
   const email: any = useRef();
@@ -34,8 +37,10 @@ const AdminForm = () => {
         id.current.value = "";
         toggler();
     }
-  async function postAdmins() {
+
+const postAdmins = async () => {
     setIsLoading(true);
+
     const nameV = name.current.value.toLowerCase().trim().replace(/\s+/g, ' ');
     const emailV = email.current.value.toLowerCase().trim().replace(/\s+/g, '');
     const passwordV = password.current.value.toLowerCase();
@@ -48,48 +53,51 @@ const AdminForm = () => {
         setIsLoading(false)
         return toast.warning("Please enter full inputs")
     }
-
-    let data = {
-      name: nameV,
-      email: emailV,
-      password: hash,
-      id: parseInt(idV),
-      role: roleV,
-      session: ""
+    
+    let data: any = {
+        name: nameV,
+        email: emailV,
+        password: hash,
+        id: parseInt(idV),
+        role: roleV,
+        session: ""
     }
 
-    axios.post('/api/admins', data).then((res) => {
+    let checkExistingEmail = admins.filter((admin: any) => admin.email === data.email)
+    
+    if (checkExistingEmail.length > 0) {
         setIsLoading(false)
+        return toast.error("Failed to add admin because Email is exist")
+    }
+    
+    await axios.post('/api/admins', data).then((res) => {
+        // setIsLoading(false)
         toast.success("New admin added successfully")
         setAdmins([...admins, 
-            {
-                name: nameV,
-                email: emailV,
-                password: hash,
-                id: parseInt(idV),
-                role: roleV,
-                session: ""
-            }
+            data
         ])
+       
         emptyInputs();
         
     }).catch(err => {
-        setIsLoading(false)
-        toast.error("Failed to add admin because Email is exist")
-    })
+        
+        console.log(err);
+        // setIsLoading(false)
+    }).finally(() => setIsLoading(false))
     
-  }
+}
 
   const getAdmins = async () => {
     await axios.get("/api/admins").then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         setIsLoading(false)
-        setAdmins(res.data)
+        const filterAdmins = res.data.filter((admin: any) => admin.role !== 'developer')
+        setAdmins(filterAdmins)
     }).catch(err => {
         console.log(err)
         setIsLoading(false)
     })
-    console.log(admins)
+    // console.log(admins)
   }
 
   const deleteAdmin = async (email: any) => {
@@ -97,6 +105,7 @@ const AdminForm = () => {
    axios.delete(`/api/admins/${email}`).then((res) => {
         setIsLoading(false)
         getAdmins();
+        toast.success("deleted successfully")
     }).catch((err) => {
         toast.error("Failed to delete admin")
         setIsLoading(false)
@@ -136,13 +145,20 @@ return (
                         <input className="input" ref={id} type="number" placeholder="id" />
                         <select className="input" ref={role}>
                         <option value="admin">admin</option>
-                        <option value="super admin">super admin</option>
+                        <option value="moderator">moderator</option>
                         </select>
-                        <input className="button-81" type="submit" onClick={(e: any) => {
-                        e.preventDefault();
-                        // console.log()
-                        postAdmins();
-                        }} />
+                        {/* <input className="button-81" type="submit" onClick={(e: any) => {
+                            e.preventDefault();
+                            // console.log()
+                            postAdmins();
+                        }} /> */}
+                        <button className="button-81" onClick={(e: any) => {
+                            e.preventDefault();
+                            // console.log()
+                            postAdmins();
+                        }}>
+                            Submit
+                        </button>
                     </form>
                 </div>
             </div>
@@ -164,16 +180,19 @@ return (
                     </thead>
                     <tbody>
                         {
-                            admins.map((e: any) => (
-                                <tr key={e.email} className="admin-tr">
-                                    <td className="admin-td">{e.id}</td>
-                                    <td className="admin-td">{e.name}</td>
-                                    <td className="admin-td">{e.email}</td>
-                                    <td className="admin-td">{e.role}</td>
-                                    {e.session === "" ? <td className="text-gray-500">Offline</td> : <td className="text-green-500 font-bold">Online</td>}
-                                    {e.role === "admin" && <td className="text-red-700 text-2xl font-black"><MdDelete onClick={() => deleteAdmin(e.email)} className="cursor-pointer mx-auto" /></td>}
-                                </tr>
-                            ))
+                            admins.map((e: any) =>                             
+                                (
+                                    <tr key={e.email} className="admin-tr">
+                                        <td className="admin-td">{e.id}</td>
+                                        <td className="admin-td">{e.name}</td>
+                                        <td className="admin-td">{e.email}</td>
+                                        <td className="admin-td">{e.role}</td>
+                                        {e.session === "" ? <td className="text-gray-500">Offline</td> : <td className="text-green-500 font-bold">Online</td>}
+                                        {(e.role === "moderator" && dataContext.credentials.role === 'admin') && <td className="text-red-700 text-2xl font-black"><MdDelete onClick={() => deleteAdmin(e.email)} className="cursor-pointer mx-auto" /></td>}
+                                        {dataContext.credentials.role === 'developer' && <td className="text-red-700 text-2xl font-black"><MdDelete onClick={() => deleteAdmin(e.email)} className="cursor-pointer mx-auto" /></td>}
+                                    </tr>
+                                )                          
+                            )
                         }
                         
                         
