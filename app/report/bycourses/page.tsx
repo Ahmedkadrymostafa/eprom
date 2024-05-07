@@ -46,7 +46,34 @@ const Page = () => {
                 </div>
                 <p className='text-black text-base w-fit h-fit m-auto font-bold border border-black py-5 px-5 flex justify-center items-center gap-4'>Progress: <span className='text-xl'>{progress} %</span></p>
             </div>
-            <div className="my-6">
+
+            <div className='mx-auto mb-16 w-full'>
+                <p className='text-black font-bold text-base text-center mb-5'>Comparison between expenses and revenue for the given time frame included profit</p>
+                <div>
+                    <table className='border-black border w-[80%] mx-auto'>
+                        <thead>
+                            <tr className='text-xl bg-gray-200 h-10 border-b-2 border-black'>
+                                <th>Revenue</th>
+                                <th className='border-x-2 border-black'>Expenses</th>
+                                <th className="border-r-2 border-black">Profit</th>
+                                <th>Profit Ratio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr className='text-center font-semibold text-base text-black h-14'>
+                                <td>{formatNumberInEGP(implementedRevenue)}</td>
+                                <td className='border-x-2 border-black'>
+                                    {formatNumberInEGP(implementedExpenses)}
+                                </td>
+                                <td className="border-r-2 border-black">{formatNumberInEGP(implementedNetRevenue)}</td>
+                                <td>{((implementedNetRevenue / implementedRevenue) * 100).toFixed(1)} %</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {/* <div className="my-6">
                 <p className='text-black text-xl font-bold mb-4 text-center'>Total financial data for the selected period</p>
                 <div className='flex items-center gap-6'>
                         <div className='flex flex-col border border-black text-center'>
@@ -57,25 +84,25 @@ const Page = () => {
                             <p className='text-black text-base font-black border-b border-black py-2 px-3'>Expenses</p>
                             <span className='text-base main-color font-bold p-3'>{formatNumberInEGP(implementedExpenses)}</span>
                         </div>
-                    {/* <div className="flex gap-4">
-                    </div> */}
+                    
                     <div className='flex flex-col border border-black text-center'>
                         <p className='text-black text-base font-black border-b border-black py-2 px-3'>Profit</p>
                         <span className='text-base main-color font-bold p-3'>{formatNumberInEGP(implementedNetRevenue)}</span>
                     </div>
                     <div className='flex flex-col border border-black text-center'>
                         <p className='text-black text-base font-black border-b border-black py-2 px-3'>Profit Ratio</p>
-                        <span className='text-base main-color font-bold p-3'>{(implementedNetRevenue / implementedRevenue) * 100} %</span>
+                        <span className='text-base main-color font-bold p-3'>{((implementedNetRevenue / implementedRevenue) * 100).toFixed(1)} %</span>
                     </div>
                     
                 </div>
-            </div>
+            </div> */}
+
         </div>
         <div>
             <p className='text-black font-bold text-xl text-center mb-8'>Implemented Courses View</p>
             
             <table className="w-full">
-                <thead className="border h-12 border-black">
+                <thead className="bg-gray-200 h-12 border border-black">
                     <tr className="text-black text-base font-bold">
                         <th className="text-left">Course Title</th>
                         <th>from</th>
@@ -110,7 +137,7 @@ const Page = () => {
             <p className='text-black font-bold text-xl text-center mb-8'>Not Implemented Courses View</p>
             
             <table className="w-full mx-auto p-2">
-                <thead>
+                <thead className="bg-gray-200 border border-black">
                     <tr className="text-black h-12 text-base font-bold">
                         <th className="w-1/2 text-left">Course Title</th>
                         <th>from</th>
