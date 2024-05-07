@@ -1,7 +1,7 @@
 'use client'
 import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
-import { FaEdit, FaPencilAlt } from "react-icons/fa";
+import { FaCheckCircle, FaEdit, FaPencilAlt } from "react-icons/fa";
 import { MdDelete, MdOutlineNoteAlt } from "react-icons/md";
 import { toast } from "react-toastify";
 import { DataContext } from "../layout";
@@ -12,6 +12,7 @@ import NewCourseInfo from "@/app/components/NewCourseInfo";
 import { IoAlertCircle } from "react-icons/io5";
 import { RiShareBoxFill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
+import { FaClockRotateLeft } from "react-icons/fa6";
 
 type addNewCourseData = {
     id?: any
@@ -284,6 +285,54 @@ const Page = () => {
         })
     }
     
+
+    const changeCourseStatusToImplemented = async (id: any) => {
+        let data = {
+            id: id,
+            status: 'implemented'
+        }
+        let updatedAllCourses = [...dataContext.courses]
+
+        await axios.put(`/api/courses/status`, data).then(() => {
+            toast.success('Status updated successfully')
+            let toUpdate = updatedAllCourses.findIndex((i: any) => i.id === id)
+                if (toUpdate !== -1) {
+                   
+                    updatedAllCourses[toUpdate] = {...updatedAllCourses[toUpdate],
+                        course_status: 'implemented'
+                    }
+                }
+            
+            setCourses(updatedAllCourses)
+            dataContext.setCourses(updatedAllCourses)
+        }).catch((error) => console.log(error))
+    }
+
+    const changeCourseStatusToNotImplemented = async (id: any) => {
+        let data = {
+            id: id,
+            status: 'not implemented'
+        }
+        let updatedAllCourses = [...dataContext.courses]
+
+        await axios.put(`/api/courses/status`, data).then(() => {
+            toast.success('Status updated successfully')
+            let toUpdate = updatedAllCourses.findIndex((i: any) => i.id === id)
+                if (toUpdate !== -1) {
+                   
+                    updatedAllCourses[toUpdate] = {...updatedAllCourses[toUpdate],
+                        course_status: 'not implemented'
+                    }
+                }
+            
+            setCourses(updatedAllCourses)
+            dataContext.setCourses(updatedAllCourses)
+            // let filteredApps = updatedAllApps.filter((app: any) => app.person_id === personId)
+            // setAPPS(filteredApps);
+            // dataContext.setAPPS(updatedAllApps)
+        }).catch((error) => console.log(error))
+    }
+
   return (
     <div className="relative">
         <div className="flex justify-between items-center mx-6 my-5">
@@ -641,19 +690,21 @@ const Page = () => {
                                 <td>{course.net_revenue}</td>
                                 <td>
                                     <div className="table-row-buttons flex justify-center gap-3">
-                                        <RiShareBoxFill className="cursor-pointer text-2xl text-gray-700" onClick={() => {
+                                        {course.course_status === 'implemented' && <FaCheckCircle className="cursor-pointer text-xl text-green-500" onClick={() => changeCourseStatusToNotImplemented(course.id)} />}
+                                        {course.course_status === 'not implemented' && <FaClockRotateLeft className="cursor-pointer text-xl text-gray-500" onClick={() => changeCourseStatusToImplemented(course.id)} />}
+                                        <RiShareBoxFill className="cursor-pointer text-xl text-gray-700" onClick={() => {
                                             setSelectedCourseToShowInfo(course)
                                             toggleCourseInfo()
                                             let instSplitter = course.instructors?.split('-')
                                             setInstructorsToShow(instSplitter)
                                         }} />
-                                        <FaEdit className="cursor-pointer text-2xl text-green-700" onClick={() => {
+                                        <FaEdit className="cursor-pointer text-xl text-green-700" onClick={() => {
                                             
                                             setFormRole('update')
                                             toggleForm()
                                             changeInputsToUpdate(course)
                                         }} />
-                                        <MdDelete className="cursor-pointer text-2xl text-red-700" onClick={() => {
+                                        <MdDelete className="cursor-pointer text-xl text-red-700" onClick={() => {
                                             deleteCourse(course.id)
                                         }} />
                                     </div>     
