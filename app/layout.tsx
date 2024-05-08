@@ -36,7 +36,6 @@ export default function RootLayout({
     setReportByApps
   };
 
-
   return (
     <html lang="en">
       <body className={inter.className}>

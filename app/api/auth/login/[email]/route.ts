@@ -46,7 +46,6 @@ export async function PUT(req: any, {params}: {params: any}) {
     }).then(() => {
       const cookieStore = cookies()
       cookieStore.set('session', session)  
-      console.log(cookieStore.get('session'))
     })
     return NextResponse.json({session: session}, {status: 200})
     

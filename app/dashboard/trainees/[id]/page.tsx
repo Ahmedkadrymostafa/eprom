@@ -16,7 +16,7 @@ import { FaClockRotateLeft } from "react-icons/fa6"
 
 type courseData = {
     person_id?: any,
-    person_name?: any,
+    // person_name?: any,
     project?: any,
     course?: any,
     course_price?: any,
@@ -28,9 +28,9 @@ type courseData = {
     total_hours?: any,
     location?: any,
     course_fees?: any,
-    instructor_fees?: any,
-    break_cost?: any,
-    tools?: any,
+    // instructor_fees?: any,
+    // break_cost?: any,
+    // tools?: any,
 }
 
 
@@ -108,7 +108,7 @@ const Page = ({params}: {params: any}) => {
     if (currentCourse.length > 0) {
         setCourseDataToSubmit({
             person_id: personId,
-            person_name: trainee.name,
+            // person_name: trainee.name,
             project: trainee.project,
             course: currentCourse[0].course_title,
             course_price: currentCourse[0].course_price,

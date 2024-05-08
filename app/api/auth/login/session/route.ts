@@ -26,7 +26,7 @@ export async function GET(req: any) {
     // console.log()
     return NextResponse.json({credentials: credentials, cookie: session.value}, {status: 200})
 }
-export async function PUT(req: any) {
+export async function PUT(req: any, res: any) {
     let newSession = "";
     let email = await req.json();
     await query({

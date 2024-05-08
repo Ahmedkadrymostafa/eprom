@@ -51,10 +51,10 @@ export async function POST(request: any, res: any) {
           try {
             const connection = await pool.getConnection();
             const result: any = await connection.query(
-              'INSERT INTO applications (person_id, person_name, project, course, course_price, date, date_from, date_to, status, days, total_hours, location) values (?,?,?,?,?,?,?,?,?,?,?,?)',
+              'INSERT INTO applications (person_id, project, course, course_price, date, date_from, date_to, status, days, total_hours, location) values (?,?,?,?,?,?,?,?,?,?,?)',
               [
                 data.person_id,
-                data.person_name,
+                
                 data.project,
                 data.course,
                 data.course_price,

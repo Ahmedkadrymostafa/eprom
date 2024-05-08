@@ -9,6 +9,8 @@ import Cookies from 'js-cookie';
 import { cookies } from "next/headers";
 import Loading from "../loading";
 import SideBar from "../components/sidebar/SideBar";
+import Footer from "../components/footer/Footer";
+import LogoutOnClose from "../helpers/logoutOnClose";
 
 export const DataContext = createContext<unknown>(null)
 
@@ -56,19 +58,19 @@ export default function Layout({children}: {children: any}){
     await axios.get('/api/courses').then((res: any) => {
         // console.log(res.data)
         setCourses(res.data)
-    })
+    }).catch((err: any) => console.log(err))
    }
   const getORGS = async () => {
     await axios.get('/api/org').then((res: any) => {
         // console.log(res.data)
         setORGS(res.data)
-    })
+    }).catch((err: any) => console.log(err))
    }
   const getAPPS = async () => {
     await axios.get('/api/apps').then((res: any) => {
         // console.log(res.data)
         setAPPS(res.data)
-    })
+    }).catch((err: any) => console.log(err))
    }
    const getData = async () => {
      getSession();
@@ -85,6 +87,13 @@ export default function Layout({children}: {children: any}){
   }, [])
 
 
+  // if (typeof window !== 'undefined') {
+  //   window.addEventListener('beforeunload', () => {
+  //     axios.put('/api/auth/login/session', {email: credentials.email})
+  //   });
+  // }
+  
+
 
 
   if (loading) {
@@ -94,6 +103,8 @@ export default function Layout({children}: {children: any}){
         
       <DataContext.Provider value={{credentials, trainees, setTrainees, courses, setCourses, ORGS, setORGS, APPS, setAPPS}}>
           <div>
+            {/* <LogoutOnClose email={credentials.email} /> */}
+
               <Header  email={credentials.email} name={credentials.name} /> 
               
               <SideBar role={credentials.role} />        
@@ -101,6 +112,7 @@ export default function Layout({children}: {children: any}){
                   {children}
                 </div>
               
+              <Footer />
           </div>    
     </DataContext.Provider>
     );

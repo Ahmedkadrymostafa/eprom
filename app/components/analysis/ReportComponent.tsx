@@ -183,7 +183,7 @@ const ReportComponent = () => {
       if (filterByStatus === 'all') {
 
         const reducedData = filteredData.reduce((acc: any, curr: any) => {
-          const {id, person_name, project, course, date_from, date_to, status} = curr;
+          const {id, person_id, project, course, date_from, date_to, status} = curr;
   
           const existingProjectIndex = acc.findIndex((item: any) => item.project === project);
           if (existingProjectIndex !== -1) {
@@ -191,7 +191,7 @@ const ReportComponent = () => {
             const existingCourseIndex = acc[existingProjectIndex].courses.findIndex((c: any) => c.course === course);
             if (existingCourseIndex !== -1) {
               // Course exists, add the person to this course
-              acc[existingProjectIndex].courses[existingCourseIndex].persons.push(person_name);
+              acc[existingProjectIndex].courses[existingCourseIndex].persons.push(person_id);
             } else {
               // Course doesn't exist, create a new entry for the course
               acc[existingProjectIndex].courses.push({
@@ -200,7 +200,7 @@ const ReportComponent = () => {
                 status: status,
                 date_from: date_from,
                 date_to: date_to,
-                persons: [person_name]
+                persons: [person_id]
               });
             }
           } else {
@@ -212,7 +212,7 @@ const ReportComponent = () => {
               status: status,
               date_from: date_from,
               date_to: date_to,
-              persons: [person_name] }]
+              persons: [person_id] }]
             });
           }
           return acc;
@@ -226,7 +226,7 @@ const ReportComponent = () => {
         let filterByImplemented = filteredData.filter((app: any) => app.status === 'implemented')
 
         const reducedData = filterByImplemented.reduce((acc: any, curr: any) => {
-          const {id, person_name, project, course, date_from, date_to, status } = curr;
+          const {id, person_id, project, course, date_from, date_to, status } = curr;
   
           const existingProjectIndex = acc.findIndex((item: any) => item.project === project);
           if (existingProjectIndex !== -1) {
@@ -234,7 +234,7 @@ const ReportComponent = () => {
             const existingCourseIndex = acc[existingProjectIndex].courses.findIndex((c: any) => c.course === course);
             if (existingCourseIndex !== -1) {
               // Course exists, add the person to this course
-              acc[existingProjectIndex].courses[existingCourseIndex].persons.push(person_name);
+              acc[existingProjectIndex].courses[existingCourseIndex].persons.push(person_id);
             } else {
               // Course doesn't exist, create a new entry for the course
               acc[existingProjectIndex].courses.push({
@@ -243,7 +243,7 @@ const ReportComponent = () => {
                 status: status,
                 date_from: date_from,
                 date_to: date_to,
-                persons: [person_name]
+                persons: [person_id]
               });
             }
           } else {
@@ -255,7 +255,7 @@ const ReportComponent = () => {
               status: status,
               date_from: date_from,
               date_to: date_to,
-              persons: [person_name] }]
+              persons: [person_id] }]
             });
           }
           return acc;
@@ -269,7 +269,7 @@ const ReportComponent = () => {
         let filterByNotImplemented = filteredData.filter((app: any) => app.status === 'not implemented')
 
         const reducedData = filterByNotImplemented.reduce((acc: any, curr: any) => {
-          const {id, person_name, project, course, date_from, date_to, status } = curr;
+          const {id, person_id, project, course, date_from, date_to, status } = curr;
   
           const existingProjectIndex = acc.findIndex((item: any) => item.project === project);
           if (existingProjectIndex !== -1) {
@@ -277,7 +277,7 @@ const ReportComponent = () => {
             const existingCourseIndex = acc[existingProjectIndex].courses.findIndex((c: any) => c.course === course);
             if (existingCourseIndex !== -1) {
               // Course exists, add the person to this course
-              acc[existingProjectIndex].courses[existingCourseIndex].persons.push(person_name);
+              acc[existingProjectIndex].courses[existingCourseIndex].persons.push(person_id);
             } else {
               // Course doesn't exist, create a new entry for the course
               acc[existingProjectIndex].courses.push({
@@ -286,7 +286,7 @@ const ReportComponent = () => {
                 status: status,
                 date_from: date_from,
                 date_to: date_to,
-                persons: [person_name]
+                persons: [person_id]
               });
             }
           } else {
@@ -298,7 +298,7 @@ const ReportComponent = () => {
               status: status,
               date_from: date_from,
               date_to: date_to,
-              persons: [person_name] }]
+              persons: [person_id] }]
             });
           }
           return acc;

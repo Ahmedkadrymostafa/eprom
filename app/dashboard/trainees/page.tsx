@@ -126,7 +126,7 @@ const Page = () => {
 
     const search = (e: any) => {           
         if (e !== "") {
-            const filtered = dataContext.trainees.filter((index: any) => index.name.includes(e.toLowerCase()))
+            const filtered = dataContext.trainees.filter((index: any) => (index.name.includes(e.toLowerCase()) || index.person_id.includes(e.toLowerCase()) || index.project.includes(e.toLowerCase())));
             setTrainees(filtered)
         }else {
             setTrainees(dataContext.trainees);

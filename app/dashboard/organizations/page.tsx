@@ -52,6 +52,22 @@ const Page = () => {
         })
     }
     
+    const deleteOrg = async (id: number) => {
+        
+        // let updated = [...dataContext.ORGS];
+        await axios.delete(`/api/org/${id}`,).then(() => {
+            
+            let updated = ORGS.filter((o: any) => o.id !== id)
+
+            setORGS(updated)
+            dataContext.setORGS(updated)
+            toast.success('deleted successfully')    
+
+        }).catch((err) => {
+            console.log(err)
+            toast.error('error deleting')
+        })
+    }
   return (
     <div className="relative">
         <p className="main-color text-4xl font-bold mx-6 my-5">Organizations</p>
@@ -86,9 +102,9 @@ const Page = () => {
                                         setSelected({id: org.id, name: org.name})
                                         editName.current.value = org.name
                                     }} />
-                                    {/* <MdDelete className="cursor-pointer text-3xl text-red-700" onClick={() => {
-                                        deleteCourse(course.id)
-                                    }} /> */}
+                                    <MdDelete className="cursor-pointer text-3xl text-red-700" onClick={() => {
+                                        deleteOrg(org.id)
+                                    }} />
                                 </div>                       
                             </div>
                         ))
