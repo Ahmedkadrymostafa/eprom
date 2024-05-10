@@ -102,13 +102,13 @@ export default function Layout({children}: {children: any}){
     return (
         
       <DataContext.Provider value={{credentials, trainees, setTrainees, courses, setCourses, ORGS, setORGS, APPS, setAPPS}}>
-          <div>
+          <div className="min-h-screen flex flex-col">
             {/* <LogoutOnClose email={credentials.email} /> */}
 
               <Header  email={credentials.email} name={credentials.name} /> 
               
               <SideBar role={credentials.role} />        
-                <div className="page-width">
+                <div className="page-width flex-1">
                   {children}
                 </div>
               

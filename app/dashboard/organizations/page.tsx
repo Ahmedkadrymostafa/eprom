@@ -70,12 +70,12 @@ const Page = () => {
     }
   return (
     <div className="relative">
-        <p className="main-color text-4xl font-bold mx-6 my-5">Organizations</p>
+        <p className="main-color text-4xl font-bold mx-6 my-5">Projects</p>
         <div className="glass flex justify-between pt-9 mx-11 max-md:flex-col">
                 
             
                 <div className="p-5 w-96">
-                    <p className="main-color text-2xl font-black mb-4 text-center">Add New ORG</p>
+                    <p className="main-color text-2xl font-black mb-4 text-center">Add New Project</p>
                     <form className="flex flex-col gap-3">
                         <input className="input" ref={name} type="text" placeholder="Organization Title" />
                         

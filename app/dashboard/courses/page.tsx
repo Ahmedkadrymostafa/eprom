@@ -1,7 +1,7 @@
 'use client'
 import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
-import { FaCheckCircle, FaEdit, FaPencilAlt } from "react-icons/fa";
+import { FaCheckCircle, FaEdit, FaPencilAlt, FaSearch } from "react-icons/fa";
 import { MdDelete, MdOutlineNoteAlt } from "react-icons/md";
 import { toast } from "react-toastify";
 import { DataContext } from "../layout";
@@ -13,35 +13,36 @@ import { IoAlertCircle } from "react-icons/io5";
 import { RiShareBoxFill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import { FaClockRotateLeft } from "react-icons/fa6";
+import Loading from "@/app/loading";
 
 type addNewCourseData = {
     id?: any
-    course_title: any,
-    course_price: any,
-    num_of_trainees: any,
-    days: any,
-    total_hours: any,
-    location: any,
-    course_status: any,
-    date_from: any,
-    date_to: any,
-    total_revenue: any,
-    instructor_fees: any,
-    break_cost: any,
-    tools: any,
-    transportation: any,
-    accommodation: any,
-    allowance: any,
-    other_expenses: any,
-    total_expenses: any,
-    net_revenue: any,
+    course_title?: any,
+    course_price?: any,
+    num_of_trainees?: any,
+    days?: any,
+    total_hours?: any,
+    location?: any,
+    course_status?: any,
+    date_from?: any,
+    date_to?: any,
+    total_revenue?: any,
+    instructor_fees?: any,
+    break_cost?: any,
+    tools?: any,
+    transportation?: any,
+    accommodation?: any,
+    allowance?: any,
+    other_expenses?: any,
+    total_expenses?: any,
+    net_revenue?: any,
     instructors?: any,
     notes?: any,
 }
 const Page = () => {
     const router = useRouter();
     const reportContext = useContext(ReportContext);
-
+    const [ isLoading, setIsLoading ] = useState(false); 
     const [ formRole, setFormRole ] = useState('add');
 
     const courseTitle: any = useRef()
@@ -198,13 +199,14 @@ const Page = () => {
         })
     }
     const addNewCourse = async () => {
+        setIsLoading(true)
         let data: addNewCourseData = {
             course_title: courseTitle.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
             course_price: coursePrice.current.value,
             num_of_trainees: numOfTrainees.current.value,
             days: days.current.value,
             total_hours: totalHours,
-            location: location.current.value,
+            location: location.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
             course_status: statusCourse,
             date_from: fromDate,
             date_to: toDate,
@@ -228,10 +230,11 @@ const Page = () => {
             // console.log(courses)
             toast.success("New course added successfully")
             emptyInputs();
-        }).catch(error => toast.error("course title is exist"))
-        console.log(data)
+            data = {}
+        }).catch(error => console.log(error)).finally(() => setIsLoading(false))
     }
     const updateCourse = async () => {
+        setIsLoading(true)
         let data: addNewCourseData = {
             id: selectedCourseToUpdateId,
             course_title: courseTitle.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
@@ -239,7 +242,7 @@ const Page = () => {
             num_of_trainees: numOfTrainees.current.value,
             days: days.current.value,
             total_hours: totalHours,
-            location: location.current.value,
+            location: location.current.value.trim().toLowerCase().replace(/\s+/g, ' '),
             course_status: statusCourse,
             date_from: fromDate,
             date_to: toDate,
@@ -271,9 +274,10 @@ const Page = () => {
             emptyInputs();
         }).catch((error) => {
             console.log(error)
-        })
+        }).finally(() => setIsLoading(false))
     }
     const deleteCourse = async (id: any) => {
+        setIsLoading(true)
         console.log(id)
         await axios.delete(`/api/courses/${id}`).then(() => {
             toast.success('deleted')
@@ -282,7 +286,7 @@ const Page = () => {
             dataContext.setCourses(afterDeleted)
         }).catch((err) => {
             console.log(err)
-        })
+        }).finally(() => setIsLoading(false));
     }
     
 
@@ -333,10 +337,35 @@ const Page = () => {
         }).catch((error) => console.log(error))
     }
 
+    const search = (e: any) => {           
+        if (e !== "") {
+            const filtered = dataContext.courses.filter((index: any) => (index.course_title.includes(e.toLowerCase()) || index.location.includes(e.toLowerCase())));
+            setCourses(filtered)
+        }else {
+            setCourses(dataContext.courses);
+        }
+        
+    }
+
   return (
+    <>
+    {isLoading ? <Loading /> : 
+
+    
     <div className="relative">
         <div className="flex justify-between items-center mx-6 my-5">
             <p className="main-color text-4xl font-bold">Courses</p>
+                <div className="flex">
+                    <input type="text" className="searchTerm" placeholder="What are you looking for?" onChange={(e: any) => {
+                        search(e.target.value)
+                    }} />
+                    <button type="submit" className="searchButton">
+                        <FaSearch />
+                    </button>
+                </div>
+            {/* <div className="glass w-fit py-9 px-7 mx-auto flex justify-between items-center gap-6">
+                
+            </div> */}
             <button className="button" onClick={() => {
                 toggleForm();
                 setFormRole('add');
@@ -376,7 +405,9 @@ const Page = () => {
             }
         </div>
 
-        <div ref={newCourseInfo} className='glass max-h-[500px] overflow-y-scroll none-scrollbar w-[100%] hidden absolute z-10 px-5 py-2 top-0 -translate-x-1/2 left-1/2'>
+        
+
+        <div ref={newCourseInfo} className='glass max-h-[500px] overflow-y-scroll none-scrollbar w-[94%] fixed hidden z-10 px-5 py-2 top-[58%] left-[48%] -translate-x-1/2 -translate-y-1/2'>
             <div className='bg-white px-7 py-3 rounded-3xl'>
                 <div className='flex justify-between items-center bottom-border px-5'>
                     <p className='main-color text-3xl font-bold'>New Course Info</p>
@@ -504,8 +535,8 @@ const Page = () => {
                             <div className="coolinput">
                                 <label className="text">Location</label>
                                 <select ref={location} className="select-form input">
-                                    <option value="Alexandria">Alexandria</option>
-                                    <option value="Cairo">Cairo</option>
+                                    <option value="alexandria">Alexandria</option>
+                                    <option value="cairo">Cairo</option>
                                 </select>
                             </div>
                             <div className="flex gap-3 items-center">
@@ -598,7 +629,7 @@ const Page = () => {
                                                 <button className="border-2 border-green-600 h-11 text-xl px-2" onClick={(e: any) => {
                                                     e.preventDefault();
                                                     if (instructorRef.current.value !== '') {
-                                                        setInstructorsToShow([...instructorsToShow, instructorRef.current.value])                              
+                                                        setInstructorsToShow([...instructorsToShow, instructorRef.current.value.trim().toLowerCase().replace(/\s+/g, ' ')])                              
                                                     } 
                                                     instructorRef.current.value = ''
                                                 }}>Add</button>
@@ -630,13 +661,13 @@ const Page = () => {
                     
                 <div className="mt-7 mx-auto">
                     {formRole === 'add' &&
-                        <input className="button-81" type="submit" value="Add New" onClick={(e: any) => {
+                        <input className="button-81" type="button" value="Add New" onClick={(e: any) => {
                             e.preventDefault();
                             addNewCourse();
                         }} />
                     }
                     {formRole === 'update' && 
-                        <input className="button-81" type="submit" value="Save" onClick={(e: any) => {
+                        <input className="button-81" type="button" value="Save" onClick={(e: any) => {
                             e.preventDefault();
                             updateCourse();
                         }} />
@@ -656,7 +687,7 @@ const Page = () => {
                         <th>from</th>
                         <th>to</th>
                         <th>location</th>
-                        <th>status</th>
+                        {/* <th>status</th> */}
                         <th>revenue</th>
                         <th>expenses</th>
                         <th>net revenue</th>
@@ -684,7 +715,7 @@ const Page = () => {
                                 <td>{course.date_from}</td>
                                 <td>{course.date_to}</td>
                                 <td>{course.location}</td>
-                                <td>{course.course_status}</td>
+                                {/* <td>{course.course_status}</td> */}
                                 <td>{course.total_revenue}</td>
                                 <td>{course.total_expenses}</td>
                                 <td>{course.net_revenue}</td>
@@ -737,6 +768,8 @@ const Page = () => {
         </div>
 
     </div>
+    }
+</>
   )
 }
 

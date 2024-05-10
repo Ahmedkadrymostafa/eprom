@@ -20,7 +20,7 @@ export async function GET(request: any) {
     
     if (credentials[0].session === session.value) {
       const courses = await query({
-        query: "SELECT * FROM courses",
+        query: "SELECT * FROM courses ORDER BY date_from DESC",
         values: [],
       })
       return NextResponse.json(courses, {status: 200})

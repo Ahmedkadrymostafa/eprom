@@ -37,7 +37,7 @@ const SideBar = (props: any) => {
             <li className={styles.sideMenuLi}>
                 <Link className={styles.sideMenuLink} href="/dashboard/organizations">
                     <p className='text-3xl'><FaBuildingUser /></p>
-                    <p>Organizations</p>
+                    <p>Projects</p>
                 </Link>
             </li>
             <li className={styles.sideMenuLi}>

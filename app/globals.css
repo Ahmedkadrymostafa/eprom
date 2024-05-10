@@ -49,6 +49,16 @@
 .green-bg {
   background-color: rgba(0, 255, 0, 0.4);
 }
+.yellow-color {
+  color: rgba(228, 255, 0, 0.42);
+}
+.blue-color {
+  color: rgb(187, 223, 255);
+}
+.green-color {
+  color: rgba(0, 255, 0, 0.4);
+}
+
 .lightblue-color {
   background-color: rgba(75, 192, 192, 0.2);
 }
@@ -79,13 +89,13 @@
   background-size: cover;
 }
 .card-one {
-  background-color: #ffdfb2;
+  background-color: #F3CA52;
 }
 .card-two {
-  background-color: #ff8d009e;
+  background-color: #FFC470;
 }
 .card-three {
-  background-color: #ff66b463;
+  background-color: #A0DEFF;
 }
 .glass {
   background: rgba(255, 255, 255, 0.2);

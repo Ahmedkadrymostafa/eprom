@@ -196,7 +196,7 @@ const Page = () => {
                             <th className="admin-th">Title</th>
                             <th className="admin-th">Company</th>
                             <th className="admin-th">Project</th>
-                            <th className="admin-th">location</th>
+                            {/* <th className="admin-th">location</th> */}
                             <th className="admin-th">{`${trainees.length} Trainee`}</th>
                         </tr>
                     </thead>
@@ -215,7 +215,7 @@ const Page = () => {
                                     <td className="admin-td">{e.title}</td>
                                     <td className="admin-td">{e.department}</td>
                                     <td className="admin-td">{e.project}</td>
-                                    <td className="admin-td">{e.location}</td>
+                                    {/* <td className="admin-td">{e.location}</td> */}
                                     
                                     <td className="text-2xl font-black ">
                                         <div className="flex justify-center gap-5 row-buttons">

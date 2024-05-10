@@ -112,7 +112,7 @@ if (completedApps.length > 0) {
                     <table className="admin-table w-[96%]">
                         <thead>
                             <tr>
-                                <th className="admin-th">Trainee Name</th>
+                                {/* <th className="admin-th">Trainee Name</th> */}
                                 <th className="admin-th">Course Name</th>
                                 <th className="admin-th">Days</th>
                                 <th className="admin-th">End date</th>
@@ -128,11 +128,11 @@ if (completedApps.length > 0) {
                                     <tr key={e.id} className="admin-tr">
                                         <td className="admin-td relative">
                                             <Link href={`/dashboard/trainees/${e.person_id}`} >
-                                                {e.person_name}
+                                                {e.course}
                                                 <p className="text-gold text-2xl font-black absolute top-4 left-6"><IoIosShareAlt /></p>
                                             </Link>
                                         </td>
-                                        <td className="admin-td">{e.course}</td>
+                                        {/* <td className="admin-td">{e.course}</td> */}
                                         <td className="admin-td">{e.days}</td>
                                         <td className="admin-td">{e.date_to}</td>
                                         <td className="admin-td">{e.status}</td>
