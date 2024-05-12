@@ -1,14 +1,11 @@
 import { query } from "../../../db"
 import { NextResponse } from "next/server"
 import pool from "../../../db"
-import { NextApiRequest } from "next"
 import { cookies } from "next/headers"
 
 
   export async function PUT(request: any, response: any) {
     const data = await request.json()
-    // const id = await params.id;   
-
 
     const cookieStore = cookies()
     const session: any = cookieStore.get("session")

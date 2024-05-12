@@ -1,14 +1,12 @@
 'use client'
 import axios from "axios";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { FaCheckCircle, FaEdit, FaPencilAlt, FaSearch } from "react-icons/fa";
 import { MdDelete, MdOutlineNoteAlt } from "react-icons/md";
 import { toast } from "react-toastify";
 import { DataContext } from "../layout";
 import { ReportContext } from "@/app/layout";
 import { GrClose } from "react-icons/gr";
-import DatePicker from 'react-date-picker';
-import NewCourseInfo from "@/app/components/NewCourseInfo";
 import { IoAlertCircle } from "react-icons/io5";
 import { RiShareBoxFill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
@@ -96,7 +94,6 @@ const Page = () => {
           });
           setCoursesToReport(filteredData)
           reportContext.setReportByCoursesData(filteredData)
-          console.log(filteredData);
     }
     const report = () => {
         router.push('/report/bycourses')
@@ -183,6 +180,7 @@ const Page = () => {
     }
 
     const saveNotes = async (id: any) => {
+        setIsLoading(true)
         let data = {
             notes: notes
         }
@@ -196,7 +194,7 @@ const Page = () => {
             });
             setCourses(updatedArray)
             dataContext.setCourses(updatedArray)
-        })
+        }).catch((err) => console.log(err)).finally(() => setIsLoading(false))
     }
     const addNewCourse = async () => {
         setIsLoading(true)
@@ -227,7 +225,6 @@ const Page = () => {
         await axios.post('/api/courses', data).then(response => {
             setCourses([{id: response.data.id, ...data}, ...courses])
             dataContext.setCourses([{id: response.data.id, ...data}, ...courses])
-            // console.log(courses)
             toast.success("New course added successfully")
             emptyInputs();
             data = {}
@@ -258,7 +255,6 @@ const Page = () => {
             net_revenue: netRevenue,
             instructors: instructorsToShow?.join('-'),
         };
-        console.log(data);
         if (!data.course_title) return toast.warn("field course title is required")
         let updatedCourses = [...courses]
         await axios.put('/api/courses', data).then(() => {
@@ -278,7 +274,6 @@ const Page = () => {
     }
     const deleteCourse = async (id: any) => {
         setIsLoading(true)
-        console.log(id)
         await axios.delete(`/api/courses/${id}`).then(() => {
             toast.success('deleted')
             const afterDeleted = courses.filter((i: any) => i.id !== id)
@@ -331,9 +326,7 @@ const Page = () => {
             
             setCourses(updatedAllCourses)
             dataContext.setCourses(updatedAllCourses)
-            // let filteredApps = updatedAllApps.filter((app: any) => app.person_id === personId)
-            // setAPPS(filteredApps);
-            // dataContext.setAPPS(updatedAllApps)
+            
         }).catch((error) => console.log(error))
     }
 
@@ -363,9 +356,7 @@ const Page = () => {
                         <FaSearch />
                     </button>
                 </div>
-            {/* <div className="glass w-fit py-9 px-7 mx-auto flex justify-between items-center gap-6">
-                
-            </div> */}
+           
             <button className="button" onClick={() => {
                 toggleForm();
                 setFormRole('add');
@@ -385,7 +376,6 @@ const Page = () => {
                     <input value={toDateReport} onChange={ToDateChangeReport} className="select-form" type="date" />
                 </div>
                 <button className="cta" onClick={() => {
-                    // getApplicationsWithTrainees();
                     getCoursesReport();
                 }}>
                     <span>Collect</span>
@@ -398,9 +388,7 @@ const Page = () => {
             {coursesToReport.length > 0 && 
                 <button className="download-button" onClick={report}>
                     <div className="docs"><svg className="css-i6dzq1" strokeLinejoin="round" strokeLinecap="round" fill="none" strokeWidth="2" stroke="currentColor" height="20" width="20" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line y2="13" x2="8" y1="13" x1="16"></line><line y2="17" x2="8" y1="17" x1="16"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Report</div>
-                    {/* <div className="download">
-                        <svg className="css-i6dzq1" strokeLinejoin="round" strokeLinecap="round" fill="none" strokeWidth="2" stroke="currentColor" height="24" width="24" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line y2="3" x2="12" y1="15" x1="12"></line></svg>
-                    </div> */}
+                    
                 </button>
             }
         </div>
@@ -687,7 +675,6 @@ const Page = () => {
                         <th>from</th>
                         <th>to</th>
                         <th>location</th>
-                        {/* <th>status</th> */}
                         <th>revenue</th>
                         <th>expenses</th>
                         <th>net revenue</th>
@@ -715,7 +702,6 @@ const Page = () => {
                                 <td>{course.date_from}</td>
                                 <td>{course.date_to}</td>
                                 <td>{course.location}</td>
-                                {/* <td>{course.course_status}</td> */}
                                 <td>{course.total_revenue}</td>
                                 <td>{course.total_expenses}</td>
                                 <td>{course.net_revenue}</td>

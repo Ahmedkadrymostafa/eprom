@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import React from 'react'
-import { MdSpaceDashboard, MdMenuBook, MdAdminPanelSettings } from "react-icons/md";
+import { MdMenuBook, MdAdminPanelSettings } from "react-icons/md";
 import styles from "./sidebar.module.css"
-import { FaUsers, FaUserPlus } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa";
 import { LuBookPlus } from "react-icons/lu";
 import { FaBuildingUser, FaChartColumn } from 'react-icons/fa6';
 
@@ -22,12 +22,7 @@ const SideBar = (props: any) => {
                     <p>View Trainees</p>
                 </Link>
             </li>
-            {/* <li className={styles.sideMenuLi}>
-                <Link className={styles.sideMenuLink} href="#">
-                    <p className='text-3xl'><FaUserPlus /></p>
-                    <p>Add new Trainer</p>
-                </Link>
-            </li> */}
+            
             <li className={styles.sideMenuLi}>
                 <Link className={styles.sideMenuLink} href="/dashboard/courses">
                     <p className='text-3xl'><MdMenuBook /></p>

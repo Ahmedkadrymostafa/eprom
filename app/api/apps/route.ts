@@ -1,7 +1,6 @@
 import { query } from "../../db"
 import { NextResponse } from "next/server"
 import pool from "../../db"
-import { NextApiRequest } from "next"
 import { cookies } from "next/headers"
 
 export async function GET(request: any) {
@@ -53,8 +52,7 @@ export async function POST(request: any, res: any) {
             const result: any = await connection.query(
               'INSERT INTO applications (person_id, project, course, course_price, date, date_from, date_to, status, days, total_hours, location) values (?,?,?,?,?,?,?,?,?,?,?)',
               [
-                data.person_id,
-                
+                data.person_id,               
                 data.project,
                 data.course,
                 data.course_price,

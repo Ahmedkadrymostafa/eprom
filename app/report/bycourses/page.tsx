@@ -73,30 +73,6 @@ const Page = () => {
                 </div>
             </div>
 
-            {/* <div className="my-6">
-                <p className='text-black text-xl font-bold mb-4 text-center'>Total financial data for the selected period</p>
-                <div className='flex items-center gap-6'>
-                        <div className='flex flex-col border border-black text-center'>
-                            <p className='text-black text-base font-black border-b border-black py-2 px-3'>Revenue</p>
-                            <span className='text-base main-color font-bold p-3'>{formatNumberInEGP(implementedRevenue)}</span>
-                        </div>
-                        <div className='flex flex-col border border-black text-center'>
-                            <p className='text-black text-base font-black border-b border-black py-2 px-3'>Expenses</p>
-                            <span className='text-base main-color font-bold p-3'>{formatNumberInEGP(implementedExpenses)}</span>
-                        </div>
-                    
-                    <div className='flex flex-col border border-black text-center'>
-                        <p className='text-black text-base font-black border-b border-black py-2 px-3'>Profit</p>
-                        <span className='text-base main-color font-bold p-3'>{formatNumberInEGP(implementedNetRevenue)}</span>
-                    </div>
-                    <div className='flex flex-col border border-black text-center'>
-                        <p className='text-black text-base font-black border-b border-black py-2 px-3'>Profit Ratio</p>
-                        <span className='text-base main-color font-bold p-3'>{((implementedNetRevenue / implementedRevenue) * 100).toFixed(1)} %</span>
-                    </div>
-                    
-                </div>
-            </div> */}
-
         </div>
         <div>
             <p className='text-black font-bold text-xl text-center mb-8'>Implemented Courses View</p>
@@ -107,10 +83,8 @@ const Page = () => {
                         <th className="text-left">Course Title</th>
                         <th>from</th>
                         <th>to</th>
-                        {/* <th>location</th> */}
                         <th>revenue</th>
                         <th>expenses</th>
-                        {/* <th>net revenue</th> */}
                     </tr>
                 </thead>
                 <tbody>
@@ -122,10 +96,8 @@ const Page = () => {
                                 </td>
                                 <td>{course.date_from}</td>
                                 <td>{course.date_to}</td>
-                                {/* <td>{course.location}</td> */}
                                 <td>{course.total_revenue}</td>
                                 <td>{course.total_expenses}</td>
-                                {/* <td>{course.net_revenue}</td>                             */}
                             </tr>
                         ))
                     }
@@ -143,9 +115,7 @@ const Page = () => {
                         <th>from</th>
                         <th>to</th>
                         <th>location</th>
-                        {/* <th>revenue</th>
-                        <th>expenses</th>
-                        <th>net revenue</th> */}
+                       
                     </tr>
                 </thead>
                 <tbody>
@@ -158,9 +128,7 @@ const Page = () => {
                                 <td>{course.date_from}</td>
                                 <td>{course.date_to}</td>
                                 <td>{course.location}</td>
-                                {/* <td>{course.total_revenue}</td>
-                                <td>{course.total_expenses}</td>
-                                <td>{course.net_revenue}</td>                             */}
+                               
                             </tr>
                         ))
                     }

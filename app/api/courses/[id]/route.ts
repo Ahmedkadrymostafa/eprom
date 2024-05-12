@@ -1,7 +1,6 @@
 import { query } from "../../../db"
 import { NextResponse } from "next/server"
 import pool from "../../../db"
-import { NextApiRequest } from "next"
 import { cookies } from "next/headers"
 
 

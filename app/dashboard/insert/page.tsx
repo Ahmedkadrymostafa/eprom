@@ -1,10 +1,8 @@
 'use client'
 import { useContext, useEffect, useRef, useState } from "react"
 import { DataContext } from "../layout"
-import Search from "@/app/components/search/Search";
 import { FaSearch } from "react-icons/fa";
 import { RiUserShared2Fill } from "react-icons/ri";
-import Link from "next/link";
 import { MdDelete } from "react-icons/md";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -31,12 +29,10 @@ const Page = () => {
         let id = e.target.selectedOptions[0].id;
 
         let filteredCourse = dataContext.courses.filter((course: any) => course.id === parseInt(id))
-        console.log(filteredCourse)
-        console.log(id)
+        
         setCourseToInsert(filteredCourse[0])
     }
 
-    // const dataContext: any = useContext(DataContext)
     const [ trainees, setTrainees ] = useState<any>([])
     const searchResultRef: any = useRef();
     
@@ -44,7 +40,6 @@ const Page = () => {
         console.log(trainees)          
         if (e !== "") {
             const filtered = dataContext.trainees.filter((index: any) => index.name.includes(e.toLowerCase()) || index.project.includes(e.toLowerCase()) || index.person_id.includes(e))
-            // console.log(filtered)
             setTrainees(filtered)
             searchResultRef.current.classList.remove('hidden')
         }else {
@@ -77,7 +72,6 @@ const Page = () => {
             total_hours: courseToInsert.total_hours,
             location: courseToInsert.location,
         }
-        console.log(trainee)
         setSelectedTrainees([...selectedTrainees, trainee])
     }
 
@@ -93,32 +87,13 @@ const Page = () => {
         if (selectedTrainees.length === 0) return toast.error('please select at least one person')
 
         selectedTrainees.map(async (trainee: any) => {
-            // let data = {
-            //     person_id: trainee.person_id,
-            //     person_name: trainee.name,
-            //     project: trainee.project,
-            //     course: courseToInsert.course_title,
-            //     course_price: courseToInsert.course_price,
-            //     date: today.toISOString().split('T')[0],
-            //     date_from: courseToInsert.date_from,
-            //     date_to: courseToInsert.date_to,
-            //     status: courseToInsert.course_status,
-            //     days: courseToInsert.days,
-            //     total_hours: courseToInsert.total_hours,
-            //     location: courseToInsert.location,
-            // }
+           
             let data = trainee
             
             await axios.post('/api/apps', data).then(response => {           
                 toast.success(`New course added successfully for ${data.person_name}`)
-                // APPS.push({id: response.data.id, ...data})
                 setNewApps([{id: response.data.id, ...trainee}])
-                // setSelectedTrainees([])
-                // setTotalHours(totalHours +  parseInt(data.total_hours))
-                // emptyInputs()
-                // setShowInfo(false)
-                // toggleForm()
-                
+                                
             }).catch(error => console.log(error))
         })
         
@@ -126,8 +101,6 @@ const Page = () => {
 
     useEffect(() => {
         dataContext.setAPPS([...newApps, ...dataContext.APPS])
-        console.log(newApps)
-
     }, [newApps])
   return (
     <div className="m-6">
@@ -231,7 +204,7 @@ const Page = () => {
 
         <div className="flex flex-col mt-16">
             <button className="button w-fit mx-auto" onClick={insertApplications}>
-                <span className="button-content">Submit Courses</span>
+                <span className="button-content">Insert</span>
             </button>
 
             <div className="h-[500px] overflow-y-scroll max-md:h-auto my-11">
@@ -240,13 +213,10 @@ const Page = () => {
                         <tr>
                             <th className="admin-th">Id</th>
                             <th className="admin-th">Name</th>
-                            {/* <th className="admin-th">Title</th>
-                            <th className="admin-th">Company</th> */}
+                            
                             <th className="admin-th">Project</th>
                             <th className="text-white text-2xl cursor-pointer" onClick={() => setSelectedTrainees([])}>Reset</th>
-                            {/* <th className="text-green-500 text-2xl cursor-pointer" onClick={insertApplications}>Submit</th> */}
-                            {/* <th className="admin-th">location</th>
-                            <th className="admin-th">{`${trainees.length} Trainee`}</th> */}
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -256,9 +226,6 @@ const Page = () => {
                                 <tr key={e.person_id} className="admin-tr">
                                     <td className="admin-td">{e.person_id}</td>
                                     <td className="admin-td">{e.person_name}</td>
-{/*                                     
-                                    <td className="admin-td">{e.title}</td>
-                                    <td className="admin-td">{e.department}</td> */}
                                     <td className="admin-td">{e.project}</td>
                                     <td className="admin-td">
                                         <MdDelete className="cursor-pointer text-2xl mx-auto text-red-700" onClick={() => {

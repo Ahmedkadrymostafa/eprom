@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import { createContext, useState } from "react";
-
+import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
 
 export const ReportContext = createContext<any>(null)
@@ -38,8 +38,12 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <Head>
+        <title>EPROM</title>
+        <link rel="icon" href="/favicon" sizes="any" />
+      </Head>
       <body className={inter.className}>
-        <ToastContainer />
+        <ToastContainer position="bottom-right" autoClose={5000} />
         <ReportContext.Provider value={reportContextValue}>
           {children}
         </ReportContext.Provider>

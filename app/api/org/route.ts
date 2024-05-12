@@ -1,7 +1,6 @@
 import { query } from "../../db"
 import { NextResponse } from "next/server"
 import pool from "../../db"
-import { NextApiRequest } from "next"
 import { cookies } from "next/headers"
 
 export async function GET(request: any) {
@@ -67,6 +66,7 @@ export async function POST(request: any, res: any) {
           }    
     }
 }
+
 export async function PUT(request: any, res: any) {
     const data = await request.json()
   

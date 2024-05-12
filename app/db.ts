@@ -1,4 +1,3 @@
-// import mysql from 'mysql2/promise';
 import mysql from 'mysql2/promise';
 
 
@@ -16,7 +15,6 @@ export async function query({ query, values = [] }: { query: any, values: any })
         return result
     }catch (error: any) {
         throw Error(error.message)
-        return ( error );
     }
 }
 

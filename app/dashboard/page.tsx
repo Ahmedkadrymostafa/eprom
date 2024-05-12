@@ -1,10 +1,6 @@
 "use client"
-import { useContext, useEffect, useState } from "react"
-import { FaUsers } from "react-icons/fa"
+import { useContext } from "react"
 import { DataContext } from "./layout"
-import { BsFillBookmarkCheckFill } from "react-icons/bs"
-import { MdLibraryBooks, MdMenuBook } from "react-icons/md"
-import { BiBookOpen } from "react-icons/bi"
 import NonImplemented from "../components/analysis/NonImplemented"
 import LastSevenDaysApps from "../components/analysis/LastSevenDaysApps"
 import LastSevenDaysRevenue from "../components/analysis/LastSevenDaysRevenue"
@@ -15,7 +11,6 @@ import ApplicationsFinance from "../components/analysis/ApplicationsFinance"
 const Page = () => {
     const data: any = useContext(DataContext)
    
-
     return (
        <>
             

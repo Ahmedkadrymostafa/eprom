@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react"
 import Cryptr from "cryptr";
-import { MdClose, MdDelete } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import Loading from "@/app/loading";
 import { FaWindowClose } from "react-icons/fa";
@@ -71,7 +71,6 @@ const postAdmins = async () => {
     }
     
     await axios.post('/api/admins', data).then((res) => {
-        // setIsLoading(false)
         toast.success("New admin added successfully")
         setAdmins([...admins, 
             data
@@ -79,37 +78,30 @@ const postAdmins = async () => {
        
         emptyInputs();
         
-    }).catch(err => {
-        
+    }).catch(err => {        
         console.log(err);
-        // setIsLoading(false)
     }).finally(() => setIsLoading(false))
     
 }
 
   const getAdmins = async () => {
     await axios.get("/api/admins").then((res) => {
-        // console.log(res.data)
-        setIsLoading(false)
         const filterAdmins = res.data.filter((admin: any) => admin.role !== 'developer')
         setAdmins(filterAdmins)
     }).catch(err => {
         console.log(err)
-        setIsLoading(false)
-    })
-    // console.log(admins)
+    }).finally(() => setIsLoading(false))
   }
 
   const deleteAdmin = async (email: any) => {
     setIsLoading(true)
    axios.delete(`/api/admins/${email}`).then((res) => {
-        setIsLoading(false)
         getAdmins();
         toast.success("deleted successfully")
     }).catch((err) => {
+        console.log(err);
         toast.error("Failed to delete admin")
-        setIsLoading(false)
-    });
+    }).finally(() => setIsLoading(false));
   }
   
   useEffect(() => {
@@ -147,14 +139,9 @@ return (
                         <option value="admin">admin</option>
                         <option value="moderator">moderator</option>
                         </select>
-                        {/* <input className="button-81" type="submit" onClick={(e: any) => {
-                            e.preventDefault();
-                            // console.log()
-                            postAdmins();
-                        }} /> */}
+                       
                         <button className="button-81" onClick={(e: any) => {
                             e.preventDefault();
-                            // console.log()
                             postAdmins();
                         }}>
                             Submit

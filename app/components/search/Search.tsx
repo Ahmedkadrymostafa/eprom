@@ -1,7 +1,7 @@
 'use client'
 import { DataContext } from "../../dashboard/layout"
 import Link from "next/link"
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useRef, useState } from "react"
 import { FaSearch } from "react-icons/fa"
 import { RiUserShared2Fill } from "react-icons/ri"
 
@@ -14,7 +14,6 @@ const Search = () => {
         console.log(trainees)          
         if (e !== "") {
             const filtered = dataContext.trainees.filter((index: any) => index.name.includes(e.toLowerCase()) || index.person_id.includes(e))
-            // console.log(filtered)
             setTrainees(filtered)
             searchResultRef.current.classList.remove('hidden')
         }else {

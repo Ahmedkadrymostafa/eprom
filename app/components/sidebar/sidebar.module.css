@@ -7,7 +7,6 @@
     height: 100%;
     width: 60px;
     list-style-type: none;
-    /* background: #000f23; */
     background: var(--main-color);
     overflow: hidden;
     transition: 0.4s;

@@ -6,6 +6,7 @@ import { Bar } from 'react-chartjs-2';
 
 const LastSevenDaysApps = (props: any) => {
     ChartJS.register(ArcElement, Tooltip, Legend);
+    
     const dataContext: any = useContext(DataContext);
     const [lastSevenDaysNames, setLastSevenDaysNames] = useState<any>([]);
     const [lastSevenDaysDates, setLastSevenDaysDates] = useState<any>([]);
@@ -13,9 +14,6 @@ const LastSevenDaysApps = (props: any) => {
     const today: any = new Date();
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     
-    // let lastSevenDaysDates: any = []
-    // let filteredAppsDates: any = []
-
     const [ showing, setShowing ] = useState(false)
 
     const [dayOne, setDayOne] = useState<any>([]);
@@ -25,15 +23,7 @@ const LastSevenDaysApps = (props: any) => {
     const [dayFive, setDayFive] = useState<any>([]);
     const [daySix, setDaySix] = useState<any>([]);
     const [daySeven, setDaySeven] = useState<any>([]);
-    // let dayOne = []
-    // let dayTwo = []
-    // let dayThree = []
-    // let dayFour = []
-    // let dayFive = []
-    // let daySix = []
-    // let daySeven = []
-
-
+    
 
     const getLastSevenDays = () => {
         const names = [];
@@ -62,7 +52,6 @@ const LastSevenDaysApps = (props: any) => {
         lastSevenDays.reverse();
         setLastSevenDaysNames(names);
         setLastSevenDaysDates(lastSevenDays);
-        // lastSevenDaysDates = lastSevenDays
         console.log(names);
         console.log(lastSevenDays);
     }
@@ -94,12 +83,7 @@ const LastSevenDaysApps = (props: any) => {
                          .map((date: any) => date.toISOString().split('T')[0].replace(/-/g, '/'));
 
         setFilteredAppsDates(sortedDates);
-        // console.log(lastSevenDays);
-        // filteredAppsDates = sortedDates;
-        // console.log(sortedDates);
-        // console.log(filteredAppsDates)
-        // console.log(apps)
-        // console.log(todayDate)
+        
     }
 
 const dividedAppsDates = () => {
@@ -144,13 +128,7 @@ const dividedAppsDates = () => {
                 }
             }
             
-            console.log(dayOne)
-            console.log(dayTwo)
-            console.log(dayThree)
-            console.log(dayFour)
-            console.log(dayFive)
-            console.log(daySix)
-            console.log(daySeven)
+           
             setDayOne(dayOne)
             setDayTwo(dayTwo)
             setDayThree(dayThree)
@@ -164,8 +142,7 @@ const dividedAppsDates = () => {
     useEffect(() => {
         getLastSevenDays();
         filteredDates();
-        // dividedAppsDates();
-         // Cleanup function to stop the effect when items become empty
+       
          console.log(filteredAppsDates)
         return () => {
              if (filteredAppsDates.length === 0) {
@@ -206,8 +183,8 @@ const dividedAppsDates = () => {
     <div className="my-9 h-[350px] flex justify-between items-center">
         <div className="px-7">
             <div>
-                <p className="main-color text-4xl font-bold">Applications</p>
-                <p className="text-gray-500 text-base ml-3">this chart shows the applications for the last seven days</p>
+                <p className="main-color text-5xl font-bold">Applications</p>
+                <p className="text-gray-500 text-base ml-3">this chart shows the submitted applications for the last seven days</p>
             </div>
 
             <div className="m-6">
@@ -223,24 +200,6 @@ const dividedAppsDates = () => {
                         </svg>
                     </button>
                 }            
-
-                {(showing && filteredAppsDates.length === 0) && 
-                    <div>
-                        <ul className="wave-menu">
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                        </ul>
-                    </div>
-                }
-
 
             {(filteredAppsDates.length !== 0) &&
                 <button className="simple-btn" onClick={dividedAppsDates}>Show Result</button>

@@ -1,7 +1,6 @@
 import { query } from "../../db"
 import { NextResponse } from "next/server"
 import pool from "../../db"
-import { NextApiRequest } from "next"
 import { cookies } from "next/headers"
 
 export async function GET(request: any) {
@@ -47,12 +46,7 @@ export async function POST(request: any, res: any) {
 
 
     if (credentials[0].session === session.value) {
-        // const courses = await query({
-        //     query: "SELECT * FROM courses WHERE name = ?",
-        //     values: [data.name],
-        //   })
-        //   if (courses.length !== 0) return NextResponse.json({message: "course is exist"}, {status: 400})
-        
+       
           try {
             const connection = await pool.getConnection();
             const result: any = await connection.query(
@@ -107,12 +101,7 @@ export async function PUT(request: any, res: any) {
 
 
     if (credentials[0].session === session.value) {
-        // const courses = await query({
-        //     query: "SELECT * FROM courses WHERE name = ?",
-        //     values: [data.name],
-        //   })
-        //   if (courses.length !== 0) return NextResponse.json({message: "course is exist"}, {status: 400})
-        
+      
           try {
             const connection = await pool.getConnection();
             const result: any = await connection.query(

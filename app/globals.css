@@ -71,12 +71,12 @@
   background-size: cover;
 
 }
-.table-gr-bg {
+/* .table-gr-bg {
   background-image: url(./assets/holographic-gradient-background.jpg) !important;
   background-position: center;
   background-size: cover;
 
-}
+} */
 .table-body-bg {
   background: none !important;
 }
@@ -84,7 +84,7 @@
   color: var(--gold-color);
 }
 .img-bg {
-  background-image: url(../app/assets/bg.PNG);
+  background-image: url(../app/assets/eprombg.jpg);
   background-position: center;
   background-size: cover;
 }
@@ -184,9 +184,7 @@
   font-size: 22px;
   border: 2px solid gray;
 }
-/* .input:hover {
-  border: 1px solid var(--main-color);
-} */
+
 .input:focus {
   border: 1px solid var(--third-color) !important;
 }
@@ -351,7 +349,7 @@ display: block;
 padding-top: 100%;
 }
 
-.circular-loader {
+/* .circular-loader {
 -webkit-animation: rotate 2s linear infinite;
         animation: rotate 2s linear infinite;
 height: 100%;
@@ -363,17 +361,17 @@ position: absolute;
 top: 0;
 left: 0;
 margin: auto;
-}
+} */
 
-.loader-path {
+/* .loader-path {
 stroke-dasharray: 150,200;
 stroke-dashoffset: -10;
 -webkit-animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
         animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
 stroke-linecap: round;
-}
+} */
 
-@-webkit-keyframes rotate {
+/* @-webkit-keyframes rotate {
 100% {
   -webkit-transform: rotate(360deg);
           transform: rotate(360deg);
@@ -441,7 +439,7 @@ stroke-linecap: round;
 80%, 90% {
   stroke: var(--loader-color4);
 }
-}
+} */
 
 /* end loader */
 
@@ -730,7 +728,6 @@ stroke-linecap: round;
   width: 8em;
   height: 2.6em;
   line-height: 2.5em;
-  /* margin: 20px; */
   position: relative;
   overflow: hidden;
   border: 2px solid var(--color);

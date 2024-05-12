@@ -1,56 +1,12 @@
 'use client'
-import { useRef, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { DataContext } from "@/app/dashboard/layout";
 import { ReportContext } from "@/app/layout";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 const ReportComponent = () => {
 
-  let array = [
-    {
-      person_name: 'ahmed kadry mostafa',
-      project: 'eprom',
-      course: 'uiux'
-    },
-    {
-      person_name: 'ahmed kadry mostafa',
-      project: 'eprom',
-      course: 'pmp'
-    },
-    {
-      person_name: 'ahmed kadry mostafa',
-      project: 'eprom',
-      course: 'copy writing'
-    },
-    {
-      person_name: 'ahmed kadry mostafa',
-      project: 'eprom',
-      course: 'hsb'
-    },
-    {
-      person_name: 'ahmed mostafa',
-      project: 'amoc',
-      course: 'pmp'
-    },
-    {
-      person_name: 'ahmed mostafa',
-      project: 'amoc',
-      course: 'hsb'
-    },
-    {
-      person_name: 'ahmed',
-      project: 'midor',
-      course: 'hsb'
-    },
-    {
-      person_name: 'ahmed',
-      project: 'midor',
-      course: 'uiux'
-    },
-  ]
-
-
-
+ 
   const router = useRouter()
     const dataContext: any = useContext(DataContext);
     const reportContext: any = useContext(ReportContext);
@@ -64,15 +20,12 @@ const ReportComponent = () => {
     const [ showResult, setShowResult ] = useState<any>(false);
     const [ filterByStatus, setFilterByStatus ] = useState<any>('all');
     const [ reportType, setReportType ] = useState<any>('');
-    // const date_from: any = useRef()
-    // const date_to: any = useRef()
+   
     const handleFilterByStatusChange = (e: any) => {
       setFilterByStatus(e.target.value);
-      // console.log(e.target.value);
     }
     const handleReportTypeChange = (e: any) => {
       setReportType(e.target.value);
-      // console.log(e.target.value);
     }
     const handleFilterByProjectChange = (project: any) => {
       if (reportType === 'include trainees') {
@@ -99,24 +52,7 @@ const ReportComponent = () => {
     const handleToDateChange = (e: any) => {
         setToDate(e.target.value)
     }
-    const handleFilter = () => {
-
-        const filteredData = dataContext.APPS.filter((app: any) => {
-
-          const appStartDate = new Date(app.date_from);
-          const appEndDate = new Date(app.date_to);
-          const selectedFromDate = new Date(fromDate);
-          const selectedToDate = new Date(toDate);
     
-          return (
-            appStartDate >= selectedFromDate && appEndDate <= selectedToDate
-          );
-        });
-    
-        console.log(filteredData);
-        // You can set filteredData to state or use it as needed
-    };
-
     function PersonsWithApplications() {
         
         // Create a new array combining person data with applications
@@ -164,7 +100,6 @@ const ReportComponent = () => {
         }, []);
         setTraineesWithProject(projectTrainees)
         setProjectsToFilter(projectTrainees)
-        console.log(projectTrainees)
     }
 
     const projectsWithCourses = () => {
@@ -218,7 +153,6 @@ const ReportComponent = () => {
           return acc;
   
         }, []);
-        console.log(reducedData);
         setCoursesWithProject(reducedData)
         setProjectsToFilter(reducedData)
 
@@ -261,7 +195,6 @@ const ReportComponent = () => {
           return acc;
   
         }, []);
-        console.log(reducedData);
         setCoursesWithProject(reducedData)
         setProjectsToFilter(reducedData)
 
@@ -304,12 +237,9 @@ const ReportComponent = () => {
           return acc;
   
         }, []);
-        console.log(reducedData);
         setCoursesWithProject(reducedData)
         setProjectsToFilter(reducedData);
       }
-
-
     }
 
 
@@ -413,7 +343,6 @@ const ReportComponent = () => {
                 
                 <div className="flex gap-4">
                     <button className="cta" onClick={() => {
-                      // getApplicationsWithTrainees();
                       if (reportType === '') return toast.warn('Please select report type first');
                       if (reportType === 'only courses') {
                         projectsWithCourses();
@@ -504,10 +433,7 @@ const ReportComponent = () => {
               <div key={project.project} className="w-[80%] mx-auto p-4 border-black border-2">
                 <p className="text-black text-4xl font-black w-fit mx-auto my-5 uppercase">{project.project}</p>
                   <div className="my-6">
-                      {/* <div className="flex flex-col gap-1">
-                        <p className="text-black text-2xl font-black capitalize">{trainee.name}</p>
-                        <p className="text-black text-2xl font-black capitalize">ID: {trainee.person_id}</p>
-                      </div> */}
+                      
                       <div>
                         <table className="w-full my-2">
                           <thead>

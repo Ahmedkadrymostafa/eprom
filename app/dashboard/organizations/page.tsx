@@ -24,7 +24,6 @@ const Page = () => {
         await axios.post('/api/org', data).then(response => {
             setORGS([{id: response.data.id, name: data.name}, ...ORGS])
             dataContext.setORGS([{id: response.data.id, name: data.name}, ...ORGS])
-            // console.log(courses)
             toast.success("New ORG added successfully")
             name.current.value = ""
         }).catch(error => toast.error("ORG title is exist"))
@@ -53,9 +52,7 @@ const Page = () => {
     }
     
     const deleteOrg = async (id: number) => {
-        
-        // let updated = [...dataContext.ORGS];
-        await axios.delete(`/api/org/${id}`,).then(() => {
+            await axios.delete(`/api/org/${id}`,).then(() => {
             
             let updated = ORGS.filter((o: any) => o.id !== id)
 

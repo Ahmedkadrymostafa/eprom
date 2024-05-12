@@ -2,21 +2,16 @@
 import Loading from "@/app/loading"
 import axios from "axios"
 import { useContext, useEffect, useRef, useState } from "react"
-import { FaCheckCircle, FaEdit, FaGraduationCap, FaUserClock } from "react-icons/fa"
+import { FaCheckCircle, FaGraduationCap, FaUserClock } from "react-icons/fa"
 import { GrClose } from "react-icons/gr"
-import { MdDelete, MdOutlineClose } from "react-icons/md"
+import { MdDelete } from "react-icons/md"
 import { DataContext } from "../../layout"
 import { toast } from "react-toastify"
-// import { parse } from "path"
 import { useRouter } from "next/navigation";
 import { FaClockRotateLeft } from "react-icons/fa6"
-// import { AiFillCloseSquare } from "react-icons/ai"
-// import { FiShare } from "react-icons/fi"
-// import { RiShareBoxLine } from "react-icons/ri"
 
 type courseData = {
     person_id?: any,
-    // person_name?: any,
     project?: any,
     course?: any,
     course_price?: any,
@@ -28,9 +23,7 @@ type courseData = {
     total_hours?: any,
     location?: any,
     course_fees?: any,
-    // instructor_fees?: any,
-    // break_cost?: any,
-    // tools?: any,
+    
 }
 
 
@@ -38,15 +31,13 @@ const Page = ({params}: {params: any}) => {
     const router = useRouter();
     const personId = params.id
     const dataContext: any = useContext(DataContext)
-    // let data = dataContext.trainees
-    // let traineeIndex = data.findIndex((item: any) => item.person_id === id)
+    
 
     const [ trainee, setTrainee ] = useState<any>()
     const [ loading, setLoading ] = useState(false)
     const courseForm: any = useRef();
     
     const courseFormContent: any = useRef('');
-    const courseDropDownRef: any = useRef('');
 
     const [ courses, setCourses ] = useState(dataContext.courses)
     
@@ -69,46 +60,15 @@ const Page = ({params}: {params: any}) => {
         }, 1000)
     }
 
-    const toggleCourseDropDown = () => {
-        if (courseDropDownRef.current) {
-            courseDropDownRef.current.classList.toggle("course-dropdown-active")
-        }
-    }
-
-   const emptyInputs = () => {
-        course.current.value = ""
-        setCourseDataToSubmit({})
-        setShowInfo(false)
-        // from.current.value = ""
-        // to.current.value = ""
-        // org.current.value = ""
-        // statusRef.current.checked = false
-        // days.current.value = ""
-        // total_hours.current.value = ""
-        // training_center.current.value = ""
-        // city.current.value = ""
-        // instructor.current.value = ""
-        // budget_code.current.value = ""
-        // course_fees.current.value = ""
-        // instructor_fees.current.value = ""
-        // total_cost.current.value = ""
-        // profit.current.value = ""
-        // allowance.current.value = ""
-        // hotel_cost.current.value = ""
-        // setStatusJob("not implemented")
-   }
-
-
+    
    const handleCourseChange = (e: any) => {
     let id = e.target.selectedOptions[0].id
-    // console.log(id)
-    // console.log(courses)
+    
     setShowInfo(true)
     let currentCourse = courses.filter((course: any) => course.id === parseInt(id))
     if (currentCourse.length > 0) {
         setCourseDataToSubmit({
             person_id: personId,
-            // person_name: trainee.name,
             project: trainee.project,
             course: currentCourse[0].course_title,
             course_price: currentCourse[0].course_price,
@@ -121,7 +81,6 @@ const Page = ({params}: {params: any}) => {
             location: currentCourse[0].location,
         })
     }
-    // console.log(currentCourse)
    }
 
     const addNewCourse = async () => {
@@ -142,10 +101,7 @@ const Page = ({params}: {params: any}) => {
     }
 
     const getTrainee = async () => {
-        // await axios.get(`/api/trainees/${id}`).then((response) => {
-        //     console.log(response.data)
-        //     setTrainee(response.data)
-        // })
+        
         let data = await dataContext.trainees
         let traineeIndex = await data.findIndex((item: any) => item.person_id === personId)
         setTrainee(data[traineeIndex])
@@ -155,14 +111,12 @@ const Page = ({params}: {params: any}) => {
             setLoading(false)
             
         }
-        // console.log(traineeIndex)
     }
 
    
     
     const deleteCourse = async () => {
         setLoading(true)
-        // let updatedAllApps = [...dataContext.APPS]
         let filteredAppsAfterDelete = dataContext.APPS.filter((app: any) => app.id !== courseToDeleteID)
         axios.delete(`/api/apps/${courseToDeleteID}`).then(() => {
             toast.success(`Course deleted successfully`);
@@ -219,7 +173,6 @@ const Page = ({params}: {params: any}) => {
     useEffect(() => {
         getTrainee()
         setCourses(dataContext.courses)
-        // setORGS(dataContext.ORGS)
         setAPPS(dataContext.APPS.filter((app: any) => app.person_id === personId))
         setTotalHours(APPS.reduce((acc: any, current: any) => parseInt(acc) + parseInt(current.total_hours), 0))
         
@@ -377,9 +330,7 @@ const Page = ({params}: {params: any}) => {
                                         <p className="main-color text-3xl font-black">Add New Course</p>
                                         <div onClick={() => {
                                         toggleForm();
-                                        // emptyInputs();
-                                        // setEdit(false)
-                                        // setShowInfo(false);
+                                       
                                         }}><p className="main-color text-3xl font-black cursor-pointer">
                                             <GrClose />
                                         </p></div>
@@ -403,7 +354,6 @@ const Page = ({params}: {params: any}) => {
                                                 <div className='bg-white px-7 py-3 rounded-3xl'>
                                                     <div className='bottom-border px-5'>
                                                         <p className='text-gold text-3xl font-bold'>New Course Info</p>
-                                                        {/* <p className='text-red-800 font-black text-2xl cursor-pointer'>Cancel</p> */}
                                                     </div>
                                                     <div className='flex justify-center flex-col m-7'>
                                                         <div className='flex flex-col gap-4'>

@@ -4,7 +4,6 @@ import { FaArrowTrendUp, FaUsers } from "react-icons/fa6"
 import { GiMoneyStack } from "react-icons/gi"
 import { GrMoney } from "react-icons/gr"
 import { MdMenuBook } from "react-icons/md"
-import { PiPiggyBankBold } from "react-icons/pi"
 import PlannedCourses from "./PlannedCourses"
 import { DataContext } from "@/app/dashboard/layout"
 import { useContext, useEffect, useState } from "react"
@@ -52,9 +51,6 @@ const ApplicationsFinance = (props: any) => {
         const implementedTrainees = filteredImplementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.num_of_trainees), 0);
         setPeopleTrained(implementedTrainees)
         
-        // setNotImplementedRevenue(notImplementedRev);
-
-        console.log(filteredImplementedCourses);
 
     }, [dataContext.courses, dataContext.APPS]);
 
@@ -86,18 +82,9 @@ const ApplicationsFinance = (props: any) => {
                     </div>
                 </div>
         </div>
-        <p className="main-color text-3xl font-semibold">Financial information for applications</p>
+        <p className="main-color text-3xl font-semibold">Financial information for implemented courses</p>
         <div className="flex justify-between gap-5 mt-5">
-            {/* <div className="yellow-bg w-1/4 p-5 rounded-2xl">
-                <div>
-                    <div className="flex justify-between">
-                        <p className="main-color text-2xl font-black">Remaining</p>
-                        <p className="text-gold text-4xl"><PiPiggyBankBold /></p>
-                    </div>
-                    <p className="text-sm text-gray-500 max-w-44">Total Revenue for not implemented course</p>
-                </div>
-                <p className="text-black text-xl font-bold mt-4">{formatNumberInEGP(notImplementedRevenue)}</p>
-            </div> */}
+           
             <div className="blue-bg w-1/3 p-5 rounded-2xl">
                 <div>
                     <div className="flex justify-between">

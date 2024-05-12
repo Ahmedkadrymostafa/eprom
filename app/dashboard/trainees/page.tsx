@@ -15,7 +15,6 @@ const Page = () => {
     const [ isLoading, setIsLoading ] = useState(true);
     const [ editButton, setEditButton ] = useState(false);
     const [ trainees, setTrainees ] = useState<any>([]);
-    // const [ cloneTrainees, setCloneTrainees ] = useState<any>([]);
     const [ traineeToDelete, setTraineeToDelete ] = useState({id: "", name: ""})
     const [ traineeToDeleteIndex, setTraineeToDeleteIndex ] = useState()
     const [ traineeToUpdate, setTraineeToUpdate ] = useState("")
@@ -55,20 +54,16 @@ const Page = () => {
         }
 
         await axios.post('/api/trainees', data).then((res: any) => {
-            console.log(res.data.id)
             setTrainees([{id: res.data.id, ...data}, ...trainees])
-            // setCloneTrainees([data, ...trainees])
 
             dataContext.setTrainees([{id: res.data.id, ...data}, ...trainees])
 
             emptyInputs();
             toast.success("New Trainee added successfully")
         
-        // emptyInputs();
         }).catch(err => {
             toast.error(`Failed to add because trainee is exist with id ${data.person_id}`)
         })
-            console.log(data)
     }
     const updateTrainee = async () => {
         console.log(traineeToUpdate)
@@ -99,7 +94,6 @@ const Page = () => {
             }
             
             setTrainees(updatedTrainees)
-            // setCloneTrainees(updatedTrainees)
             dataContext.setTrainees(updatedTrainees)
             emptyInputs()
             toast.success("updated successfully")
@@ -112,15 +106,12 @@ const Page = () => {
         setIsLoading(true)
 
         await axios.delete(`/api/trainees/${id}`).then((res) => {
-            setIsLoading(false)
             const updatedItems = trainees.filter((index: any) => index !== e);
             setTrainees(updatedItems)
-            // setCloneTrainees(updatedItems)
             toast.success("Successfully deleted")
         }).catch((err) => {
             toast.error("Failed to delete trainee")
-            setIsLoading(false)
-        });  
+        }).finally(() => setIsLoading(false)) 
     }
 
 
@@ -136,11 +127,8 @@ const Page = () => {
 
 
     useEffect(() => {
-    //    GetTrainees()
-            setIsLoading(false)
-            setTrainees(dataContext.trainees)
-            // setCloneTrainees(dataContext.trainees)
-            console.log(dataContext.trainees)
+        setIsLoading(false)
+        setTrainees(dataContext.trainees)
     }, [dataContext])
 
   return (
@@ -159,7 +147,6 @@ const Page = () => {
                     <div className="trainee-btn w-fit mx-auto h-[45px] flex gap-2 items-center cursor-pointer duration-150 main-bg text-gold rounded-xl p-3 text-xl" onClick={() => {
                         deleteTrainee(traineeToDelete.id, traineeToDeleteIndex)
                         deletePopUp.current.classList.toggle('active-form-popup')
-                        // console.log(traineeToDelete.id, traineeToDeleteIndex)
                     }}>
                         Delete
                     </div>
@@ -196,7 +183,6 @@ const Page = () => {
                             <th className="admin-th">Title</th>
                             <th className="admin-th">Company</th>
                             <th className="admin-th">Project</th>
-                            {/* <th className="admin-th">location</th> */}
                             <th className="admin-th">{`${trainees.length} Trainee`}</th>
                         </tr>
                     </thead>
@@ -215,7 +201,6 @@ const Page = () => {
                                     <td className="admin-td">{e.title}</td>
                                     <td className="admin-td">{e.department}</td>
                                     <td className="admin-td">{e.project}</td>
-                                    {/* <td className="admin-td">{e.location}</td> */}
                                     
                                     <td className="text-2xl font-black ">
                                         <div className="flex justify-center gap-5 row-buttons">
@@ -270,7 +255,6 @@ const Page = () => {
                         }
                         
                     </select>
-                    {/* <input ref={project} type="text" placeholder='Project' className='input' /> */}
                     <input ref={location} type="text" placeholder='Location' className='input' />
                     {editButton ? <input className="button-81" type="submit" value="Save" onClick={(e: any) => {
                         e.preventDefault();

@@ -1,7 +1,5 @@
 import { query } from "../../../db"
 import { NextResponse } from "next/server"
-import pool from "../../../db"
-import { NextApiRequest } from "next"
 import { cookies } from "next/headers"
 
 export async function GET(req: any, {params}: {params: any}) {
@@ -26,6 +24,8 @@ export async function GET(req: any, {params}: {params: any}) {
   })
   return NextResponse.json(admins[0], {status: 200})
 }
+
+
 export async function PUT(req: any, {params}: {params: any}) {
   
   const cookieStore = cookies()

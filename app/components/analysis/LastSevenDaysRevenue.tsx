@@ -22,27 +22,10 @@ const LastSevenDaysRevenue = () => {
         Tooltip,
         Legend
       );
-    //   const [lastSevenDaysNames, setLastSevenDaysNames] = useState<any>([]);
-    //   const today: any = new Date();
-    // const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-    // const getLastSevenDays = () => {
-    //     const names = [];
-
-    //     for (let i = 0; i < 7; i++) {
-    //         const date = new Date(today);
-    //         date.setDate(today.getDate() - i);
-    //         const dayName = dayNames[date.getDay()];
-    //         names.push(dayName);
-    //     }
-
-    //     names.reverse();
-    //     setLastSevenDaysNames(names);
-    // }
+   
 
     const dataContext: any = useContext(DataContext);
     
-    // const [implementedCourses, setImplementedCourses] = useState<any[]>([]);
     const [ janRev, setJanRev ] = useState(0);
     const [ janExp, setJanExp ] = useState(0);
     const [ janProfit, setJanProfit ] = useState(0);
@@ -98,7 +81,7 @@ const LastSevenDaysRevenue = () => {
           const year = parseInt(course.date_from.split('/')[0])
           return (course.course_status === 'implemented' && year === currentYear)
       });
-      // setImplementedCourses(filteredImplementedCourses);
+      
     const jan = filteredCourses.filter((course: any) => {
       const courseMonth = new Date(course.date_from).getMonth() + 1;
       return courseMonth === 1;

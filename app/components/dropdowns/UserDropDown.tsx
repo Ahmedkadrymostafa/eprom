@@ -1,7 +1,6 @@
 'use client'
 import { LogOut } from "@/app/helpers/logout";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { MdOutlineMail } from "react-icons/md";
@@ -20,7 +19,6 @@ const UserDropDown = (props: any) => {
     if (dropDown) {
         document.body.addEventListener('click', (e: any) => {
             if (!e.target.classList.contains("drop-down") && !e.target.classList.contains("user-drop-down")) {
-                // openDropDown();
                 setDropDown(false)
             }
         })
@@ -37,9 +35,7 @@ const UserDropDown = (props: any) => {
                         router.push('/dashboard/settings')
                         setDropDown(false)
                     }} className="user-drop-down main-color font-bold text-xl flex items-center gap-1 p-2 rounded-lg hover:bg-slate-200"><IoMdSettings className="text-2x text-gray-600" /> Settings</button>
-                    {/* <Link href="/dashboard/settings" className="main-color font-bold text-xl flex items-center gap-1 p-2 rounded-lg hover:bg-slate-200"><IoMdSettings className="text-2xl" /> Settings</Link> */}
-                    {/* <Link href="#" className="main-color font-bold text-xl capitalize">Logout</Link> */}
-                    <button className="user-drop-down main-color w-full font-bold text-xl flex items-center gap-1  p-2 rounded-lg hover:bg-slate-200" onClick={() => LogOut(props.email, router)}><BiLogOut className="text-2x text-gray-600" /> Logout</button>
+                   <button className="user-drop-down main-color w-full font-bold text-xl flex items-center gap-1  p-2 rounded-lg hover:bg-slate-200" onClick={() => LogOut(props.email, router)}><BiLogOut className="text-2x text-gray-600" /> Logout</button>
                 </div>
             </div>
         }

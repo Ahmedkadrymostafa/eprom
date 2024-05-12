@@ -20,7 +20,6 @@ const Page = () => {
 
     const getAdmin = async () => {
         await axios.get(`/api/admins/${email}`).then((res: any) => {
-            // console.log(res.data)
             setAdmin(res.data)
             setLoading(false)
         })
