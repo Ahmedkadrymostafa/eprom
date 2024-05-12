@@ -214,6 +214,7 @@ const LastSevenDaysRevenue = () => {
             backgroundColor: 'rgba(228, 255, 0, 0.42)',
           },
           {
+            fill: true,
             label: 'Profit',
             data: [janProfit, fepProfit, marProfit, aprilProfit, mayProfit, juneProfit, julyProfit, augProfit, sepProfit, octProfit, novProfit, decProfit],
             borderColor: 'rgb(0, 255, 0)',

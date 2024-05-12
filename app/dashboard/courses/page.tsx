@@ -522,10 +522,7 @@ const Page = () => {
                         <div className="flex justify-between items-center">
                             <div className="coolinput">
                                 <label className="text">Location</label>
-                                <select ref={location} className="select-form input">
-                                    <option value="alexandria">Alexandria</option>
-                                    <option value="cairo">Cairo</option>
-                                </select>
+                                <input ref={location} type="text" name="input" className="input" />
                             </div>
                             <div className="flex gap-3 items-center">
                                 <input ref={statusRef} type="checkbox" value={statusCourse} className="w-6 h-6" onChange={(e: any) => {

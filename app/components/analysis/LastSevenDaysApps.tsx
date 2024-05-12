@@ -52,8 +52,7 @@ const LastSevenDaysApps = (props: any) => {
         lastSevenDays.reverse();
         setLastSevenDaysNames(names);
         setLastSevenDaysDates(lastSevenDays);
-        console.log(names);
-        console.log(lastSevenDays);
+        
     }
 
         // Function to check if a date is within the last seven days
@@ -64,7 +63,7 @@ const LastSevenDaysApps = (props: any) => {
         // Convert time difference to days
         const diffDays = Math.round(diffTime / oneDay);
 
-        return diffDays >= 0 && diffDays <= 6;
+        return (diffDays >= 0 && diffDays < 7);
     }
 
     const filteredDates = async () => {
@@ -142,14 +141,6 @@ const dividedAppsDates = () => {
     useEffect(() => {
         getLastSevenDays();
         filteredDates();
-       
-         console.log(filteredAppsDates)
-        return () => {
-             if (filteredAppsDates.length === 0) {
-            console.log(filteredAppsDates)
-          console.log('Stopping effect...');
-        }
-      };
     }, [])
 
     const data = {

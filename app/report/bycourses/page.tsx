@@ -24,7 +24,7 @@ const Page = () => {
 
         setImplemented(filteredImplementedCourses)
         setNotImplemented(filteredNotImplementedCourses)
-        setProgress((filteredImplementedCourses.length / (filteredImplementedCourses.length + filteredNotImplementedCourses.length)) * 100)
+        setProgress(((filteredImplementedCourses.length / (filteredImplementedCourses.length + filteredNotImplementedCourses.length)) * 100).toFixed(1))
 
         const implementedRev = filteredImplementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.total_revenue), 0);
         const implementedExp = filteredImplementedCourses.reduce((acc: any, course: any) => acc + parseInt(course.total_expenses), 0);
