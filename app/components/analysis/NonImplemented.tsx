@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 const NonImplemented = (props: any) => {
     ChartJS.register(ArcElement, Tooltip, Legend);
     const dataContext = useContext<any>(DataContext);
-
+    const [runEffect, setRunEffect] = useState(true);
     const today = new Date().setHours(0, 0, 0, 0);
     const [ completedApps, setCompletedApps ] = useState([]);
 
@@ -56,12 +56,14 @@ const NonImplemented = (props: any) => {
                 dataContext.setAPPS(updatedAllApps)
             }).catch((error) => console.log(error))
         })
-
+        setRunEffect(false)
         setCompletedApps([])
     }
 
     useEffect(() => {
-        setCompletedApps(dataContext.APPS.filter((app: any) => (new Date(app.date_to).setHours(0, 0, 0, 0) < today && app.status === 'not implemented')))
+        if (runEffect) {
+            setCompletedApps(dataContext.APPS.filter((app: any) => (new Date(app.date_to).setHours(0, 0, 0, 0) < today && app.status === 'not implemented')))
+        }
     }, [dataContext.APPS, today])
 
 
@@ -80,8 +82,8 @@ if (completedApps.length > 0) {
                 <span className="button-content text-xl font-bold">Apply all as <span className="text-gold ">Implemented</span></span>
             </button>
 
-            <div className="h-auto max-h-[360px] w-[90%] mx-auto">
-                <div className="overflow-y-scroll max-md:h-auto">
+            <div className="h-auto w-[90%] mx-auto">
+                <div className="h-[400px] overflow-y-scroll max-md:h-auto">
                     <table className="admin-table w-[96%]">
                         <thead>
                             <tr>

@@ -293,17 +293,20 @@ const Page = ({params}: {params: any}) => {
                                             {
                                                 APPS.map((app: any) => (
                                                     <tr key={app.id} className="admin-tr relative">
-                                                        <td className="admin-td">{app.course}</td>                                       
+                                                        <td className="admin-td max-w-60">{app.course}</td>                                       
                                                         <td className="admin-td">{app.course_price}</td>                                       
                                                         <td className="admin-td">{app.date_from}</td>
                                                         <td className="admin-td">{app.date_to}</td>
                                                         <td className="admin-td">{app.days}</td>
                                                         <td className="admin-td">{app.location}</td>
-                                                        <td className="admin-td">{app.status}</td>
+                                                        <td className="admin-td">
+                                                            <div className="flex justify-center">
+                                                                {app.status === 'implemented' && <FaCheckCircle className="cursor-pointer text-green-500" onClick={() => changeAppStatusToNotImplemented(app.id)} />}
+                                                                {app.status === 'not implemented' && <FaClockRotateLeft className="cursor-pointer text-gray-500" onClick={() => changeAppStatusToImplemented(app.id)} />}     
+                                                            </div>
+                                                        </td>
                                                         <td className="text-2xl font-black ">
                                                             <div className="flex justify-center gap-5 row-buttons">
-                                                                {app.status === 'implemented' && <FaCheckCircle className="cursor-pointer text-green-500" onClick={() => changeAppStatusToNotImplemented(app.id)} />}
-                                                                {app.status === 'not implemented' && <FaClockRotateLeft className="cursor-pointer text-gray-500" onClick={() => changeAppStatusToImplemented(app.id)} />}
                                                                 <MdDelete className="cursor-pointer text-red-700" onClick={() => {
                                                                     setCoursesToDeleteID(app.id)
                                                                     deletePopUp.current.classList.toggle('active-form-popup')

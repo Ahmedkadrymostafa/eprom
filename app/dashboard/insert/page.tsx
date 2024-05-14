@@ -25,6 +25,8 @@ const Page = () => {
     const [ courseToInsert, setCourseToInsert ] = useState<course>();
     let [ newApps, setNewApps ] = useState<any>([])
 
+    const searchInputRef: any = useRef();
+
     const handleCourseChange = (e: any) => {
         let id = e.target.selectedOptions[0].id;
 
@@ -37,7 +39,6 @@ const Page = () => {
     const searchResultRef: any = useRef();
     
     const search = (e: any) => { 
-        console.log(trainees)          
         if (e !== "") {
             const filtered = dataContext.trainees.filter((index: any) => index.name.includes(e.toLowerCase()) || index.project.includes(e.toLowerCase()) || index.person_id.includes(e))
             setTrainees(filtered)
@@ -73,6 +74,7 @@ const Page = () => {
             location: courseToInsert.location,
         }
         setSelectedTrainees([...selectedTrainees, trainee])
+        searchInputRef.current.value = ''
     }
 
     const deleteTraineeFromSelected = (e: any) => {
@@ -164,7 +166,7 @@ const Page = () => {
                 <p className="text-gray-700 text-3xl font-bold w-fit m-7">Select trainees to insert course</p>
                 <div className="relative glass w-fit py-2 px-4 mx-auto flex flex-col">
                     <div className="search">
-                        <input type="text" className="searchTerm" placeholder="Select Trainee" onChange={(e: any) => {
+                        <input ref={searchInputRef} type="text" className="searchTerm" placeholder="Select Trainee" onChange={(e: any) => {
                             search(e.target.value)
                         }} />
                         <button type="submit" className="searchButton">

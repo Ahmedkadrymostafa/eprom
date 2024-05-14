@@ -43,7 +43,7 @@ const postAdmins = async () => {
 
     const nameV = name.current.value.toLowerCase().trim().replace(/\s+/g, ' ');
     const emailV = email.current.value.toLowerCase().trim().replace(/\s+/g, '');
-    const passwordV = password.current.value.toLowerCase();
+    const passwordV = password.current.value
     const idV = id.current.value;
     const roleV = role.current.value.toLowerCase()
     
@@ -58,7 +58,7 @@ const postAdmins = async () => {
         name: nameV,
         email: emailV,
         password: hash,
-        id: parseInt(idV),
+        id: idV,
         role: roleV,
         session: ""
     }
@@ -134,7 +134,7 @@ return (
                         <input className="input" ref={name} type="text" placeholder="name" />
                         <input className="input" ref={email} type="email" placeholder="email" />
                         <input className="input" ref={password} type="password" placeholder="password" />
-                        <input className="input" ref={id} type="number" placeholder="id" />
+                        <input className="input" ref={id} type="text" placeholder="id" />
                         <select className="input" ref={role}>
                         <option value="admin">admin</option>
                         <option value="moderator">moderator</option>

@@ -52,7 +52,7 @@ const Page = () => {
     }
     
     const deleteOrg = async (id: number) => {
-            await axios.delete(`/api/org/${id}`,).then(() => {
+        await axios.delete(`/api/org/${id}`,).then(() => {
             
             let updated = ORGS.filter((o: any) => o.id !== id)
 
@@ -65,7 +65,7 @@ const Page = () => {
             toast.error('error deleting')
         })
     }
-  return (
+  return (   
     <div className="relative">
         <p className="main-color text-4xl font-bold mx-6 my-5">Projects</p>
         <div className="glass flex justify-between pt-9 mx-11 max-md:flex-col">
@@ -74,7 +74,7 @@ const Page = () => {
                 <div className="p-5 w-96">
                     <p className="main-color text-2xl font-black mb-4 text-center">Add New Project</p>
                     <form className="flex flex-col gap-3">
-                        <input className="input" ref={name} type="text" placeholder="Organization Title" />
+                        <input className="input" ref={name} type="text" placeholder="Project Name" />
                         
                         <input className="button-81" type="submit" onClick={(e: any) => {
                             e.preventDefault();
@@ -139,6 +139,8 @@ const Page = () => {
                             </div>
                 </div>
     </div>
+    
+
   )
 }
 

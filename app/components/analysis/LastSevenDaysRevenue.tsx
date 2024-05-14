@@ -204,14 +204,18 @@ const LastSevenDaysRevenue = () => {
           {
             label: 'Revenue',
             data: [janRev, fepRev, marRev, aprilRev, mayRev, juneRev, julyRev, augRev, sepRev, octRev, novRev, decRev],
-            borderColor: 'rgb(187, 223, 255)',
-            backgroundColor: 'rgb(187, 223, 255)',
+            borderColor: 'rgb(107 185 255)',
+            backgroundColor: 'rgb(107 185 255)',
+            // borderColor: 'rgb(187, 223, 255)',
+            // backgroundColor: 'rgb(187, 223, 255)',
           },
           {
             label: 'Expenses',
             data: [janExp, fepExp, marExp, aprilExp, mayExp, juneExp, julyExp, augExp, sepExp, octExp, novExp, decExp],
-            borderColor: 'rgb(228, 255, 0)',
-            backgroundColor: 'rgba(228, 255, 0, 0.42)',
+            borderColor: 'rgb(255 76 76)',
+            backgroundColor: 'rgb(255 76 76)',
+            // borderColor: 'rgb(228, 255, 0)',
+            // backgroundColor: 'rgba(228, 255, 0, 0.42)',
           },
           {
             fill: true,

@@ -129,7 +129,7 @@ const Page = () => {
     useEffect(() => {
         setIsLoading(false)
         setTrainees(dataContext.trainees)
-    }, [dataContext])
+    }, [dataContext.trainees])
 
   return (
     <>
@@ -156,7 +156,7 @@ const Page = () => {
         <div>
             <div className="glass w-fit py-9 px-7 mx-auto flex justify-between items-center gap-6">
                 <div className="search">
-                    <input type="text" className="searchTerm" placeholder="What are you looking for?" onChange={(e: any) => {
+                    <input type="text" className="searchTerm" placeholder="Search by Name / ID / Project" onChange={(e: any) => {
                         search(e.target.value)
                     }} />
                     <button type="submit" className="searchButton">

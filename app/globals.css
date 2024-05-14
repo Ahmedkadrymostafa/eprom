@@ -41,7 +41,8 @@
   background-color: var(--second-bg);
 }
 .yellow-bg {
-  background-color: rgba(228, 255, 0, 0.42);
+  background-color: rgb(255 76 76);;
+  /* background-color: rgba(228, 255, 0, 0.42); */
 }
 .blue-bg {
   background-color: rgb(187, 223, 255);
@@ -71,12 +72,7 @@
   background-size: cover;
 
 }
-/* .table-gr-bg {
-  background-image: url(./assets/holographic-gradient-background.jpg) !important;
-  background-position: center;
-  background-size: cover;
 
-} */
 .table-body-bg {
   background: none !important;
 }
@@ -89,13 +85,16 @@
   background-size: cover;
 }
 .card-one {
-  background-color: #F3CA52;
+  background-color: #e252f387;
+  /* background-color: #F3CA52; */
 }
 .card-two {
-  background-color: #FFC470;
+  background-color: #fffa5dba;
+  /* background-color: #FFC470; */
 }
 .card-three {
-  background-color: #A0DEFF;
+  background-color: #b668fd7a;
+  /* background-color: #A0DEFF; */
 }
 .glass {
   background: rgba(255, 255, 255, 0.2);

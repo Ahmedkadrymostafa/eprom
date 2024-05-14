@@ -281,8 +281,7 @@ const ReportComponent = () => {
   const report = () => {
     if (reportType === 'include trainees') {
       reportContext.setReportByTraineesData(traineesWithProject)
-      router.push('/report/bytrainees')
-
+      router.push('/report/bytrainees')      
     }else if (reportType === 'only courses') {
       reportContext.setReportByApps(coursesWithProject)
       router.push('/report/byapps')

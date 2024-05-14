@@ -1,6 +1,6 @@
 'use client'
 import axios from "axios";
-import { useContext, useRef, useState } from "react";
+import { useContext, useRef, useState, useEffect } from "react";
 import { FaCheckCircle, FaEdit, FaPencilAlt, FaSearch } from "react-icons/fa";
 import { MdDelete, MdOutlineNoteAlt } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -40,7 +40,7 @@ type addNewCourseData = {
 const Page = () => {
     const router = useRouter();
     const reportContext = useContext(ReportContext);
-    const [ isLoading, setIsLoading ] = useState(false); 
+    const [ isLoading, setIsLoading ] = useState(true); 
     const [ formRole, setFormRole ] = useState('add');
 
     const courseTitle: any = useRef()
@@ -152,7 +152,7 @@ const Page = () => {
     const newCourseInfo: any = useRef()
 
     const dataContext: any = useContext(DataContext)
-    const [ courses, setCourses ] = useState(dataContext.courses)
+    const [ courses, setCourses ] = useState<any>([])
 
     const toggleForm = () => {
         newCourseForm.current.classList.toggle('left-[15px]')
@@ -340,6 +340,11 @@ const Page = () => {
         
     }
 
+    useEffect(() => {
+        setIsLoading(false)
+        setCourses(dataContext.courses)
+    }, [dataContext.courses])
+
   return (
     <>
     {isLoading ? <Loading /> : 
@@ -347,9 +352,9 @@ const Page = () => {
     
     <div className="relative">
         <div className="flex justify-between items-center mx-6 my-5">
-            <p className="main-color text-4xl font-bold">Courses</p>
+            <p className="main-color text-5xl font-bold">Courses</p>
                 <div className="flex">
-                    <input type="text" className="searchTerm" placeholder="What are you looking for?" onChange={(e: any) => {
+                    <input type="text" className="searchTerm" placeholder="Search by title / location" onChange={(e: any) => {
                         search(e.target.value)
                     }} />
                     <button type="submit" className="searchButton">
@@ -669,12 +674,13 @@ const Page = () => {
                 <thead>
                     <tr className="text-gold text-xl font-bold">
                         <th>Title</th>
-                        <th>from</th>
-                        <th>to</th>
-                        <th>location</th>
-                        <th>revenue</th>
-                        <th>expenses</th>
-                        <th>net revenue</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Location</th>
+                        <th>Revenue</th>
+                        <th>Expenses</th>
+                        <th>Net Revenue</th>
+                        <th>Status</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -703,16 +709,20 @@ const Page = () => {
                                 <td>{course.total_expenses}</td>
                                 <td>{course.net_revenue}</td>
                                 <td>
-                                    <div className="table-row-buttons flex justify-center gap-3">
+                                    <div className="flex justify-center">
                                         {course.course_status === 'implemented' && <FaCheckCircle className="cursor-pointer text-xl text-green-500" onClick={() => changeCourseStatusToNotImplemented(course.id)} />}
                                         {course.course_status === 'not implemented' && <FaClockRotateLeft className="cursor-pointer text-xl text-gray-500" onClick={() => changeCourseStatusToImplemented(course.id)} />}
-                                        <RiShareBoxFill className="cursor-pointer text-xl text-gray-700" onClick={() => {
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className="table-row-buttons flex justify-center gap-3">
+                                        <RiShareBoxFill className="cursor-pointer text-xl text-blue-500" onClick={() => {
                                             setSelectedCourseToShowInfo(course)
                                             toggleCourseInfo()
                                             let instSplitter = course.instructors?.split('-')
                                             setInstructorsToShow(instSplitter)
                                         }} />
-                                        <FaEdit className="cursor-pointer text-xl text-green-700" onClick={() => {
+                                        <FaEdit className="cursor-pointer text-xl text-gold" onClick={() => {
                                             
                                             setFormRole('update')
                                             toggleForm()

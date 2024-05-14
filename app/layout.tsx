@@ -1,5 +1,5 @@
 'use client'
-import type { Metadata } from "next";
+// import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import { createContext, useState } from "react";
-import Head from "next/head";
+// import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
 
 export const ReportContext = createContext<any>(null)
@@ -38,10 +38,10 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <Head>
-        <title>EPROM</title>
-        <link rel="icon" href="/favicon" sizes="any" />
-      </Head>
+      <head>
+          <title>EPROM</title>
+          <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body className={inter.className}>
         <ToastContainer position="bottom-right" autoClose={5000} />
         <ReportContext.Provider value={reportContextValue}>
