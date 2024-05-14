@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Loading from "../app/loading";
-import Logo from '../app/assets/eprom.PNG';
+import Logo from '../app/assets/eprom.jpg'
 import Image from "next/image";
 
 export default function Home() {

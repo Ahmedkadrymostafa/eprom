@@ -8,7 +8,7 @@ export async function GET(req: any, {params}: {params: any}) {
     const session: any = cookieStore.get("session")
     if (!session) return NextResponse.json({message: "forbidden"}, {status: 403})
 
-    const credentials = await query({
+    const credentials: any = await query({
       query: "SELECT * FROM admins WHERE session = ?",
       values: [session.value],
     })
@@ -18,7 +18,7 @@ export async function GET(req: any, {params}: {params: any}) {
 
   const email: any = await params.email;
   
-  const admins = await query({
+  const admins: any = await query({
     query: "SELECT * FROM admins WHERE email = ?",
     values: [email],
   })
@@ -32,7 +32,7 @@ export async function PUT(req: any, {params}: {params: any}) {
     const session: any = cookieStore.get("session")
     if (!session) return NextResponse.json({message: "forbidden"}, {status: 403})
 
-    const credentials = await query({
+    const credentials: any = await query({
       query: "SELECT * FROM admins WHERE session = ?",
       values: [session.value],
     })

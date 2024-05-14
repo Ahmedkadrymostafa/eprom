@@ -1,6 +1,6 @@
 'use client'
 import { useContext } from 'react'
-import { ReportContext } from '@/app/layout'
+import { ReportContext } from '@/app/dashboard/layout'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js/auto";
 import { Bar } from 'react-chartjs-2';
 
@@ -8,7 +8,7 @@ const Page = () => {
     ChartJS.register(ArcElement, Tooltip, Legend);
 
     const reportContext: any = useContext(ReportContext);
-    const data = reportContext.reportByTraineesData
+    const data: any = reportContext.reportByTraineesData
     
 
     const chartData = {

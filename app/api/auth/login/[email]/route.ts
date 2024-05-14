@@ -9,7 +9,7 @@ const cryptr = new Cryptr('secretKey', { encoding: 'base64', pbkdf2Iterations: 1
 export async function POST(req: any, {params}: {params: any}) {
   const email: any = await params.email;
   const password: any = await req.json()
-  const admins = await query({
+  const admins: any = await query({
     query: "SELECT * FROM admins WHERE email = ?",
     values: [email],
   })

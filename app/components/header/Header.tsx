@@ -4,7 +4,7 @@ import UserDropDown from "../dropdowns/UserDropDown";
 import { IoMdExit } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { LogOut } from "@/app/helpers/logout";
-import eprom from '../../assets/eprom.PNG'
+import eprom from '@/app/assets/eprom.jpg'
 import Search from "../search/Search";
 
 const Header = (props: any) => {

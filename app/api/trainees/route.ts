@@ -9,7 +9,7 @@ export async function GET(request: any) {
     const session: any = cookieStore.get("session")
     if (!session) return NextResponse.json({message: "forbidden"}, {status: 403})
 
-    const credentials = await query({
+    const credentials: any = await query({
       query: "SELECT * FROM admins WHERE session = ?",
       values: [session.value],
     })
@@ -36,7 +36,7 @@ export async function POST(request: any, res: any) {
     const session: any = cookieStore.get("session")
     if (!session) return NextResponse.json({message: "forbidden"}, {status: 403})
 
-    const credentials = await query({
+    const credentials: any = await query({
       query: "SELECT * FROM admins WHERE session = ?",
       values: [session.value],
     })
@@ -46,7 +46,7 @@ export async function POST(request: any, res: any) {
 
 
     if (credentials[0].session === session.value) {
-        const trainees = await query({
+        const trainees: any = await query({
             query: "SELECT * FROM trainees WHERE person_id = ?",
             values: [data.person_id],
           })

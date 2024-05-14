@@ -5,7 +5,7 @@ import { FaCheckCircle, FaEdit, FaPencilAlt, FaSearch } from "react-icons/fa";
 import { MdDelete, MdOutlineNoteAlt } from "react-icons/md";
 import { toast } from "react-toastify";
 import { DataContext } from "../layout";
-import { ReportContext } from "@/app/layout";
+import { ReportContext } from "@/app/dashboard/layout";
 import { GrClose } from "react-icons/gr";
 import { IoAlertCircle } from "react-icons/io5";
 import { RiShareBoxFill } from "react-icons/ri";
@@ -39,7 +39,7 @@ type addNewCourseData = {
 }
 const Page = () => {
     const router = useRouter();
-    const reportContext = useContext(ReportContext);
+    const reportContext: any = useContext(ReportContext);
     const [ isLoading, setIsLoading ] = useState(true); 
     const [ formRole, setFormRole ] = useState('add');
 
@@ -96,7 +96,7 @@ const Page = () => {
           reportContext.setReportByCoursesData(filteredData)
     }
     const report = () => {
-        router.push('/report/bycourses')
+        router.push('/dashboard/report/bycourses')
     }
   const handleFromDateChange = (event: any) => {
     setFromDate(event.target.value);

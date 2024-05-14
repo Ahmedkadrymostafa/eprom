@@ -1,5 +1,5 @@
 'use client'
-import { ReportContext } from "@/app/layout"
+import { ReportContext } from "@/app/dashboard/layout"
 import { useContext, useEffect, useState } from "react"
 import formatNumberInEGP from "@/app/helpers/FormatNumInEGP"
 
@@ -15,10 +15,10 @@ const Page = () => {
     const [implementedNetRevenue, setImplementedNetRevenue] = useState<number>(0);
 
     useEffect(() => {
-        const filteredImplementedCourses = reportContext.reportByCoursesData.filter((course: any) => {
+        const filteredImplementedCourses: any = reportContext?.reportByCoursesData?.filter((course: any) => {
             return (course.course_status === 'implemented')
         });
-        const filteredNotImplementedCourses = reportContext.reportByCoursesData.filter((course: any) => {
+        const filteredNotImplementedCourses: any = reportContext?.reportByCoursesData?.filter((course: any) => {
             return (course.course_status === 'not implemented')
         });
 

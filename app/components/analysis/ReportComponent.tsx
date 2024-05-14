@@ -1,7 +1,7 @@
 'use client'
 import { useState, useContext } from "react";
 import { DataContext } from "@/app/dashboard/layout";
-import { ReportContext } from "@/app/layout";
+import { ReportContext } from "@/app/dashboard/layout";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 const ReportComponent = () => {
@@ -281,10 +281,10 @@ const ReportComponent = () => {
   const report = () => {
     if (reportType === 'include trainees') {
       reportContext.setReportByTraineesData(traineesWithProject)
-      router.push('/report/bytrainees')      
+      router.push('/dashboard/report/bytrainees')      
     }else if (reportType === 'only courses') {
       reportContext.setReportByApps(coursesWithProject)
-      router.push('/report/byapps')
+      router.push('/dashboard/report/byapps')
     }
   }
     

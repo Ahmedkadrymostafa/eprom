@@ -1,10 +1,10 @@
 'use client'
 import { useContext } from "react"
-import { ReportContext } from "@/app/layout"
+import { ReportContext } from "@/app//dashboard/layout"
 
 const Page = () => {
     const reportContext = useContext(ReportContext)
-    const data = reportContext.reportByApps
+    const data: any = reportContext.reportByApps
 
   return (
     

@@ -12,7 +12,7 @@ export async function DELETE(request: any, {params}: {params: any}) {
       const session: any = cookieStore.get("session")
       if (!session) return NextResponse.json({message: "forbidden"}, {status: 403})
   
-    const credentials = await query({
+    const credentials: any = await query({
       query: "SELECT * FROM admins WHERE session = ?",
       values: [session.value],
     })
@@ -39,7 +39,7 @@ export async function DELETE(request: any, {params}: {params: any}) {
     const session: any = cookieStore.get("session")
     if (!session) return NextResponse.json({message: "forbidden"}, {status: 403})
 
-    const credentials = await query({
+    const credentials: any = await query({
       query: "SELECT * FROM admins WHERE session = ?",
       values: [session.value],
     })

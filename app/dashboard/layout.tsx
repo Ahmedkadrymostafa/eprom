@@ -1,19 +1,57 @@
 'use client'
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Header from "../components/header/Header";
 import axios from "axios";
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState, createContext, Context } from "react";
 import Loading from "../loading";
 import SideBar from "../components/sidebar/SideBar";
 import Footer from "../components/footer/Footer";
+// import { useRouter } from 'next/router';
 
-export const DataContext = createContext<unknown>(null)
+type DataContext = {
+  credentials?: any,
+  trainees?: any,
+  setTrainees?: any,
+  courses?: any,
+  setCourses?: any,
+  ORGS?: any,
+  setORGS?: any,
+  APPS?: any,
+  setAPPS?: any,
+}
+
+interface ReportContextType {
+
+  reportByTraineesData?: any[],
+  setReportByTraineesData?: React.Dispatch<React.SetStateAction<any[]>>,
+  reportByCoursesData?: any[],
+  setReportByCoursesData?: React.Dispatch<React.SetStateAction<any[]>>,
+  reportByApps?: any[],
+  setReportByApps?: React.Dispatch<React.SetStateAction<any[]>>
+}
+
+export const ReportContext: Context<ReportContextType> = createContext<ReportContextType>(
+  {
+    reportByTraineesData: [],
+    setReportByTraineesData: () => {},
+    reportByCoursesData: [],
+    setReportByCoursesData: () => {},
+    reportByApps: [],
+    setReportByApps: () => {}
+  }
+);
+
+export const DataContext = createContext<DataContext>({})
 
 export default function Layout({children}: {children: any}){
+  
+  // const router = useRouter();
   
   const [loggedIn, setLoggedIn] = useState<any>(null);
   const [loading, setLoading] = useState<any>(true);
   const router = useRouter();
+  const pathname = usePathname()
+
   const [ credentials, setCredentials] = useState<any>({});
   const [ trainees, setTrainees] = useState([])
   const [ courses, setCourses ] = useState([])
@@ -69,8 +107,22 @@ export default function Layout({children}: {children: any}){
     getData().then(() => {
       setLoading(false);
     })
-    
+    console.log(pathname)
   }, [])
+
+
+  const [ reportByTraineesData, setReportByTraineesData ] = useState<any>([])
+  const [ reportByCoursesData, setReportByCoursesData ] = useState<any>([])
+  const [ reportByApps, setReportByApps ] = useState<any>([])
+
+  const reportContextValue: ReportContextType = {
+    reportByTraineesData,
+    setReportByTraineesData,
+    reportByCoursesData,
+    setReportByCoursesData,
+    reportByApps,
+    setReportByApps
+  };
 
 
  
@@ -82,14 +134,23 @@ export default function Layout({children}: {children: any}){
       <DataContext.Provider value={{credentials, trainees, setTrainees, courses, setCourses, ORGS, setORGS, APPS, setAPPS}}>
           <div className="min-h-screen flex flex-col">
 
-              <Header  email={credentials.email} name={credentials.name} /> 
+              {!pathname.includes('report') &&
+                <Header  email={credentials.email} name={credentials.name} /> 
+              }
+              {!pathname.includes('report') &&
+                <SideBar role={credentials.role} />                
+              }
+
               
-              <SideBar role={credentials.role} />        
+              <ReportContext.Provider value={reportContextValue}>
                 <div className="page-width flex-1">
                   {children}
                 </div>
+              </ReportContext.Provider>
               
-              <Footer />
+              {!pathname.includes('report') &&
+                <Footer />
+              }
           </div>    
     </DataContext.Provider>
     );

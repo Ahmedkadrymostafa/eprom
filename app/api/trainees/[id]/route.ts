@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: any, {params}: {params: any}) {
     const id: any = await params.id;
-    const trainee = await query({
+    const trainee: any = await query({
       query: "SELECT * FROM trainees WHERE person_id = ?",
       values: [id],
     })
