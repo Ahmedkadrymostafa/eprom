@@ -12,7 +12,6 @@ import { FaClockRotateLeft } from "react-icons/fa6"
 
 type courseData = {
     person_id?: any,
-    project?: any,
     course?: any,
     course_price?: any,
     date?: any,
@@ -69,7 +68,6 @@ const Page = ({params}: {params: any}) => {
     if (currentCourse.length > 0) {
         setCourseDataToSubmit({
             person_id: personId,
-            project: trainee.project,
             course: currentCourse[0].course_title,
             course_price: currentCourse[0].course_price,
             date: today.toISOString().split('T')[0],
@@ -93,7 +91,6 @@ const Page = ({params}: {params: any}) => {
             APPS.push({id: response.data.id, ...data})
             dataContext.setAPPS([{id: response.data.id, ...data}, ...dataContext.APPS])
             setTotalHours(totalHours +  parseInt(data.total_hours))
-            // emptyInputs()
             setShowInfo(false)
             toggleForm()
             

@@ -19,7 +19,7 @@ const ReportComponent = () => {
     const [ projectsToFilter, setProjectsToFilter ] = useState<any>([]);
     const [ showResult, setShowResult ] = useState<any>(false);
     const [ filterByStatus, setFilterByStatus ] = useState<any>('all');
-    const [ reportType, setReportType ] = useState<any>('');
+    const [ reportType, setReportType ] = useState<any>('include trainees');
    
     const handleFilterByStatusChange = (e: any) => {
       setFilterByStatus(e.target.value);
@@ -332,6 +332,7 @@ const ReportComponent = () => {
                     <div className="mb-7">
                       <p className="main-color text-xl font-black">Report Type</p>
                       <select className="input" value={reportType} onChange={handleReportTypeChange}>
+                        <option value="select type" disabled>select type</option>
                         <option value="include trainees">Include Trainees</option>
                         <option value="only courses">Only Courses</option>
                       </select>

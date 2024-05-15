@@ -19,7 +19,7 @@ export async function GET(request: any) {
     
     if (credentials[0].session === session.value) {
       const apps = await query({
-        query: "SELECT * FROM applications",
+        query: "SELECT applications.*, trainees.name, trainees.project FROM applications LEFT JOIN trainees ON applications.person_id = trainees.person_id",
         values: [],
       })
       return NextResponse.json(apps, {status: 200})
@@ -50,10 +50,9 @@ export async function POST(request: any, res: any) {
           try {
             const connection = await pool.getConnection();
             const result: any = await connection.query(
-              'INSERT INTO applications (person_id, project, course, course_price, date, date_from, date_to, status, days, total_hours, location) values (?,?,?,?,?,?,?,?,?,?,?)',
+              'INSERT INTO applications (person_id, course, course_price, date, date_from, date_to, status, days, total_hours, location) values (?,?,?,?,?,?,?,?,?,?)',
               [
                 data.person_id,               
-                data.project,
                 data.course,
                 data.course_price,
                 data.date,

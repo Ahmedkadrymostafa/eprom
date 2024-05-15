@@ -44,9 +44,7 @@ export const ReportContext: Context<ReportContextType> = createContext<ReportCon
 export const DataContext = createContext<DataContext>({})
 
 export default function Layout({children}: {children: any}){
-  
-  // const router = useRouter();
-  
+    
   const [loggedIn, setLoggedIn] = useState<any>(null);
   const [loading, setLoading] = useState<any>(true);
   const router = useRouter();
