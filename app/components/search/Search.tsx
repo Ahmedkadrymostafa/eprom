@@ -9,7 +9,7 @@ const Search = () => {
     const dataContext: any = useContext(DataContext)
     const [ trainees, setTrainees ] = useState<any>([])
     const searchResultRef: any = useRef();
-
+    const [ titleToSearch, setTitleToSearch ] = useState<String>('')
     const search = (e: any) => { 
         console.log(trainees)          
         if (e !== "") {
@@ -36,14 +36,20 @@ const Search = () => {
     <div>
         <div>
             <div className="relative glass w-fit py-2 px-4 mx-auto flex flex-col">
-                <div className="search">
-                    <input type="text" className="searchTerm" placeholder="Who are you looking for?" onChange={(e: any) => {
-                        search(e.target.value)
-                    }} />
-                    <button type="submit" className="searchButton">
-                        <FaSearch />
-                    </button>
-                </div>
+                <form>
+                    <div className="search">
+                        <input type="text" className="searchTerm" placeholder="Who are you looking for?" onChange={(e: any) => {
+                            // search(e.target.value)
+                            setTitleToSearch(e.target.value);
+                        }} />
+                        <button type="submit" className="searchButton" onClick={(e: any) => {
+                                e.preventDefault();
+                                search(titleToSearch)}
+                            }>
+                            <FaSearch />
+                        </button>
+                    </div>
+                </form>
                 
                 <div ref={searchResultRef} className="search-result glass py-5 hidden px-5 absolute top-[70px] right-0 w-full max-h-96 overflow-y-scroll">
                     <ul className="bg-white py-5 px-2 rounded-3xl flex flex-col gap-4">

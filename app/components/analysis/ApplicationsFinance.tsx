@@ -79,6 +79,7 @@ const ApplicationsFinance = (props: any) => {
                             <p className="text-4xl main-color font-black">{currentYearApps.length}</p>
                         </div>
                         <p className="text-6xl main-color"><BsFillBookmarkCheckFill /></p>
+                        
                     </div>
                 </div>
         </div>

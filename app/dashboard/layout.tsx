@@ -6,7 +6,6 @@ import { useEffect, useState, createContext, Context } from "react";
 import Loading from "../loading";
 import SideBar from "../components/sidebar/SideBar";
 import Footer from "../components/footer/Footer";
-// import { useRouter } from 'next/router';
 
 type DataContext = {
   credentials?: any,

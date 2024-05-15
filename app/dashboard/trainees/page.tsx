@@ -18,6 +18,7 @@ const Page = () => {
     const [ traineeToDelete, setTraineeToDelete ] = useState({id: "", name: ""})
     const [ traineeToDeleteIndex, setTraineeToDeleteIndex ] = useState()
     const [ traineeToUpdate, setTraineeToUpdate ] = useState("")
+    const [ traineeToSearch, setTraineeToSearch ] = useState("")
     const person_id: any = useRef()
     const name: any = useRef()
     const title: any = useRef()
@@ -155,14 +156,19 @@ const Page = () => {
                 
         <div>
             <div className="glass w-fit py-9 px-7 mx-auto flex justify-between items-center gap-6">
-                <div className="search">
-                    <input type="text" className="searchTerm" placeholder="Search by Name / ID / Project" onChange={(e: any) => {
-                        search(e.target.value)
-                    }} />
-                    <button type="submit" className="searchButton">
-                        <FaSearch />
-                    </button>
-                </div>
+                <form>
+                    <div className="search">
+                        <input type="text" className="searchTerm" placeholder="Search by Name / ID / Project" onChange={(e: any) => {
+                            setTraineeToSearch(e.target.value)
+                        }} />
+                        <button type="submit" className="searchButton" onClick={(e: any) => {
+                            e.preventDefault();
+                            search(traineeToSearch)                           
+                        }}>
+                            <FaSearch />
+                        </button>
+                    </div>
+                </form>
                 <div className="trainee-btn h-[45px] flex gap-2 items-center cursor-pointer duration-150 main-bg text-gold rounded-xl p-3 text-xl" onClick={() => {
                     setEditButton(false);
                     formPopUp.current.classList.toggle('active-form-popup')
