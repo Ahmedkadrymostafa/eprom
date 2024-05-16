@@ -9,6 +9,8 @@ import { DataContext } from "../../layout"
 import { toast } from "react-toastify"
 import { useRouter } from "next/navigation";
 import { FaClockRotateLeft } from "react-icons/fa6"
+import { GiMoneyStack } from "react-icons/gi"
+import formatNumberInEGP from "@/app/helpers/FormatNumInEGP"
 
 type courseData = {
     person_id?: any,
@@ -42,6 +44,7 @@ const Page = ({params}: {params: any}) => {
     
     const [ APPS, setAPPS ] = useState(dataContext.APPS.filter((app: any) => app.person_id === personId))
     const [ totalHours, setTotalHours ] = useState(0)
+    const [ cashPaid, setCashPaid ] = useState(0)
 
     const [ showInfo, setShowInfo ] = useState(false);
     const [ courseDataToSubmit, setCourseDataToSubmit ] = useState<courseData>({})
@@ -172,7 +175,7 @@ const Page = ({params}: {params: any}) => {
         setCourses(dataContext.courses)
         setAPPS(dataContext.APPS.filter((app: any) => app.person_id === personId))
         setTotalHours(APPS.reduce((acc: any, current: any) => parseInt(acc) + parseInt(current.total_hours), 0))
-        
+        setCashPaid(APPS.reduce((acc: any, current: any) => parseInt(acc) + parseInt(current.course_price), 0))
     }, [])
     
 
@@ -215,17 +218,24 @@ const Page = ({params}: {params: any}) => {
                                 </div>
                             </div>
                 
-                            <div className="flex justify-between my-5 mx-10 gap-6 shadow-2xl p-6 rounded-3xl">
-                                <div className="flex flex-col gap-3">
-                                    <div className="glass p-5 w-80 text-center">
+                            <div className="flex flex-col my-12 mx-10 gap-6 shadow-2xl p-6 rounded-3xl">
+                                <div className="flex justify-between gap-3">
+                                    <div className="glass p-5 w-full text-center">
                                         <div className="flex gap-2 w-fit mx-auto items-center">
                                             <p className=" text-gray-700 text-5xl font-black mb-5"><FaGraduationCap /></p>
                                             <p className=" text-gray-700 text-3xl font-black mb-5">Courses</p>
                                         </div>
                                         <p className="text-gold text-5xl font-black">{APPS.length}</p>
                                     </div>
+                                    <div className="glass p-5 w-full text-center">
+                                        <div className="flex gap-2 w-fit mx-auto items-center">
+                                            <p className=" text-gray-700 text-5xl font-black mb-5"><GiMoneyStack /></p>
+                                            <p className=" text-gray-700 text-3xl font-black mb-5">Cash Paid</p>
+                                        </div>
+                                        <p className="text-gold text-5xl font-black">{formatNumberInEGP(cashPaid)}</p>
+                                    </div>
 
-                                    <div className="glass p-5 w-80 text-center">
+                                    <div className="glass p-5 w-full text-center">
                                         <div className="flex gap-2 w-fit mx-auto items-center">
                                             <p className=" text-gray-700 text-5xl font-black mb-5"><FaUserClock /></p>
                                             <p className=" text-gray-700 text-3xl font-black mb-5">Total Hours</p>

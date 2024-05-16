@@ -417,7 +417,7 @@ const Page = () => {
         <div ref={newCourseInfo} className='glass max-h-[500px] overflow-y-scroll none-scrollbar w-[94%] fixed hidden z-10 px-5 py-2 top-[58%] left-[48%] -translate-x-1/2 -translate-y-1/2'>
             <div className='bg-white px-7 py-3 rounded-3xl'>
                 <div className='flex justify-between items-center bottom-border px-5'>
-                    <p className='main-color text-3xl font-bold'>New Course Info</p>
+                    <p className='main-color text-3xl font-bold'>Course Details</p>
                     <p className='text-red-800 font-black text-2xl cursor-pointer' onClick={toggleCourseInfo}>Cancel</p>
                 </div>
                 <div className='flex justify-around m-7'>
