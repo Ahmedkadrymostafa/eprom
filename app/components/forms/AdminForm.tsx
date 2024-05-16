@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import Loading from "@/app/loading";
 import { FaWindowClose } from "react-icons/fa";
 import { DataContext } from "@/app/dashboard/layout";
+import { GoDotFill } from "react-icons/go";
 
 const AdminForm = () => {
 const dataContext: any = useContext(DataContext)
@@ -174,7 +175,21 @@ return (
                                         <td className="admin-td">{e.name}</td>
                                         <td className="admin-td">{e.email}</td>
                                         <td className="admin-td">{e.role}</td>
-                                        {e.session === "" ? <td className="text-gray-500">Offline</td> : <td className="text-green-500 font-bold">Online</td>}
+                                        {e.session === "" ?
+                                            <td>
+                                                <div className="flex items-center justify-center">
+                                                    <GoDotFill className="text-purple-600" />
+                                                    <p className="text-gray-500 font-bold">Offline</p>
+                                                </div>
+                                            </td>
+                                             : 
+                                             <td className="text-green-500 font-bold">
+                                                <div className="flex items-center justify-center">
+                                                    <GoDotFill /> 
+                                                    <p>Active</p>
+                                                </div>
+                                            </td>
+                                        }
                                         {(e.role === "moderator" && dataContext.credentials.role === 'admin') && <td className="text-red-700 text-2xl font-black"><MdDelete onClick={() => deleteAdmin(e.email)} className="cursor-pointer mx-auto" /></td>}
                                         {dataContext.credentials.role === 'developer' && <td className="text-red-700 text-2xl font-black"><MdDelete onClick={() => deleteAdmin(e.email)} className="cursor-pointer mx-auto" /></td>}
                                     </tr>
@@ -186,9 +201,6 @@ return (
                     </tbody>
                 </table>
             </div>
-
-
-
 
         </div>
 </div>

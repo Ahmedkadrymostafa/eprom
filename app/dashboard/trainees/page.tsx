@@ -2,7 +2,7 @@
 import Loading from "@/app/loading";
 import { useState, useRef, useEffect, useContext } from "react";
 import { MdDelete } from "react-icons/md";
-import { FaEdit, FaSearch, FaUserPlus } from "react-icons/fa";
+import { FaEdit, FaSearch, FaUndo, FaUserPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { GrClose } from "react-icons/gr";
@@ -43,7 +43,7 @@ const Page = () => {
 
     const addTrainee = async () => {
         let data = {
-            person_id: person_id.current.value.toLowerCase().trim().replace(/\s+/g, ' '),
+            person_id: person_id.current.value.trim().replace(/\s+/g, ' '),
             name: name.current.value.toLowerCase().trim().replace(/\s+/g, ' '),
             title: title.current.value.toLowerCase().trim().replace(/\s+/g, ' '),
             project: project.current.value.toLowerCase().trim().replace(/\s+/g, ' '),
@@ -69,7 +69,7 @@ const Page = () => {
     const updateTrainee = async () => {
         console.log(traineeToUpdate)
         let data = {
-            person_id: person_id.current.value.toLowerCase().trim().replace(/\s+/g, ' '),
+            person_id: person_id.current.value.trim().replace(/\s+/g, ' '),
             name: name.current.value.toLowerCase().trim().replace(/\s+/g, ' '),
             title: title.current.value.toLowerCase().trim().replace(/\s+/g, ' '),
             project: project.current.value.toLowerCase().trim().replace(/\s+/g, ' '),
@@ -118,7 +118,7 @@ const Page = () => {
 
     const search = (e: any) => {           
         if (e !== "") {
-            const filtered = dataContext.trainees.filter((index: any) => (index.name.includes(e.toLowerCase()) || index.person_id.includes(e.toLowerCase()) || index.project.includes(e.toLowerCase())));
+            const filtered = dataContext.trainees.filter((index: any) => (index.name.includes(e.toLowerCase()) || index.person_id.includes(e) || index.project.includes(e.toLowerCase())));
             setTrainees(filtered)
         }else {
             setTrainees(dataContext.trainees);
@@ -156,19 +156,27 @@ const Page = () => {
                 
         <div>
             <div className="glass w-fit py-9 px-7 mx-auto flex justify-between items-center gap-6">
-                <form>
-                    <div className="search">
-                        <input type="text" className="searchTerm" placeholder="Search by Name / ID / Project" onChange={(e: any) => {
-                            setTraineeToSearch(e.target.value)
-                        }} />
-                        <button type="submit" className="searchButton" onClick={(e: any) => {
-                            e.preventDefault();
-                            search(traineeToSearch)                           
-                        }}>
-                            <FaSearch />
-                        </button>
-                    </div>
-                </form>
+                <div className="flex">
+                    <button className="undoButton" onClick={(e: any) => {
+                        e.preventDefault();
+                        setTrainees(dataContext.trainees);
+                    }}>
+                        <FaUndo />
+                    </button>
+                    <form>
+                        <div className="search">
+                            <input type="text" className="searchTerm" placeholder="Search by Name / ID / Project" onChange={(e: any) => {
+                                setTraineeToSearch(e.target.value)
+                            }} />
+                            <button type="submit" className="searchButton" onClick={(e: any) => {
+                                e.preventDefault();
+                                search(traineeToSearch)                           
+                            }}>
+                                <FaSearch />
+                            </button>
+                        </div>
+                    </form>
+                </div>
                 <div className="trainee-btn h-[45px] flex gap-2 items-center cursor-pointer duration-150 main-bg text-gold rounded-xl p-3 text-xl" onClick={() => {
                     setEditButton(false);
                     formPopUp.current.classList.toggle('active-form-popup')

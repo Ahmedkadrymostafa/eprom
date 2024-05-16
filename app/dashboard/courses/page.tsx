@@ -1,7 +1,7 @@
 'use client'
 import axios from "axios";
 import { useContext, useRef, useState, useEffect } from "react";
-import { FaCheckCircle, FaEdit, FaPencilAlt, FaSearch } from "react-icons/fa";
+import { FaCheckCircle, FaEdit, FaPencilAlt, FaSearch, FaUndo } from "react-icons/fa";
 import { MdDelete, MdOutlineNoteAlt } from "react-icons/md";
 import { toast } from "react-toastify";
 import { DataContext } from "../layout";
@@ -69,6 +69,7 @@ const Page = () => {
     
     const [ selectedCourseToUpdateId, setSelectedCourseToUpdateId ] = useState<any>()
     const [ selectedCourseToShowInfo, setSelectedCourseToShowInfo ] = useState<addNewCourseData>()
+    const [ courseToSearch, setCourseToSearch ] = useState<String>('')
     
     const [fromDateReport, setFromDateReport ] = useState<any>('');
     const [toDateReport, setToDateReport ] = useState<any>('');
@@ -354,12 +355,25 @@ const Page = () => {
         <div className="flex justify-between items-center mx-6 my-5">
             <p className="main-color text-5xl font-bold">Courses</p>
                 <div className="flex">
-                    <input type="text" className="searchTerm" placeholder="Search by title / location" onChange={(e: any) => {
-                        search(e.target.value)
-                    }} />
-                    <button type="submit" className="searchButton">
-                        <FaSearch />
+                    <button className="undoButton" onClick={(e: any) => {
+                        e.preventDefault();
+                        setCourses(dataContext.courses)
+                    }}>
+                        <FaUndo />
                     </button>
+                    <form>
+                        <div className="flex">
+                            <input type="text" className="searchTerm" placeholder="Search by title / location" onChange={(e: any) => {
+                                setCourseToSearch(e.target.value)
+                            }} />
+                            <button type="submit" className="searchButton" onClick={(e: any) => {
+                                e.preventDefault();
+                                search(courseToSearch);
+                            }}>
+                                <FaSearch />
+                            </button>
+                        </div>
+                    </form>
                 </div>
            
             <button className="button" onClick={() => {
