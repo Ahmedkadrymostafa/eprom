@@ -94,6 +94,7 @@ const Page = ({params}: {params: any}) => {
             APPS.push({id: response.data.id, ...data})
             dataContext.setAPPS([{id: response.data.id, ...data}, ...dataContext.APPS])
             setTotalHours(totalHours +  parseInt(data.total_hours))
+            setCashPaid(cashPaid + parseInt(data.course_price))
             setShowInfo(false)
             toggleForm()
             
@@ -124,8 +125,10 @@ const Page = ({params}: {params: any}) => {
             const updatedApps = filteredAppsAfterDelete.filter((app: any) => app.person_id === personId)
             setAPPS(updatedApps)
             setTotalHours(updatedApps.reduce((acc: any, current: any) => parseInt(acc) + parseInt(current.total_hours), 0))
+            setCashPaid(updatedApps.reduce((acc: any, current: any) => parseInt(acc) + parseInt(current.course_price), 0))
             dataContext.setAPPS(filteredAppsAfterDelete)
-        })
+            
+        }).catch((err) => console.log(err))
     }
 
     const changeAppStatusToImplemented = async (id: any) => {

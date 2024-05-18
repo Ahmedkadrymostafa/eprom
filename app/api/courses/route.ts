@@ -50,7 +50,7 @@ export async function POST(request: any, res: any) {
           try {
             const connection = await pool.getConnection();
             const result: any = await connection.query(
-              'INSERT INTO courses (course_title, course_price, num_of_trainees, date_from, date_to, days, total_hours, location, course_status, total_revenue, instructor_fees, break_cost, tools, transportation, accommodation, allowance, other_expenses, total_expenses, net_revenue, notes) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+              'INSERT INTO courses (course_title, course_price, num_of_trainees, date_from, date_to, days, total_hours, location, course_status, total_revenue, instructor_fees, break_cost, tools, transportation, accommodation, allowance, other_expenses, total_expenses, net_revenue, instructors, notes) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
               [
                 data.course_title,
                 data.course_price,
@@ -71,6 +71,7 @@ export async function POST(request: any, res: any) {
                 data.other_expenses,
                 data.total_expenses,
                 data.net_revenue,
+                data.instructors,
                 data.notes
               ]
             );

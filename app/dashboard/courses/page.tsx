@@ -65,7 +65,7 @@ const Page = () => {
     const [ totalExpenses, setTotalExpenses ] = useState();
     const [ netRevenue, setNetRevenue] = useState();
     const instructorRef: any = useRef();
-    const [ instructorsToShow, setInstructorsToShow ] = useState<any>([]);
+    const [ instructorsToShow, setInstructorsToShow ] = useState<Array<String>>([]);
     
     const [ selectedCourseToUpdateId, setSelectedCourseToUpdateId ] = useState<any>()
     const [ selectedCourseToShowInfo, setSelectedCourseToShowInfo ] = useState<addNewCourseData>()
@@ -138,9 +138,9 @@ const Page = () => {
             let instructorsSplitter = course.instructors?.split('-')
             if (!instructorsSplitter?.includes('')) {
                 setInstructorsToShow(instructorsSplitter)
-            }else {
-                setInstructorsToShow([])
             }
+        }else {
+            setInstructorsToShow([])
         }
 
    }
@@ -219,6 +219,7 @@ const Page = () => {
             other_expenses: 0,
             total_expenses: 0,
             net_revenue: 0,
+            instructors: '',
             notes: '',
         };
         if (!data.course_title) return toast.warn("course title is required")
@@ -377,7 +378,7 @@ const Page = () => {
                 </div>
            
             <button className="button" onClick={() => {
-                toggleForm();
+                emptyInputs();
                 setFormRole('add');
             }}>
                 <span className="button-content">Add New Course</span>
@@ -634,7 +635,7 @@ const Page = () => {
                                                     e.preventDefault();
                                                     if (instructorRef.current.value !== '') {
                                                         setInstructorsToShow([...instructorsToShow, instructorRef.current.value.trim().toLowerCase().replace(/\s+/g, ' ')])                              
-                                                    } 
+                                                    }
                                                     instructorRef.current.value = ''
                                                 }}>Add</button>
                                                 <button className="border-2 border-black h-11 text-xl px-2" onClick={(e: any) => {
