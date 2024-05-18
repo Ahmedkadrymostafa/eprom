@@ -12,6 +12,7 @@ import { RiShareBoxFill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import { FaClockRotateLeft } from "react-icons/fa6";
 import Loading from "@/app/loading";
+import formatNumberInEGP from "@/app/helpers/FormatNumInEGP";
 
 type addNewCourseData = {
     id?: any
@@ -162,6 +163,7 @@ const Page = () => {
     }
     const toggleCourseInfo = () => {
         newCourseInfo.current.classList.toggle('hidden')
+        newCourseInfo.current.classList.toggle('flex')
     }
     const toggleNotes = () => {
         notesRef.current.classList.toggle('hidden')
@@ -415,21 +417,21 @@ const Page = () => {
 
         
 
-        <div ref={newCourseInfo} className='glass max-h-[500px] overflow-y-scroll none-scrollbar w-[94%] fixed hidden z-10 px-5 py-2 top-[58%] left-[48%] -translate-x-1/2 -translate-y-1/2'>
-            <div className='bg-white px-7 py-3 rounded-3xl'>
+        <div ref={newCourseInfo} className='glass overflow-y-scroll none-scrollbar fixed hidden z-50 h-screen w-screen top-0 left-0 items-center'>
+            <div className='bg-white px-7 py-3 rounded-3xl w-[95%] h-[90%]'>
                 <div className='flex justify-between items-center bottom-border px-5'>
                     <p className='main-color text-3xl font-bold'>Course Details</p>
                     <p className='text-red-800 font-black text-2xl cursor-pointer' onClick={toggleCourseInfo}>Cancel</p>
                 </div>
-                <div className='flex justify-around m-7'>
-                    <div className='flex flex-col gap-4'>
+                <div className='flex justify-between m-7'>
+                    <div className='flex flex-col gap-3 w-[35%]'>
                         <div>
                             <p className='main-color text-3xl font-bold'>Course Title</p>
-                            <p className='text-gold text-2xl my-2 font-semibold max-w-60'>{selectedCourseToShowInfo?.course_title}</p>
+                            <p className='text-gold text-xl my-2 font-semibold'>{selectedCourseToShowInfo?.course_title}</p>
                         </div>
                         <div className="flex items-center gap-3">
                             <p className='main-color text-xl font-bold'>Course Price</p>
-                            <p className='text-black text-3xl font-black'>{selectedCourseToShowInfo?.course_price}</p>
+                            <p className='text-black text-3xl font-black'>{formatNumberInEGP(selectedCourseToShowInfo?.course_price)}</p>
                         </div>
                         <div className="flex items-center gap-3">
                             <p className='main-color text-xl font-bold'>Number of trainees</p>
@@ -445,7 +447,7 @@ const Page = () => {
                         </div>
                         <div className='flex items-center gap-3'>
                             <p className='main-color text-xl font-bold'>Location</p>
-                            <p className='text-black text-2xl'>{selectedCourseToShowInfo?.location}</p>
+                            <p className='text-black text-2xl font-semibold'>{selectedCourseToShowInfo?.location}</p>
                         </div>
                         <div className='flex items-center gap-3'>
                             <p className='main-color text-xl font-bold'>Days</p>
@@ -468,12 +470,12 @@ const Page = () => {
                             <div className="flex flex-col gap-2 text-base">
                                 <pre className="text-gray-500 font-bold">-Instructor fees:    {selectedCourseToShowInfo?.instructor_fees}</pre>
                                 <pre className="text-gray-500 font-bold">-Break cost:    {selectedCourseToShowInfo?.break_cost}</pre>
-                                <pre className="text-gray-500 font-bold">-Training Tools:    {selectedCourseToShowInfo?.tools}</pre>
+                                <pre className="text-gray-500 font-bold">-Training tools:    {selectedCourseToShowInfo?.tools}</pre>
                                 <pre className="text-gray-500 font-bold">-Transportation:    {selectedCourseToShowInfo?.transportation}</pre>
                                 <pre className="text-gray-500 font-bold">-Accommodation:    {selectedCourseToShowInfo?.accommodation}</pre>
                                 <pre className="text-gray-500 font-bold">-Allowance:    {selectedCourseToShowInfo?.allowance}</pre>
-                                <pre className="text-gray-500 font-bold">-Other Expenses:    {selectedCourseToShowInfo?.other_expenses}</pre>
-                                <pre className="text-red-500 text-2xl font-bold">total Expenses:    {selectedCourseToShowInfo?.total_expenses}</pre>
+                                <pre className="text-gray-500 font-bold">-Other expenses:    {selectedCourseToShowInfo?.other_expenses}</pre>
+                                <pre className="text-red-500 text-2xl font-bold">Total expenses:    {selectedCourseToShowInfo?.total_expenses}</pre>
                             </div>
                             <pre className='text-green-700 text-2xl font-bold'>Net revenue:    {selectedCourseToShowInfo?.net_revenue}</pre>
                         </div>
